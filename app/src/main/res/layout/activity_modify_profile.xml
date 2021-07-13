@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Theme.InternFinder.NoActionBar"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ModifyProfileActivity">
+
+    <ImageView
+        android:id="@+id/ivProfilePic"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="21dp"
+        android:layout_toEndOf="@+id/ivProfilePic"
+        android:fontFamily="sans-serif-light"
+        android:textSize="20sp"
+        tools:text="username" />
+
+    <EditText
+        android:id="@+id/etFirstNameEditProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvUsername"
+        android:layout_marginStart="21dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/ivProfilePic"
+        android:fontFamily="sans-serif-light"
+        android:hint="Firstname"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:text="Jane" />
+
+    <EditText
+        android:id="@+id/etLastNameEditProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etFirstNameEditProfile"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/ivProfilePic"
+        android:fontFamily="sans-serif-light"
+        android:hint="Lastname"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        tools:text="Doe" />
+
+    <EditText
+        android:id="@+id/etBioEditProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etLastNameEditProfile"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
+        android:layout_toEndOf="@+id/ivProfilePic"
+        android:fontFamily="sans-serif-light"
+        android:hint="Bio"
+        android:textSize="16sp"
+        tools:text="19 year old Product Design intern in NYC this summer! I love watching movies, thrifting, and meeting new people! :)" />
+
+    <Button
+        android:id="@+id/btnSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnLogout2"
+        android:layout_marginTop="29dp"
+        android:text="SAVE" />
+
+    <Button
+        android:id="@+id/btnLogout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etBioEditProfile"
+        android:layout_marginTop="296dp"
+        android:text="Logout" />
+</RelativeLayout>
