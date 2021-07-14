@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvUsername"
-        android:layout_marginStart="21dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_toEndOf="@+id/ivProfilePic"
         android:fontFamily="sans-serif-light"
@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvUsername"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="-10dp"
         android:layout_marginTop="10dp"
         android:layout_toEndOf="@+id/etFirstName"
         android:fontFamily="sans-serif-light"
@@ -64,11 +64,31 @@
         android:textSize="16sp"
         tools:text="19 year old Product Design intern in NYC this summer! I love watching movies, thrifting, and meeting new people! :)" />
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="534dp"
+        android:layout_below="@+id/btnEditProfile"
+        android:layout_marginTop="10dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvUserPosts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="20dp"
+            android:padding="8dp" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
     <Button
         android:id="@+id/btnEditProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="67dp"
+        android:layout_below="@+id/tvBio"
+        android:layout_marginStart="-200dp"
+        android:layout_marginTop="4dp"
         android:layout_toEndOf="@+id/tvUsername"
         android:backgroundTint="#E3B2B2"
         android:fontFamily="sans-serif-light"

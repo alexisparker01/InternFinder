@@ -34,6 +34,10 @@ public class ModifyProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_profile);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
 
         tvUsername = findViewById(R.id.tvUsername);
         etFirstname = findViewById(R.id.etFirstNameEditProfile);
