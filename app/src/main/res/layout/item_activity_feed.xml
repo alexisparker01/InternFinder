@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <TextView
+        android:id="@+id/tvUsernamePD"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/profilePic"
+        android:fontFamily="sans-serif-thin"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        tools:text="@janedoetheintern" />
+
+
+    <TextView
+        android:id="@+id/tvDescriptionPD"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profilePic"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/tvUsernameDescriptionPD"
+        android:fontFamily="sans-serif-light"
+        tools:text="i'm so hungry who wants to get dinner with me!" />
+
+    <TextView
+        android:id="@+id/tvCreatedAtPD"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvDescriptionPD"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="30dp"
+        android:fontFamily="sans-serif-condensed-light"
+        tools:text="5m" />
+
+
+    <ImageView
+        android:id="@+id/profilePic"
+        android:layout_width="88dp"
+        android:layout_height="55dp"
+        tools:srcCompat="@tools:sample/avatars" />
+
+
+</RelativeLayout>

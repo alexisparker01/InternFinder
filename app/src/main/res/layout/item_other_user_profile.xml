@@ -1,69 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/ivProfilePictureItem"
+        android:id="@+id/ivProfilePictureItemOtherUser"
         android:layout_width="75dp"
         android:layout_height="75dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/tvFirstnameItem"
+        android:id="@+id/tvFirstnameItemOtherUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvUsernameItem"
+        android:layout_below="@+id/tvUsernameItemOtherUser"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
-        android:layout_toEndOf="@+id/ivProfilePictureItem"
+        android:layout_toEndOf="@+id/ivProfilePictureItemOtherUser"
         android:fontFamily="sans-serif-light"
         android:textSize="18sp"
         tools:text="firstname" />
 
     <TextView
-        android:id="@+id/tvDescriptionItem"
+        android:id="@+id/tvDescriptionItemOtherUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvFirstnameItem"
+        android:layout_below="@+id/tvFirstnameItemOtherUser"
         android:layout_marginStart="10dp"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="50dp"
-        android:layout_toEndOf="@+id/ivProfilePictureItem"
+        android:layout_toEndOf="@+id/ivProfilePictureItemOtherUser"
         android:fontFamily="sans-serif-light"
         android:textSize="18sp"
         tools:text="Description" />
 
     <TextView
-        android:id="@+id/tvUsernameItem"
+        android:id="@+id/tvUsernameItemOtherUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_toEndOf="@+id/ivProfilePictureItem"
+        android:layout_toEndOf="@+id/ivProfilePictureItemOtherUser"
         android:fontFamily="sans-serif-light"
         android:textSize="18sp"
         tools:text="@username" />
 
     <TextView
-        android:id="@+id/tvLastnameItem"
+        android:id="@+id/tvLastnameItemOtherUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvUsernameItem"
+        android:layout_below="@+id/tvUsernameItemOtherUser"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
-        android:layout_toEndOf="@+id/tvFirstnameItem"
+        android:layout_toEndOf="@+id/tvFirstnameItemOtherUser"
         android:layout_weight="1"
         android:fontFamily="sans-serif-light"
         android:textSize="18sp"
         tools:text="lastname" />
 
     <TextView
-        android:id="@+id/tvCreatedAtItem"
+        android:id="@+id/tvCreatedAtItemOtherUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvDescriptionItem"
+        android:layout_below="@+id/tvDescriptionItemOtherUser"
         android:layout_marginTop="5dp"
         tools:text="5m" />
 

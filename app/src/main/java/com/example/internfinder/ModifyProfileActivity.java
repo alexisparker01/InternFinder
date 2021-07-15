@@ -62,6 +62,12 @@ public class ModifyProfileActivity extends AppCompatActivity {
             Glide.with(this).load(prof.getUrl()).into(ivProfilePic);
         }
 
+        ivProfilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("ModifyProfileActivity", "ivProfilepic clicked");
+            }
+        });
 
 
         btnSave.setOnClickListener(new View.OnClickListener() {

@@ -13,7 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.InternFinder">
-        <activity android:name=".FeedActivity"></activity>
+        <activity android:name=".OtherUserProfileActivity"></activity>
+        <activity android:name=".OpenPost" />
+        <activity android:name=".FeedActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".ModifyProfileActivity" />
         <activity android:name=".LogoutActivity" />

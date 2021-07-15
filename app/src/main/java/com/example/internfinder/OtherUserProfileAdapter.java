@@ -20,12 +20,12 @@ import java.util.Date;
 import java.util.List;
 
 
-public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapter.ViewHolder> {
+public class OtherUserProfileAdapter extends RecyclerView.Adapter<OtherUserProfileAdapter.ViewHolder> {
     private Context context;
     private List<Post> posts;
 
 
-    public ProfilePostsAdapter(Context context, List<Post> allPosts) {
+    public OtherUserProfileAdapter(Context context, List<Post> allPosts) {
         this.context = context;
         this.posts = allPosts;
     }
@@ -34,8 +34,7 @@ public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_profile_post, parent, false);
-        // Log.i("ProfilePostsAdapter", "reached");
+        View view = LayoutInflater.from(context).inflate(R.layout.item_other_user_profile, parent, false);
         return new ViewHolder(view);
 
     }
@@ -53,54 +52,53 @@ public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapte
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView ivProfilePictureItem;
-        private TextView tvUsernameItem;
-        private TextView tvFirstnameItem;
-        private TextView tvLastnameItem;
-        private TextView tvDescriptionItem;
-        private TextView tvCreatedAtItem;
+        private ImageView ivProfilePictureItemOtherUser;
+        private TextView tvUsernameItemOtherUser;
+        private TextView tvFirstnameItemOtherUser;
+        private TextView tvLastnameItemOtherUser;
+        private TextView tvDescriptionItemOtherUser;
+        private TextView tvCreatedAtItemOtherUser;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            ivProfilePictureItem = itemView.findViewById(R.id.ivProfilePictureItem);
-            tvUsernameItem = itemView.findViewById(R.id.tvUsernameItem);
-            tvFirstnameItem = itemView.findViewById(R.id.tvFirstnameItem);
-            tvLastnameItem = itemView.findViewById(R.id.tvLastnameItem);
-            tvDescriptionItem = itemView.findViewById(R.id.tvDescriptionItem);
-            tvCreatedAtItem = itemView.findViewById(R.id.tvCreatedAtItem);
+            ivProfilePictureItemOtherUser = itemView.findViewById(R.id.ivProfilePictureItemOtherUser);
+            tvUsernameItemOtherUser = itemView.findViewById(R.id.tvUsernameItemOtherUser);
+            tvFirstnameItemOtherUser = itemView.findViewById(R.id.tvFirstnameItemOtherUser);
+            tvLastnameItemOtherUser = itemView.findViewById(R.id.tvLastnameItemOtherUser);
+            tvDescriptionItemOtherUser = itemView.findViewById(R.id.tvDescriptionItemOtherUser);
+            tvCreatedAtItemOtherUser = itemView.findViewById(R.id.tvCreatedAtItemOtherUser);
 
         }
 
         public void bind(Post post) {
 
-
             // Bind the post data to the view elements
-            tvDescriptionItem.setText(post.getDescription());
+            tvDescriptionItemOtherUser.setText(post.getDescription());
 
-            tvUsernameItem.setText("@" + post.getUser().getUsername());
+            tvUsernameItemOtherUser.setText("@" + post.getUser().getUsername());
 
-            tvFirstnameItem.setText(post.getUser().getString("firstname"));
+            tvFirstnameItemOtherUser.setText(post.getUser().getString("firstname"));
 
-            tvLastnameItem.setText(post.getUser().getString("lastname"));
+            tvLastnameItemOtherUser.setText(post.getUser().getString("lastname"));
 
             Date createdAt = post.getCreatedAt();
             String timeAgo = Post.calculateTimeAgo(createdAt);
-            tvCreatedAtItem.setText(timeAgo);
+            tvCreatedAtItemOtherUser.setText(timeAgo);
 
 
             ParseFile profilePicItem = post.getUser().getParseFile("profilePicture");
             if (profilePicItem != null) {
-                Glide.with(context).load(profilePicItem.getUrl()).into(ivProfilePictureItem);
+                Glide.with(context).load(profilePicItem.getUrl()).into(ivProfilePictureItemOtherUser);
             }
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(context, FeedActivity.class);
+                    Intent i = new Intent(context, OpenPost.class);
                     //go to postdetails
                     //  i.putExtra("Post", Parcels.wrap(post));
-                     context.startActivity(i);
+                    context.startActivity(i);
                 }
             });
 
