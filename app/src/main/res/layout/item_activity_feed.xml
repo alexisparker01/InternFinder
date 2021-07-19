@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -25,7 +26,6 @@
         android:layout_below="@+id/profilePic"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="20dp"
-        android:layout_toEndOf="@+id/tvUsernameDescriptionPD"
         android:fontFamily="sans-serif-light"
         tools:text="i'm so hungry who wants to get dinner with me!" />
 
@@ -46,6 +46,14 @@
         android:layout_width="88dp"
         android:layout_height="55dp"
         tools:srcCompat="@tools:sample/avatars" />
+
+    <ImageView
+        android:id="@+id/ivPostImageFeed"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_alignTop="@+id/tvDescriptionPD"
+        android:layout_marginTop="80dp"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
 
 </RelativeLayout>

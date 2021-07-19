@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CreatePostActivity">
+
+    <Spinner
+        android:id="@+id/spinnerPostType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/btn_dropdown"
+        android:clipChildren="false"
+        android:prompt="@string/title"
+        android:spinnerMode="dropdown" />
+
+    <ImageView
+        android:id="@+id/ivPostImage"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_below="@+id/spinnerPostType"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    <EditText
+        android:id="@+id/etPostText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivPostImage"
+        android:layout_marginTop="19dp"
+        android:ems="10"
+        android:hint="Enter some text you'd like to share!"
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/btnSubmitPost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etPostText"
+        android:layout_marginTop="36dp"
+        android:text="submit"
+        tools:text="submit" />
+
+    <Button
+        android:id="@+id/btnCam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnSubmitPost"
+        android:layout_marginTop="6dp"
+        android:text="take picture"
+        tools:text="take picture" />
+
+</RelativeLayout>

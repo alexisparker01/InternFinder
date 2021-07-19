@@ -36,6 +36,7 @@ public class FeedActivity extends AppCompatActivity {
     protected List<Post> allPosts;
     RecyclerView rvFeedPosts;
     private SwipeRefreshLayout swipeContainer;
+    Button btnCreatePost;
 
 
     @Override
@@ -72,6 +73,18 @@ public class FeedActivity extends AppCompatActivity {
 
         rvFeedPosts = findViewById(R.id.rvFeedPosts);
 
+        btnCreatePost = findViewById(R.id.btnCreatePost);
+
+        btnCreatePost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent i = new Intent(FeedActivity.this, CreatePostActivity.class);
+                startActivity(i);
+
+            }
+        });
+
         allPosts = new ArrayList<>();
         adapter = new FeedActivityAdapter(this, allPosts);
 
@@ -80,19 +93,6 @@ public class FeedActivity extends AppCompatActivity {
         // set the layout manager on the recycler view
         rvFeedPosts.setLayoutManager(new LinearLayoutManager(this));
 
-        // Define ActionBar object
-        ActionBar actionBar;
-        actionBar = getSupportActionBar();
-
-        // Define ColorDrawable object and parse color
-        // using parseColor method
-        // with color hash code as its parameter
-        ColorDrawable colorDrawable
-                = new ColorDrawable(Color.parseColor("#ffffff"));
-
-        // Set BackgroundDrawable
-        actionBar.setBackgroundDrawable(colorDrawable);
-        actionBar.setTitle(Html.fromHtml("<font color=\"black\">" + getString(R.string.app_name) + "</font>"));
     }
 
 
@@ -126,10 +126,6 @@ public class FeedActivity extends AppCompatActivity {
                 swipeContainer.setRefreshing(false);
             }
         });
-    }
-
-    public void postDetails() {
-        Toast.makeText(FeedActivity.this, "post clicked", Toast.LENGTH_LONG).show();
     }
 
 

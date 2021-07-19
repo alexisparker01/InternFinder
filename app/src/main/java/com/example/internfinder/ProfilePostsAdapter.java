@@ -60,6 +60,7 @@ public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapte
         private TextView tvDescriptionItem;
         private TextView tvCreatedAtItem;
 
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -69,6 +70,7 @@ public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapte
             tvLastnameItem = itemView.findViewById(R.id.tvLastnameItem);
             tvDescriptionItem = itemView.findViewById(R.id.tvDescriptionItem);
             tvCreatedAtItem = itemView.findViewById(R.id.tvCreatedAtItem);
+
 
         }
 

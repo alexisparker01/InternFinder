@@ -7,11 +7,10 @@
     tools:context=".FeedActivity">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
         android:id="@+id/swipeContainerFeedActivity"
-       >
+        android:layout_width="408dp"
+        android:layout_height="471dp"
+        android:layout_marginTop="10dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvFeedPosts"
@@ -23,5 +22,13 @@
             android:padding="8dp" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <Button
+        android:id="@+id/btnCreatePost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/swipeContainerFeedActivity"
+        android:layout_marginTop="80dp"
+        android:text="create post" />
 
 </RelativeLayout>

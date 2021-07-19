@@ -5,7 +5,6 @@ import android.app.Application;
 import com.parse.Parse;
 import com.parse.ParseObject;
 
-import org.w3c.dom.Comment;
 
 public class ParseApplication extends Application {
 

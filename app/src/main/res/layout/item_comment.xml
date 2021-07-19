@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/ivProfilePicComment"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/tvUsernameComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="22dp"
+        android:layout_toEndOf="@+id/ivProfilePicComment"
+        android:textSize="20sp"
+        tools:text="@username" />
+
+    <TextView
+        android:id="@+id/tvTextComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvUsernameComment"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/ivProfilePicComment"
+        android:textSize="18sp"
+        tools:text="comment text" />
+
+    <TextView
+        android:id="@+id/tvCreatedAtComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvTextComment"
+        android:layout_marginTop="32dp"
+        android:textSize="18sp"
+        tools:text="5m" />
+</RelativeLayout>

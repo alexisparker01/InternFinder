@@ -22,6 +22,8 @@ import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,18 +40,21 @@ public class ProfileActivity extends AppCompatActivity {
     private RecyclerView rvPosts;
     protected ProfilePostsAdapter adapter;
     protected List<Post> allPosts;
-
-
-
+    Post post;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+
+        //unwrap post
+
 
         tvUsernameProfile = findViewById(R.id.tvUsername);
         tvFirstname = findViewById(R.id.etFirstName);
@@ -85,6 +90,7 @@ public class ProfileActivity extends AppCompatActivity {
         // set the adapter on the recycler view
         rvPosts.setAdapter(adapter);
 
+
         // set the layout manager on the recycler view
         rvPosts.setLayoutManager(new LinearLayoutManager(this));
 
@@ -92,16 +98,23 @@ public class ProfileActivity extends AppCompatActivity {
         queryPosts();
 
         // add user data to fields
-        tvFirstname.setText(ParseUser.getCurrentUser().getString("firstname"));
-        tvLastname.setText(ParseUser.getCurrentUser().getString("lastname"));
-        tvBio.setText(ParseUser.getCurrentUser().getString("bio"));
-        tvUsernameProfile.setText("@" + ParseUser.getCurrentUser().getString("username"));
 
-        // load profile pic
-        ParseFile profilePic = ParseUser.getCurrentUser().getParseFile("profilePicture");
-        if (profilePic != null) {
-            Glide.with(this).load(profilePic.getUrl()).into(ivProfilePicProfile);
-        }
+        ParseFile profilePic;
+
+                btnEditProfile.setVisibility(View.VISIBLE);
+                tvFirstname.setText(ParseUser.getCurrentUser().getString("firstname"));
+                tvLastname.setText(ParseUser.getCurrentUser().getString("lastname"));
+                tvBio.setText(ParseUser.getCurrentUser().getString("bio"));
+                tvUsernameProfile.setText("@" + ParseUser.getCurrentUser().getString("username"));
+
+                // load profile pic
+                profilePic = ParseUser.getCurrentUser().getParseFile("profilePicture");
+                if (profilePic != null) {
+                    Glide.with(this).load(profilePic.getUrl()).into(ivProfilePicProfile);
+
+
+            }
+
 
 
         // edit profile button click listener
@@ -121,8 +134,18 @@ public class ProfileActivity extends AppCompatActivity {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
 
         // include data referred by user key
-       query.include(Post.KEY_USER);
-       query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
+
+     /*   if (ParseUser.getCurrentUser() != post.getUser()) {
+            query.include(Post.KEY_USER);
+            query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
+        } else {
+            query.include(Post.KEY_USER);
+            query.whereEqualTo(Post.KEY_USER, post.getUser());
+        }
+
+*/
+        query.include(Post.KEY_USER);
+        query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
 
         // limit query to latest 15 posts
         query.setLimit(15);
@@ -139,7 +162,6 @@ public class ProfileActivity extends AppCompatActivity {
                     Log.e("ProfileActivity", "Problem with fetching posts", e);
                     return;
                 }
-
 
                 // printing each of the posts I get to see if I'm getting all the posts from the server
 

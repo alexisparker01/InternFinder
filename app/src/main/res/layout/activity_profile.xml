@@ -92,6 +92,7 @@
         android:layout_toEndOf="@+id/tvUsername"
         android:backgroundTint="#E3B2B2"
         android:fontFamily="sans-serif-light"
-        android:text="edit profile" />
+        android:text="edit profile"
+        android:visibility="gone" />
 
 </RelativeLayout>

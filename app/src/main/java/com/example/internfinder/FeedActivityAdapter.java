@@ -58,6 +58,7 @@ public class FeedActivityAdapter extends RecyclerView.Adapter<FeedActivityAdapte
         private TextView tvDescription;
         private TextView tvCreatedAt;
         private ImageView ivProfilePic;
+        private ImageView ivImagePostFeed;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -67,11 +68,13 @@ public class FeedActivityAdapter extends RecyclerView.Adapter<FeedActivityAdapte
             tvDescription = itemView.findViewById(R.id.tvDescriptionPD);
             tvCreatedAt = itemView.findViewById(R.id.tvCreatedAtPD);
             ivProfilePic = itemView.findViewById(R.id.profilePic);
+            ivImagePostFeed = itemView.findViewById(R.id.ivPostImageFeed);
 
         }
 
         public void bind(Post post) {
             // Bind the post data to the view elements
+            ivImagePostFeed.setVisibility(View.VISIBLE);
 
             tvDescription.setText(post.getDescription());
             tvUsername.setText("@" + post.getUser().getUsername());
@@ -80,12 +83,19 @@ public class FeedActivityAdapter extends RecyclerView.Adapter<FeedActivityAdapte
             tvCreatedAt.setText(timeAgo);
 
 
+
             ParseFile profilePic = ParseUser.getCurrentUser().getParseFile("profilePicture");
             if (profilePic != null) {
                 Glide.with(context).load(profilePic.getUrl()).into(ivProfilePic);
-
-
             }
+
+            ParseFile image = post.getImage();
+            if (image != null) {
+                Glide.with(context).load(image.getUrl()).into(ivImagePostFeed);
+            } else {
+                ivImagePostFeed.setVisibility(View.GONE);
+            }
+
             tvUsername.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
