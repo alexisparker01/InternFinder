@@ -63,6 +63,14 @@
         android:textSize="16sp"
         tools:text="19 year old Product Design intern in NYC this summer! I love watching movies, thrifting, and meeting new people! :)" />
 
+    <Button
+        android:id="@+id/btnFollow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="99dp"
+        android:layout_toEndOf="@+id/tvUsernameOtherUser"
+        android:text="Follow" />
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainerOtherUser"
         android:layout_width="match_parent"
@@ -80,7 +88,6 @@
             android:padding="8dp" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
 
 
 </RelativeLayout>

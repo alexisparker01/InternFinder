@@ -38,6 +38,7 @@ public class CreatePostActivity extends AppCompatActivity {
     Button btnSubmitPost;
     Button btnCam;
     private boolean photoChosen;
+    private boolean textChosen;
 
     // camera instance variables
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
@@ -87,6 +88,7 @@ public class CreatePostActivity extends AppCompatActivity {
                     btnSubmitPost.setVisibility(View.VISIBLE);
                     btnCam.setVisibility(View.GONE);
                     photoFile = null;
+                    photoChosen = false;
 
                 } else if (parent.getItemAtPosition(position).equals("Picture Post")) {
 
@@ -121,16 +123,18 @@ public class CreatePostActivity extends AppCompatActivity {
         btnSubmitPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.i("createpost", String.valueOf(photoChosen));
                 String description = etPostText.getText().toString();
                 if (description.isEmpty()) {
                    Log.e(TAG,"Description can't be empty");
                     return;
                 }
 
-                if((photoFile == null || ivPostImage.getDrawable() == null) && photoChosen == true) {
+                if((photoFile == null || ivPostImage.getDrawable() == null) && (photoChosen == true)) {
                     Log.e(TAG, "Photo cannot be empty. Choose text or event post if you do not want to upload picture.");
                     return;
                 }
+
 
                 ParseUser currentUser = ParseUser.getCurrentUser();
                 savePost(description, currentUser, photoFile);

@@ -2,8 +2,12 @@ package com.example.internfinder;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +21,10 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 public class ModifyProfileActivity extends AppCompatActivity {
 
     TextView tvUsername;
@@ -26,6 +34,8 @@ public class ModifyProfileActivity extends AppCompatActivity {
     Button btnSave;
     ImageView ivProfilePic;
     Button btnLogout2;
+    public static final int GET_FROM_GALLERY = 3;
+    User user;
 
 
 
@@ -47,6 +57,14 @@ public class ModifyProfileActivity extends AppCompatActivity {
         ivProfilePic = findViewById(R.id.ivProfilePic);
         btnLogout2 = findViewById(R.id.btnLogout2);
 
+
+        ivProfilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
+            }
+        });
+
         if (ParseUser.getCurrentUser() != null) {
 
             etFirstname.setText(ParseUser.getCurrentUser().getString("firstname"));
@@ -62,12 +80,6 @@ public class ModifyProfileActivity extends AppCompatActivity {
             Glide.with(this).load(prof.getUrl()).into(ivProfilePic);
         }
 
-        ivProfilePic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i("ModifyProfileActivity", "ivProfilepic clicked");
-            }
-        });
 
 
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -133,5 +145,32 @@ public class ModifyProfileActivity extends AppCompatActivity {
 
         Intent i = new Intent(ModifyProfileActivity.this, ProfileActivity.class);
         startActivity(i);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        //Detects request codes
+        if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
+            Uri selectedImage = data.getData();
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            final ParseFile imageFile = new ParseFile(new File(selectedImage.getPath()));
+
+            if(imageFile != null) {
+                Glide.with(this).load(imageFile.getUrl()).into(ivProfilePic);
+            }
+        }
     }
 }

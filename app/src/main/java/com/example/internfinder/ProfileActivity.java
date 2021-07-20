@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -63,6 +64,7 @@ public class ProfileActivity extends AppCompatActivity {
         ivProfilePicProfile = findViewById(R.id.ivProfilePic);
         btnEditProfile = findViewById(R.id.btnEditProfile);
         rvPosts = findViewById(R.id.rvUserPosts);
+
 
 
 
@@ -127,7 +129,29 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    /*
+    private void queryFollowers() {
+        // set up the query on the Follow table
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Follow");
+        ParseQuery<ParseObject> query2 = ParseQuery.getQuery("Post");
+        query.include(Follow.KEY_FROM);
+        query.include(Follow.KEY_TO);
 
+     //   we want the posts where the FROM is the CURRENT USER and the posts of all of those FROM users
+
+        query.whereEqualTo("to", ParseUser.getCurrentUser());
+        //query2.whereEqualTo("user",
+
+        // execute the query
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+
+            }
+        }
+
+    }
+*/
 
     private void queryPosts() {
         // specifying that i am querying data from the Post.class

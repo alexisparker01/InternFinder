@@ -14,9 +14,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -33,11 +36,17 @@ public class OtherUserProfileActivity extends AppCompatActivity {
     TextView tvBioOtherUser;
     ImageView ivProfilePicProfileOtherUser;
     Post post;
+    Button btnFollow;
+
 
     private SwipeRefreshLayout swipeContainerOtherUser;
     private RecyclerView rvPostsOtherUser;
     protected OtherUserProfileAdapter adapter;
     protected List<Post> allPosts;
+    Follow follow;
+    String followId;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +54,7 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_other_user_profile);
 
         post = Parcels.unwrap(getIntent().getParcelableExtra("Post"));
+
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
@@ -56,6 +66,87 @@ public class OtherUserProfileActivity extends AppCompatActivity {
         tvBioOtherUser = findViewById(R.id.tvBioOtherUser);
         ivProfilePicProfileOtherUser = findViewById(R.id.ivProfilePicOtherUser);
         rvPostsOtherUser= findViewById(R.id.rvOtherUserPosts);
+        btnFollow = findViewById(R.id.btnFollow);
+
+
+        follow = new Follow();
+        followId = follow.getObjectId();
+
+
+
+        // set up the query on the Follow table
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Follow");
+        query.whereEqualTo("to", post.getUser());
+        query.whereEqualTo("from", ParseUser.getCurrentUser());
+
+        // execute the query
+        query.findInBackground(new FindCallback<ParseObject>() {
+                                   public void done(List<ParseObject> followList, ParseException e) {
+
+                                       if (followList.size() > 0) {
+
+                                           btnFollow.setText("Following");
+                                           btnFollow.setBackgroundColor(getResources().getColor(R.color.lime));
+
+                                       }
+                                   }
+                               });
+
+
+
+
+            btnFollow.setOnClickListener(new View.OnClickListener() {
+                                             @Override
+                                             public void onClick(View v) {
+
+                                                 if (btnFollow.getText().toString().equals("Follow")) {
+
+
+                                                     ParseUser otherUser = post.getUser();
+
+                                                     // create an entry in the Follow table
+                                                     follow.setFrom(ParseUser.getCurrentUser());
+                                                     follow.setTo(otherUser);
+                                                     //  follow.put("date", Date());
+                                                     follow.saveInBackground();
+
+                                                     btnFollow.setText("Following");
+                                                     btnFollow.setBackgroundColor(getResources().getColor(R.color.lime));
+
+                                                 } else if (btnFollow.getText().toString().equals("Following")) {
+
+
+                                                     ParseQuery<Follow> query = ParseQuery.getQuery(Follow.class);
+                                                     query.include(Follow.KEY_TO);
+                                                     query.include(Follow.KEY_FROM);
+                                                     query.whereEqualTo(Follow.KEY_TO, post.getUser());
+                                                     query.whereEqualTo(Follow.KEY_FROM, ParseUser.getCurrentUser());
+
+                                                     query.findInBackground(new FindCallback<Follow>() {
+                                                         @Override
+                                                         public void done(List<Follow> follows, ParseException e) {
+                                                             try {
+                                                                 for (Follow follow : follows) {
+
+                                                                         follow.delete();
+                                                                         follow.saveInBackground();
+                                                                         btnFollow.setText("Follow");
+                                                                         btnFollow.setBackgroundColor(getResources().getColor(R.color.purple_200));
+                                                                         Log.i("OtherUser", "deleted follow");
+
+                                                                 }
+                                                             }catch (ParseException parseException) {
+                                                                 parseException.printStackTrace();
+                                                                 Log.i("OtherUser", "problem with deleting follow");
+                                                             }
+                                                         }
+                                                     });
+
+
+                                                     }}});
+
+
+
 
 
 

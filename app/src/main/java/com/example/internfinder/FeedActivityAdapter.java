@@ -99,18 +99,29 @@ public class FeedActivityAdapter extends RecyclerView.Adapter<FeedActivityAdapte
             tvUsername.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(context, OtherUserProfileActivity.class);
-                    i.putExtra("Post", Parcels.wrap(post));
-                    context.startActivity(i);
+
+                    // check to see if user is clicking on their own handle and should therefore we sent to their own page
+                    if (post.getUser().getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
+                        Intent i = new Intent(context, ProfileActivity.class);
+                        context.startActivity(i);
+                    } else {
+                        Intent i = new Intent(context, OtherUserProfileActivity.class);
+                        i.putExtra("Post", Parcels.wrap(post));
+                        context.startActivity(i);
+                    }
                 }
             });
+
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i = new Intent(context, OpenPost.class);
-                    i.putExtra("Post", Parcels.wrap(post));
-                    context.startActivity(i);
+
+
+                        Intent i = new Intent(context, OpenPost.class);
+                        i.putExtra("Post", Parcels.wrap(post));
+                        context.startActivity(i);
+
                 }
             });
 
