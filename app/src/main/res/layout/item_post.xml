@@ -8,14 +8,14 @@
 
     <TextView
         android:id="@+id/tvUsernamePD"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="0dp"
         android:layout_toEndOf="@+id/profilePic"
         android:fontFamily="sans-serif-thin"
-        android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="15sp"
         tools:text="@janedoetheintern" />
 
 
@@ -23,37 +23,43 @@
         android:id="@+id/tvDescriptionPD"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/profilePic"
+        android:layout_below="@+id/ivPostImageFeed"
+        android:layout_marginStart="10dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="18dp"
+        android:layout_toEndOf="@+id/profilePic"
         android:fontFamily="sans-serif-light"
+        android:textSize="15sp"
         tools:text="i'm so hungry who wants to get dinner with me!" />
 
-    <TextView
-        android:id="@+id/tvCreatedAtPD"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvDescriptionPD"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="30dp"
-        android:fontFamily="sans-serif-condensed-light"
-        tools:text="5m" />
-
-
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profilePic"
-        android:layout_width="88dp"
-        android:layout_height="55dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        tools:src="@tools:sample/avatars"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/ivPostImageFeed"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_alignTop="@+id/tvDescriptionPD"
-        android:layout_marginTop="80dp"
+        android:layout_below="@+id/tvUsernamePD"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="9dp"
+        android:layout_toEndOf="@+id/profilePic"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+    <TextView
+        android:id="@+id/tvCreatedAtPD"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvDescriptionPD"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginBottom="30dp"
+        android:fontFamily="sans-serif-condensed-light"
+        android:textSize="14sp"
+        tools:text="5m" />
 
 
 </RelativeLayout>

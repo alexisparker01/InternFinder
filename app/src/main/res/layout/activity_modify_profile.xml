@@ -53,12 +53,10 @@
 
     <EditText
         android:id="@+id/etBioEditProfile"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/etLastNameEditProfile"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="16dp"
-        android:layout_toEndOf="@+id/ivProfilePic"
+        android:layout_below="@+id/spinnerIndustry"
+        android:layout_marginTop="19dp"
         android:fontFamily="sans-serif-light"
         android:hint="Bio"
         android:textSize="16sp"
@@ -79,4 +77,19 @@
         android:layout_below="@+id/etBioEditProfile"
         android:layout_marginTop="296dp"
         android:text="Logout" />
+
+    <Spinner
+        android:id="@+id/spinnerIndustry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/etFirstNameEditProfile"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="21dp"
+        android:layout_toEndOf="@+id/ivProfilePic"
+        android:clipChildren="false"
+        android:prompt="@string/title"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown" />
+
+
 </RelativeLayout>

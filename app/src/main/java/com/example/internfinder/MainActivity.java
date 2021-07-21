@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.SearchView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -12,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(this, ModifyProfileActivity.class);
+        Intent intent = new Intent(this, FeedActivity.class);
         startActivity(intent);
 
 

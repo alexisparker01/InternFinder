@@ -52,6 +52,9 @@ dependencies {
     //Google Maps SDK
     implementation 'com.google.android.gms:play-services-location:18.0.0'
 
+    // circular
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
 
 
     //ParseApplication

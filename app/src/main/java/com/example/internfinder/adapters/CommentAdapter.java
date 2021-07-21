@@ -1,7 +1,6 @@
-package com.example.internfinder;
+package com.example.internfinder.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.internfinder.Comment;
+import com.example.internfinder.R;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseUser;
-
-import org.parceler.Parcels;
 
 import java.util.Date;
 import java.util.List;
@@ -96,7 +94,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             catch (Exception e) {
                 e.printStackTrace();
             }
-
 
         }
     }

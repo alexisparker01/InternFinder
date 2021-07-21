@@ -1,6 +1,5 @@
 package com.example.internfinder;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -8,7 +7,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.internfinder.adapters.PostAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -36,25 +35,43 @@ public class ProfileActivity extends AppCompatActivity {
     TextView tvBio;
     ImageView ivProfilePicProfile;
     Button btnEditProfile;
+    TextView tvIndustry;
+    private Button btnFollow;
+
+    ParseUser user;
+    Post post;
+    Follow follow;
+
+    boolean fromPost;
+    boolean fromUser;
+
 
     private SwipeRefreshLayout swipeContainer;
     private RecyclerView rvPosts;
-    protected ProfilePostsAdapter adapter;
+    protected PostAdapter adapter;
     protected List<Post> allPosts;
-    Post post;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-
-
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
 
-        //unwrap post
+        post = Parcels.unwrap(getIntent().getParcelableExtra("Post"));
+        user = Parcels.unwrap(getIntent().getParcelableExtra("User"));
+
+        if(post != null) {
+            fromPost = true;
+        }
+
+        if (user != null) {
+            fromUser = true;
+        }
+
 
 
         tvUsernameProfile = findViewById(R.id.tvUsername);
@@ -64,21 +81,192 @@ public class ProfileActivity extends AppCompatActivity {
         ivProfilePicProfile = findViewById(R.id.ivProfilePic);
         btnEditProfile = findViewById(R.id.btnEditProfile);
         rvPosts = findViewById(R.id.rvUserPosts);
+        tvIndustry = findViewById(R.id.tvIndustry);
+        btnFollow = findViewById(R.id.btnFollow2);
 
-
+        btnFollow.setVisibility(View.GONE);
+        btnEditProfile.setVisibility(View.GONE);
 
 
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
-        // Setup refresh listener which triggers new data loading
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // Your code to refresh the list here.
-                // Make sure you call swipeContainer.setRefreshing(false)
-                // once the network request has completed successfully.
-                queryPosts();
+
+        follow = new Follow();
+
+
+        // if we are on the logged in user's profile
+        if(ParseUser.getCurrentUser().getUsername().equals(user.getUsername())) {
+            btnFollow.setVisibility(View.GONE);
+            btnEditProfile.setVisibility(View.VISIBLE);
+
+            tvFirstname.setText(ParseUser.getCurrentUser().getString("firstname"));
+            tvLastname.setText(ParseUser.getCurrentUser().getString("lastname"));
+            tvBio.setText(ParseUser.getCurrentUser().getString("bio"));
+            tvUsernameProfile.setText("@" + ParseUser.getCurrentUser().getString("username"));
+            tvIndustry.setText(ParseUser.getCurrentUser().getString("industry"));
+
+            // load profile pic
+            ParseFile profilePic = ParseUser.getCurrentUser().getParseFile("profilePicture");
+            if (profilePic != null) {
+                Glide.with(this).load(profilePic.getUrl()).into(ivProfilePicProfile);
+
             }
-        });
+
+            // Setup refresh listener which triggers new data loading
+            swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    // Your code to refresh the list here.
+                    // Make sure you call swipeContainer.setRefreshing(false)
+                    // once the network request has completed successfully.
+                    queryPosts(ParseUser.getCurrentUser());
+                }
+            });
+
+            queryPosts(ParseUser.getCurrentUser());
+
+
+        } else {
+            // if we are on another user's profile
+
+            if(fromPost == true) {
+                btnFollow.setVisibility(View.VISIBLE);
+                btnEditProfile.setVisibility(View.GONE);
+
+                tvFirstname.setText(post.getUser().getString("firstname"));
+                tvLastname.setText(post.getUser().getString("lastname"));
+                tvBio.setText(post.getUser().getString("bio"));
+                tvUsernameProfile.setText(post.getUser().getString("username"));
+                tvIndustry.setText(post.getUser().getString("industry"));
+
+                ParseFile profilePic = post.getUser().getParseFile("profilePicture");
+                if (profilePic != null) {
+                    Glide.with(this).load(profilePic.getUrl()).into(ivProfilePicProfile);
+
+                }
+
+                // Setup refresh listener which triggers new data loading
+                swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        // Your code to refresh the list here.
+                        // Make sure you call swipeContainer.setRefreshing(false)
+                        // once the network request has completed successfully.
+                        queryPosts(post.getUser());
+                    }
+                });
+
+                queryPosts(post.getUser());
+
+            } else if (fromUser == true) {
+                btnFollow.setVisibility(View.VISIBLE);
+                btnEditProfile.setVisibility(View.GONE);
+
+                tvFirstname.setText(user.getString("firstname"));
+                tvLastname.setText(user.getString("lastname"));
+                tvBio.setText(user.getString("bio"));
+                tvUsernameProfile.setText(user.getString("username"));
+                tvIndustry.setText(user.getString("industry"));
+
+                ParseFile profilePic = user.getParseFile("profilePicture");
+                if (profilePic != null) {
+                    Glide.with(this).load(profilePic.getUrl()).into(ivProfilePicProfile);
+
+                }
+                // Setup refresh listener which triggers new data loading
+                swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        // Your code to refresh the list here.
+                        // Make sure you call swipeContainer.setRefreshing(false)
+                        // once the network request has completed successfully.
+                        queryPosts(user);
+                    }
+                });
+                queryPosts(user);
+            }
+
+
+
+        }
+
+         // set up the query on the Follow table
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Follow");
+        query.whereEqualTo("to", user);
+        query.whereEqualTo("from", ParseUser.getCurrentUser());
+
+        // execute the query
+        query.findInBackground(new FindCallback<ParseObject>() {
+                                   public void done(List<ParseObject> followList, ParseException e) {
+
+                                       if (followList.size() > 0) {
+
+                                           btnFollow.setText("Following");
+                                           btnFollow.setBackgroundColor(getResources().getColor(R.color.lime));
+
+                                       }
+                                   }
+                               });
+
+
+
+
+            btnFollow.setOnClickListener(new View.OnClickListener() {
+                                             @Override
+                                             public void onClick(View v) {
+
+                                                 if (btnFollow.getText().toString().equals("Follow")) {
+
+
+                                                     ParseUser otherUser = post.getUser();
+
+                                                     // create an entry in the Follow table
+                                                     follow.setFrom(ParseUser.getCurrentUser());
+                                                     follow.setTo(otherUser);
+                                                     //  follow.put("date", Date());
+                                                     follow.saveInBackground();
+
+                                                     btnFollow.setText("Following");
+                                                     btnFollow.setBackgroundColor(getResources().getColor(R.color.lime));
+
+                                                 } else if (btnFollow.getText().toString().equals("Following")) {
+
+
+                                                     ParseQuery<Follow> query = ParseQuery.getQuery(Follow.class);
+                                                     query.include(Follow.KEY_TO);
+                                                     query.include(Follow.KEY_FROM);
+                                                     query.whereEqualTo(Follow.KEY_TO, post.getUser());
+                                                     query.whereEqualTo(Follow.KEY_FROM, ParseUser.getCurrentUser());
+
+                                                     query.findInBackground(new FindCallback<Follow>() {
+                                                         @Override
+                                                         public void done(List<Follow> follows, ParseException e) {
+                                                             try {
+                                                                 for (Follow follow : follows) {
+
+                                                                         follow.delete();
+                                                                         follow.saveInBackground();
+                                                                         btnFollow.setText("Follow");
+                                                                         btnFollow.setBackgroundColor(getResources().getColor(R.color.purple_200));
+                                                                         Log.i("OtherUser", "deleted follow");
+
+                                                                 }
+                                                             }catch (ParseException parseException) {
+                                                                 parseException.printStackTrace();
+                                                                 Log.i("OtherUser", "problem with deleting follow");
+                                                             }
+                                                         }
+                                                     });
+
+
+                                                     }}});
+
+
+
+
+
+
+
+
         // Configure the refreshing colors
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
@@ -87,7 +275,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         // initialize the array that will hold posts and create the adapter for the profile
         allPosts = new ArrayList<>();
-        adapter = new ProfilePostsAdapter(this, allPosts);
+        adapter = new PostAdapter(this, allPosts);
 
         // set the adapter on the recycler view
         rvPosts.setAdapter(adapter);
@@ -95,28 +283,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         // set the layout manager on the recycler view
         rvPosts.setLayoutManager(new LinearLayoutManager(this));
-
-        // query posts from server
-        queryPosts();
-
-        // add user data to fields
-
-        ParseFile profilePic;
-
-                btnEditProfile.setVisibility(View.VISIBLE);
-                tvFirstname.setText(ParseUser.getCurrentUser().getString("firstname"));
-                tvLastname.setText(ParseUser.getCurrentUser().getString("lastname"));
-                tvBio.setText(ParseUser.getCurrentUser().getString("bio"));
-                tvUsernameProfile.setText("@" + ParseUser.getCurrentUser().getString("username"));
-
-                // load profile pic
-                profilePic = ParseUser.getCurrentUser().getParseFile("profilePicture");
-                if (profilePic != null) {
-                    Glide.with(this).load(profilePic.getUrl()).into(ivProfilePicProfile);
-
-
-            }
-
 
 
         // edit profile button click listener
@@ -129,47 +295,13 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    /*
-    private void queryFollowers() {
-        // set up the query on the Follow table
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Follow");
-        ParseQuery<ParseObject> query2 = ParseQuery.getQuery("Post");
-        query.include(Follow.KEY_FROM);
-        query.include(Follow.KEY_TO);
 
-     //   we want the posts where the FROM is the CURRENT USER and the posts of all of those FROM users
-
-        query.whereEqualTo("to", ParseUser.getCurrentUser());
-        //query2.whereEqualTo("user",
-
-        // execute the query
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-
-            }
-        }
-
-    }
-*/
-
-    private void queryPosts() {
+    private void queryPosts(ParseUser theUser) {
         // specifying that i am querying data from the Post.class
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
 
-        // include data referred by user key
-
-     /*   if (ParseUser.getCurrentUser() != post.getUser()) {
-            query.include(Post.KEY_USER);
-            query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
-        } else {
-            query.include(Post.KEY_USER);
-            query.whereEqualTo(Post.KEY_USER, post.getUser());
-        }
-
-*/
         query.include(Post.KEY_USER);
-        query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
+        query.whereEqualTo(Post.KEY_USER, theUser);
 
         // limit query to latest 15 posts
         query.setLimit(15);

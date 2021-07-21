@@ -10,9 +10,12 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -20,6 +23,8 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import org.parceler.Parcels;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -36,6 +41,8 @@ public class ModifyProfileActivity extends AppCompatActivity {
     Button btnLogout2;
     public static final int GET_FROM_GALLERY = 3;
     User user;
+    Spinner spinnerIndustry;
+
 
 
 
@@ -49,6 +56,7 @@ public class ModifyProfileActivity extends AppCompatActivity {
         }
 
 
+        spinnerIndustry = findViewById(R.id.spinnerIndustry);
         tvUsername = findViewById(R.id.tvUsername);
         etFirstname = findViewById(R.id.etFirstNameEditProfile);
         etLastname = findViewById(R.id.etLastNameEditProfile);
@@ -56,6 +64,92 @@ public class ModifyProfileActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.btnSave);
         ivProfilePic = findViewById(R.id.ivProfilePic);
         btnLogout2 = findViewById(R.id.btnLogout2);
+
+        String[] postSelections = new String[]{"Technology", "Finance", "Arts", "Medical"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, postSelections);
+//set the spinners adapter to the previously created one.
+        spinnerIndustry.setAdapter(adapter);
+
+        spinnerIndustry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                      @Override
+                                                      public void onItemSelected(AdapterView<?> parent, View view,
+                                                                                 int position, long id) {
+
+
+                                                          if (parent.getItemAtPosition(position).equals("Technology")) {
+                                                              ParseUser.getCurrentUser().put("industry", "Technology");
+
+                                                              ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
+                                                                  @Override
+                                                                  public void done(ParseException e) {
+                                                                      if (e != null) {
+                                                                          Log.e("ModifyProfileActivity", "Error while saving!");
+                                                                      }
+
+                                                                      Log.i("ModifyProfileActivity", "Successfully saved!");
+
+
+                                                                  }
+                                                              });
+
+                                                          } else if (parent.getItemAtPosition(position).equals("Finance")) {
+                                                              ParseUser.getCurrentUser().put("industry", "Finance");
+
+                                                              ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
+                                                                  @Override
+                                                                  public void done(ParseException e) {
+                                                                      if (e != null) {
+                                                                          Log.e("ModifyProfileActivity", "Error while saving!");
+                                                                      }
+
+                                                                      Log.i("ModifyProfileActivity", "Successfully saved!");
+
+
+                                                                  }
+                                                              });
+
+                                                          } else if (parent.getItemAtPosition(position).equals("Arts")) {
+
+                                                              ParseUser.getCurrentUser().put("industry", "Arts");
+
+                                                              ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
+                                                                  @Override
+                                                                  public void done(ParseException e) {
+                                                                      if (e != null) {
+                                                                          Log.e("ModifyProfileActivity", "Error while saving!");
+                                                                      }
+
+                                                                      Log.i("ModifyProfileActivity", "Successfully saved!");
+
+
+                                                                  }
+                                                              });
+                                                              } else if (parent.getItemAtPosition(position).equals("Medical")) {
+
+                ParseUser.getCurrentUser().put("industry", "Medical");
+
+                ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e != null) {
+                            Log.e("ModifyProfileActivity", "Error while saving!");
+                        }
+
+                        Log.i("ModifyProfileActivity", "Successfully saved!");
+
+
+                    }
+                });
+            }
+                                                      }
+
+
+                                                      @Override
+                                                      public void onNothingSelected(AdapterView<?> parent) {
+
+                                                          Log.i("modify", "nothign selected");
+                                                      }
+                                                  });
 
 
         ivProfilePic.setOnClickListener(new View.OnClickListener() {
@@ -134,8 +228,6 @@ public class ModifyProfileActivity extends AppCompatActivity {
                 tvUsername.setText("@" + username);
 
 
-             //   ivProfilePic.setImageBitmap();ParseUser.getCurrentUser().get
-
 
             }
         });
@@ -144,7 +236,9 @@ public class ModifyProfileActivity extends AppCompatActivity {
     private void goToProfile() {
 
         Intent i = new Intent(ModifyProfileActivity.this, ProfileActivity.class);
+        i.putExtra("User", Parcels.wrap(ParseUser.getCurrentUser()));
         startActivity(i);
+
     }
 
     @Override

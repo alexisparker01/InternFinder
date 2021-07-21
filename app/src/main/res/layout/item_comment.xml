@@ -5,10 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivProfilePicComment"
         android:layout_width="75dp"
         android:layout_height="75dp"
+        tools:src="@tools:sample/avatars"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -17,7 +18,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="22dp"
         android:layout_toEndOf="@+id/ivProfilePicComment"
-        android:textSize="20sp"
+        android:fontFamily="sans-serif-light"
+        android:textSize="15sp"
         tools:text="@username" />
 
     <TextView
@@ -25,10 +27,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvUsernameComment"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="18dp"
         android:layout_toEndOf="@+id/ivProfilePicComment"
-        android:textSize="18sp"
+        android:fontFamily="sans-serif-light"
+        android:textSize="15sp"
         tools:text="comment text" />
 
     <TextView
@@ -37,6 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvTextComment"
         android:layout_marginTop="32dp"
-        android:textSize="18sp"
+        android:fontFamily="sans-serif-light"
+        android:textSize="15sp"
         tools:text="5m" />
 </RelativeLayout>

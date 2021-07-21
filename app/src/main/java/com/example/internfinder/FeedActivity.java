@@ -1,38 +1,26 @@
 package com.example.internfinder;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 
-import com.example.internfinder.LogoutActivity;
-import com.example.internfinder.MainActivity;
-import com.example.internfinder.Post;
-import com.example.internfinder.R;
+import com.example.internfinder.adapters.PostAdapter;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FeedActivity extends AppCompatActivity {
-    protected FeedActivityAdapter adapter;
+    protected PostAdapter adapter;
     protected List<Post> allPosts;
     RecyclerView rvFeedPosts;
     private SwipeRefreshLayout swipeContainer;
@@ -86,7 +74,7 @@ public class FeedActivity extends AppCompatActivity {
         });
 
         allPosts = new ArrayList<>();
-        adapter = new FeedActivityAdapter(this, allPosts);
+        adapter = new PostAdapter(this, allPosts);
 
         // set the adapter on the recycler view
         rvFeedPosts.setAdapter(adapter);
@@ -94,9 +82,6 @@ public class FeedActivity extends AppCompatActivity {
         rvFeedPosts.setLayoutManager(new LinearLayoutManager(this));
 
     }
-
-
-
 
 
     private void queryPosts() {

@@ -21,6 +21,7 @@ public class User extends ParseObject {
     public static  final String KEY_USER = "user";
     public static  final String KEY_USERNAME = "username";
     public static  final String KEY_PASSWORD = "password";
+    public static  final String KEY_INDUSTRY = "industry";
 
 
 
@@ -79,9 +80,16 @@ public class User extends ParseObject {
         put(KEY_USERNAME, username);
     }
 
-    public void setPassword(String password) {
-        put(KEY_PASSWORD, password);
+    public String getUsername() {
+        return getString(KEY_USERNAME);
     }
 
+    public void setIndustry(String industry) {
+        put(KEY_INDUSTRY, industry);
+    }
+
+    public String getIndustry() {
+        return getString(KEY_INDUSTRY);
+    }
 
 }

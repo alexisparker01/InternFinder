@@ -1,40 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/Theme.InternFinder.NoActionBar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FBF7CD"
     tools:context=".ProfileActivity">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivProfilePic"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_marginEnd="156dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.071"
+        tools:src="@tools:sample/avatars"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/tvUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="21dp"
         android:layout_toEndOf="@+id/ivProfilePic"
         android:fontFamily="sans-serif-light"
         android:textSize="20sp"
-        tools:text="username" />
+        app:layout_constraintBottom_toTopOf="@+id/ivProfilePic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="username" /><![CDATA[
+
+
+
+
+
+    @+id/"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
+        app:layout_constraintTop_toBottomOf="@+id/ivProfilePic"
+        app:layout_constraintVertical_bias="0.027"
+        tools:text="19 year old Product Design intern in NYC this summer! I love watching movies, thrifting, and meeting new people! :)" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ]]>
 
     <TextView
         android:id="@+id/etFirstName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvUsername"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="70dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
         android:layout_toEndOf="@+id/ivProfilePic"
         android:fontFamily="sans-serif-light"
         android:hint="Firstname"
         android:textSize="18sp"
-        android:textStyle="bold"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ivProfilePic"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.109"
         tools:text="Jane" />
 
     <TextView
@@ -42,13 +86,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvUsername"
-        android:layout_marginStart="-10dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="70dp"
         android:layout_toEndOf="@+id/etFirstName"
         android:fontFamily="sans-serif-light"
         android:hint="Lastname"
         android:textSize="18sp"
-        android:textStyle="bold"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.109"
         tools:text="Doe" />
 
     <TextView
@@ -56,20 +107,50 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvLastName"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="16dp"
         android:layout_toEndOf="@+id/ivProfilePic"
         android:fontFamily="sans-serif-light"
         android:hint="Bio"
         android:textSize="16sp"
-        tools:text="19 year old Product Design intern in NYC this summer! I love watching movies, thrifting, and meeting new people! :)" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivProfilePic"
+        app:layout_constraintVertical_bias="0.021" />
+
+    <Button
+        android:id="@+id/btnEditProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvBio"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@+id/tvUsername"
+        android:backgroundTint="#E3B2B2"
+        android:fontFamily="sans-serif-light"
+        android:text="edit profile"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvIndustry" />
+
+    <Button
+        android:id="@+id/btnFollow2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Follow"
+        tools:layout_editor_absoluteX="161dp"
+        tools:layout_editor_absoluteY="214dp" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainer"
-        android:layout_width="match_parent"
-        android:layout_height="534dp"
+        android:layout_width="379dp"
+        android:layout_height="476dp"
         android:layout_below="@+id/btnEditProfile"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnEditProfile"
+        app:layout_constraintVertical_bias="0.0">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvUserPosts"
@@ -82,17 +163,15 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <Button
-        android:id="@+id/btnEditProfile"
+    <TextView
+        android:id="@+id/tvIndustry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvBio"
-        android:layout_marginStart="-200dp"
-        android:layout_marginTop="4dp"
-        android:layout_toEndOf="@+id/tvUsername"
-        android:backgroundTint="#E3B2B2"
+        android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-light"
-        android:text="edit profile"
-        android:visibility="gone" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvBio"
+        tools:text="Industry" />
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package com.example.internfinder;
+package com.example.internfinder.adapters;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,10 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.internfinder.OpenPost;
 import com.example.internfinder.Post;
+import com.example.internfinder.ProfileActivity;
 import com.example.internfinder.R;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -24,12 +25,12 @@ import org.parceler.Parcels;
 import java.util.Date;
 import java.util.List;
 
-public class FeedActivityAdapter extends RecyclerView.Adapter<FeedActivityAdapter.ViewHolder> {
+public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     private Context context;
     private List<Post> posts;
 
 
-    public FeedActivityAdapter(Context context, List<Post> thePosts) {
+    public PostAdapter(Context context, List<Post> thePosts) {
         this.context = context;
         this.posts = thePosts;
     }
@@ -37,7 +38,7 @@ public class FeedActivityAdapter extends RecyclerView.Adapter<FeedActivityAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_activity_feed, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_post, parent, false);
         return new ViewHolder(view);
     }
 
@@ -100,15 +101,12 @@ public class FeedActivityAdapter extends RecyclerView.Adapter<FeedActivityAdapte
                 @Override
                 public void onClick(View v) {
 
-                    // check to see if user is clicking on their own handle and should therefore we sent to their own page
-                    if (post.getUser().getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
-                        Intent i = new Intent(context, ProfileActivity.class);
-                        context.startActivity(i);
-                    } else {
-                        Intent i = new Intent(context, OtherUserProfileActivity.class);
-                        i.putExtra("Post", Parcels.wrap(post));
-                        context.startActivity(i);
-                    }
+                    Log.i("PostAdapter", "clicked");
+
+                    Intent i = new Intent(context, ProfileActivity.class);
+                    i.putExtra("Post", Parcels.wrap(post));
+                    i.putExtra("User", Parcels.wrap(post.getUser()));
+                    context.startActivity(i);
                 }
             });
 
@@ -116,7 +114,6 @@ public class FeedActivityAdapter extends RecyclerView.Adapter<FeedActivityAdapte
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
 
                         Intent i = new Intent(context, OpenPost.class);
                         i.putExtra("Post", Parcels.wrap(post));

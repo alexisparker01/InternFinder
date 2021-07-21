@@ -12,14 +12,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.internfinder.adapters.CommentAdapter;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -40,6 +38,7 @@ public class OpenPost extends AppCompatActivity {
     ImageView ivProfilePicProfileOpenPost;
     TextView tvCreatedAtOpenPost;
     Post post;
+    User user;
     ImageView ivImageOpenPost;
     EditText etComment;
     Button btnSubmitComment;
@@ -56,9 +55,11 @@ public class OpenPost extends AppCompatActivity {
 
        post = Parcels.unwrap(getIntent().getParcelableExtra("Post"));
 
+
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+
 
         tvUsernameProfileOpenPost= findViewById(R.id.tvUsernameOpenPost);
         tvFirstnameOpenPost = findViewById(R.id.tvFirstnameOpenPost);
@@ -124,6 +125,7 @@ public class OpenPost extends AppCompatActivity {
 
         // query comments from server
         queryComments();
+
 
         // add user data to fields
         tvFirstnameOpenPost.setText(post.getUser().getString("firstname"));
