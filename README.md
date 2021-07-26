@@ -28,27 +28,33 @@ InternFinder is an app where you can create a profile and meet and connect with 
 
 **Required Must-have Stories**
 
-* Users can register for an account which requires email confirmation
-* Users who already have an account can login
-* Users can set up a profile after their email in confirmed. Profiles would include: Name (EditText), Bio (EditText), Industry (Pick from a list), and Profile Picture (ImageView)
-* Users can post events
-* Users can post status updates
-* Users can post intro posts (which will serve as a groupchat in the comment section)
-* Each post has a comment section
-* Users can direct message people
-* Users can reply to other user's comments
+* Users can register for an account which requires email confirmation [x]
+* Users who already have an account can login [x]
+* Users can logout [x]
+* Users can set up a profile after their email in confirmed. Profiles would include: Name (EditText), Bio (EditText), Industry (Pick from a list), and Profile Picture (ImageView) [x]
+* Users can post events (event post) using Google Maps and Places SDK [x]
+* Users can post status updates (text post) [x]
+* Users can post intro posts (text post) [x]
+* Users can post picture posts (picture post) using the Camera [x]
+* Each post has a comment section so the users can communicate with each other [x]
+* Every profile has a followers and following list
+* Users can search for other users [x]
+* Gesture feature
+* Animation feature
+* External library to add visual polish
+* Navigation [x]
 
 
 **Optional Nice-to-have Stories**
 
 * You can link your LinkedIn profile to your profile
-* Bio has little prompts to answer (the answers will be multiple choice) so you can get to know someone like for example: After work what is your favorite thing to do? On the weekends what do you like to do? What's your work from home set up like?)
-* Based on how many of the little bio questions that you have similar answers to, it'll show how alike you guys are like (you and this person are 50% compatable)
-* For Profile Picture, there can be an option to upload picture from camera roll or make your profile picture a picture you take on your camera then and there.
+* Bio has little prompts to answer (the answers will be multiple choice) so you can get to know someone like for example: After work what is your favorite thing to do? On the weekends what do you like to do? What's your work from home set up like?) Based on how many of the little bio questions that you have similar answers to, it'll show how alike you guys are like (you and this person are 50% compatable)
+* Users can filter feed to show posts from people they are following, and people within a certain number of miles of them [x]
 * You can see a list of people attending the event
-* Users can react to posts (bookmark, like, etc.)
-* Zoom feature where you can create zoom events as well
-* Feature where you can only see posts from people within 20 miles of you
+* There is a map on the search/explore page that shows events near you on a map [x]
+* Autofill suggestions when searching event locations
+* Search page will display interns that have the same industry as you and in the same area
+* For Profile Picture, there can be an option to upload picture from camera roll or make your profile picture a picture you take on your camera then and there.
 
 ### 2. Screen Archetypes
 
@@ -65,17 +71,18 @@ InternFinder is an app where you can create a profile and meet and connect with 
 
 * Comment Section Page
     * Users can reply to other users in comment section underneath post
-* DM
-    * Users can DM other users 
-* Search for Interns - stretch goal
+
+* Search for Interns
     * Users can search the accounts of other users
+
+* Map of Events Near you
+    * User can see a map of event posts near them
 
 ### 3. Navigation
 
 **Tab Navigation** (Tab to Screen)
 
 *All icons in upper bar of screen*
-* DM (upper bar)
 * Search (upper bar)
 * Create a post (upper bar)
 * Profile (upper bar)
@@ -83,7 +90,7 @@ InternFinder is an app where you can create a profile and meet and connect with 
 
 ## Wireframes
 [Add picture of your hand sketched wireframes in this section]
-<img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
+<img src="https://www.figma.com/proto/0yivHGyHXgUChY8IypclPc/InternFinder?node-id=1%3A2&scaling=scale-down&page-id=0%3A1" width=600>
 
 ### [BONUS] Digital Wireframes & Mockups
 
@@ -102,7 +109,7 @@ Post
 | commentsCount     | Number     | number of comments that have been posted to image   |
 | likesCount	| Number |	number of likes for the post
 | createdAt	| DateTime	| date when post is created (default field)
-| Location | ? | MapAPI of location
+| location | GeoPoint | Coordinate of location of event
 
 User
 | Property | Type | Description |
