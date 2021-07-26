@@ -9,7 +9,7 @@
     android:layout_centerHorizontal="false"
     android:layout_centerVertical="false"
     android:background="#FCFFE1"
-    tools:context=".LoginActivity">
+    tools:context=".activities.LoginActivity">
 
 
     <TextView

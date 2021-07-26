@@ -1,4 +1,4 @@
-package com.example.internfinder;
+package com.example.internfinder.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,10 +19,13 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.internfinder.R;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import org.parceler.Parcels;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -226,8 +229,9 @@ public class ModifyProfileActivity extends AppCompatActivity {
     private void goToProfile() {
 
         Intent i = new Intent(ModifyProfileActivity.this, ProfileActivity.class);
-       // i.putExtra("User", Parcels.wrap(ParseUser.getCurrentUser()));
+        i.putExtra("User", Parcels.wrap(ParseUser.getCurrentUser()));
         startActivity(i);
+
 
     }
 

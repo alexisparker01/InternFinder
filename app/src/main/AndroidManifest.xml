@@ -24,17 +24,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.InternFinder">
-        <activity android:name=".SearchActivity"></activity>
-        <activity android:name=".CreatePostActivity" />
-        <activity android:name=".OpenPost" />
-        <activity android:name=".FeedActivity" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".ModifyProfileActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.CreatePostActivity" />
+        <activity android:name=".activities.OpenPostActivity" />
+        <activity android:name=".activities.ProfileActivity" />
+        <activity android:name=".activities.ModifyProfileActivity" />
+        <activity android:name=".activities.LoginActivity" />
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

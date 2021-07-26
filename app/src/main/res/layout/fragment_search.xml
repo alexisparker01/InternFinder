@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft="10dp"
-    tools:context=".SearchActivity">
+    tools:context=".activities2delte.SearchActivity">
 
     <EditText
         android:id="@+id/etSearch"
@@ -19,8 +19,13 @@
 
     </EditText>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".fragments.SearchFragment"/>
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvUsers"
+        android:id="@+id/rvUsers2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/etSearch"

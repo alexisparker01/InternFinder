@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.internfinder.ProfileActivity;
+import com.example.internfinder.activities.ProfileActivity;
 import com.example.internfinder.R;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -32,6 +32,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         this.users = usersList;
 
     }
+
 
     @NonNull
     @Override
@@ -92,10 +93,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                 @Override
                 public void onClick(View v) {
 
+
                         Intent i = new Intent(context, ProfileActivity.class);
                         i.putExtra("User", Parcels.wrap(user));
                         context.startActivity(i);
-                    }
+
+
+
+                }
 
             });
     }

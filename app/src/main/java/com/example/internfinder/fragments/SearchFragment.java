@@ -1,16 +1,22 @@
-package com.example.internfinder;
+package com.example.internfinder.fragments;
 
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.internfinder.R;
 import com.example.internfinder.adapters.UserAdapter;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -18,36 +24,44 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchFragment extends Fragment {
 
-    private static final String TAG = "SearchActivity";
+    private static final String TAG = "SearchFragment";
+
     private EditText etSearch;
     private RecyclerView rvUsers;
-
 
     protected UserAdapter adapter;
     protected List<ParseUser> allUsers;
 
+
+    public SearchFragment() {
+        // Required empty public constructor
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_search, container, false);
+    }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-
-        etSearch = findViewById(R.id.etSearch);
-        rvUsers = findViewById(R.id.rvUsers);
+        etSearch = view.findViewById(R.id.etSearch);
+        rvUsers = view.findViewById(R.id.rvUsers2);
 
         // initialize the array that will hold posts and create the adapter for the profile
         allUsers = new ArrayList<>();
-        adapter = new UserAdapter(this, allUsers);
+        adapter = new UserAdapter(getContext(), allUsers);
 
         // set the adapter on the recycler view
         rvUsers.setAdapter(adapter);
 
-
         // set the layout manager on the recycler view
-        rvUsers.setLayoutManager(new LinearLayoutManager(this));
+        rvUsers.setLayoutManager(new LinearLayoutManager(getContext()));
 
 
         // TODO: when search page loads you will automatically see users in your area
@@ -79,41 +93,38 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
+
     }
 
-        public void findUsers(String letter) {
+    public void findUsers(String letter) {
 
         ParseQuery<ParseUser> query = ParseUser.getQuery();
 
         query.include("username");
-       // query.include("firstname");
-       // query.include("lastname");
+        // query.include("firstname");
+        // query.include("lastname");
         query.whereContains("username", letter.toLowerCase());
-       // query.whereContains("firstname", letter.toLowerCase());
-       // query.whereContains("lastname", letter.toLowerCase());
+        // query.whereContains("firstname", letter.toLowerCase());
+        // query.whereContains("lastname", letter.toLowerCase());
 
 
         query.findInBackground((users, e) -> {
             if (e == null) {
                 // The query was successful, returns the users that matches
                 // the criteria.
-                for(ParseUser user : users) {
-                   Log.i(TAG, user.getUsername());
+                for (ParseUser user : users) {
+                    Log.i(TAG, user.getUsername());
                 }
                 allUsers.clear();
                 allUsers.addAll(users);
                 adapter.notifyDataSetChanged();
             } else {
                 // Something went wrong.
-                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
 
         });
 
-
-
     }
-
-
 }

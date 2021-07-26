@@ -1,4 +1,4 @@
-package com.example.internfinder;
+package com.example.internfinder.activities;
 
 import android.Manifest;
 import android.app.Activity;
@@ -35,8 +35,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
+import com.example.internfinder.R;
+import com.example.internfinder.fragments.FeedFragment;
 import com.example.internfinder.models.Post;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -131,7 +135,7 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
 
             afterTypingMap();
             // gestures
-            //mMap.getUiSettings().isZoomControlsEnabled(true);
+            mMap.getUiSettings().setAllGesturesEnabled(true);
         }
 
     }
@@ -374,9 +378,12 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
                 ) {
                     // execute method for searching
                     geoLocate();
+                    hideSoftKeyboard(CreatePostActivity.this);
                     return true;
 
+
                 }
+                hideSoftKeyboard(CreatePostActivity.this);
                 return false;
             }
         });
@@ -577,8 +584,15 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
 
     // takes the user back to the feed after they are finished
     private void goToFeed() {
-        Intent i = new Intent(CreatePostActivity.this, FeedActivity.class);
+       /* Intent i = new Intent(CreatePostActivity.this, FeedFragment.class);
         startActivity(i);
+
+        */
+
+        Fragment fragment = new FeedFragment();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.flFeed, fragment);
+        ft.commit();
     }
 
 

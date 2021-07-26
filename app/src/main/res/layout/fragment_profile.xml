@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/Theme.InternFinder.NoActionBar"
@@ -7,7 +7,9 @@
     android:layout_height="match_parent"
     android:background="#FBF7CD"
     tools:context=".activities.ProfileActivity">
-
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivProfilePic"
         android:layout_width="100dp"
@@ -37,48 +39,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        tools:text="@username" /><![CDATA[
-
-
-
-
-
-    @+id/"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
-        app:layout_constraintTop_toBottomOf="@+id/ivProfilePic"
-        app:layout_constraintVertical_bias="0.027"
-        tools:text="19 year old Product Design intern in NYC this summer! I love watching movies, thrifting, and meeting new people! :)" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    ]]>
+        tools:text="@username" />
 
     <TextView
         android:id="@+id/etFirstName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvUsername"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="13dp"
         android:layout_marginEnd="20dp"
         android:layout_toEndOf="@+id/ivProfilePic"
         android:fontFamily="sans-serif-light"
@@ -98,8 +67,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvUsername"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="70dp"
         android:layout_toEndOf="@+id/etFirstName"
         android:fontFamily="sans-serif-light"
@@ -118,7 +87,9 @@
         android:id="@+id/tvBio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvLastName"
+        android:layout_below="@+id/tvIndustry"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="18dp"
         android:layout_toEndOf="@+id/ivProfilePic"
         android:fontFamily="sans-serif-light"
         android:hint="Bio"
@@ -134,8 +105,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvBio"
-        android:layout_marginTop="8dp"
-        android:layout_toEndOf="@+id/tvUsername"
+        android:layout_marginTop="7dp"
         android:backgroundTint="#E3B2B2"
         android:fontFamily="sans-serif-light"
         android:text="edit profile"
@@ -148,7 +118,8 @@
         android:id="@+id/btnFollow2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_below="@+id/tvBio"
+        android:layout_marginTop="9dp"
         android:text="Follow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -182,11 +153,15 @@
         android:id="@+id/tvIndustry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_below="@+id/etFirstName"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="11dp"
+        android:layout_toEndOf="@+id/ivProfilePic"
         android:fontFamily="sans-serif-light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvBio"
         tools:text="Industry" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
+</FrameLayout>

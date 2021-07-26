@@ -1,4 +1,4 @@
-package com.example.internfinder;
+package com.example.internfinder.activities;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
+import com.example.internfinder.R;
 import com.example.internfinder.adapters.CommentAdapter;
 import com.example.internfinder.models.Comment;
 import com.example.internfinder.models.Post;
@@ -32,7 +33,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class OpenPost extends AppCompatActivity {
+public class OpenPostActivity extends AppCompatActivity {
 
 
     private TextView tvUsernameProfileOpenPost;
@@ -154,7 +155,7 @@ public class OpenPost extends AppCompatActivity {
 
         ParseFile image = post.getImage();
         if (image != null) {
-            Glide.with(OpenPost.this).load(image.getUrl()).into(ivImageOpenPost);
+            Glide.with(OpenPostActivity.this).load(image.getUrl()).into(ivImageOpenPost);
         } else {
             ivImageOpenPost.setVisibility(View.GONE);
         }
@@ -182,7 +183,7 @@ public class OpenPost extends AppCompatActivity {
             public void done(List<Comment> comments, ParseException e) {
                 // check for errors
                 if (e != null) {
-                    Log.e("OpenPost", "Problem with fetching comments", e);
+                    Log.e("OpenPostActivity", "Problem with fetching comments", e);
                     return;
                 }
 
@@ -191,7 +192,7 @@ public class OpenPost extends AppCompatActivity {
 
                 for (Comment comment: comments) {
 
-                    Log.i("OpenPost", "comment: " + comment.getUser());
+                    Log.i("OpenPostActivity", "comment: " + comment.getUser());
 
                 }
 
@@ -227,7 +228,7 @@ public class OpenPost extends AppCompatActivity {
             public void done(List<Comment> comments, ParseException e) {
                 // check for errors
                 if (e != null) {
-                    Log.e("OpenPost", "Problem with fetching comments", e);
+                    Log.e("OpenPostActivity", "Problem with fetching comments", e);
                     return;
                 }
 
@@ -236,7 +237,7 @@ public class OpenPost extends AppCompatActivity {
 
                 for (Comment comment: comments) {
 
-                   Log.i("OpenPost", "comment: " + comment.getUser());
+                   Log.i("OpenPostActivity", "comment: " + comment.getUser());
 
                 }
 

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">InternFinder</string>
     <string name="title_activity_modify_profile">ModifyProfileActivity</string>
-    <!-- Strings used for fragments for navigation -->
+    <!-- Strings used for com.example.internfinder.fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
@@ -13,5 +13,7 @@
 
 
     <string name="google_maps_api_key">AIzaSyABbgxUaKHBgwuaVndt5G0tR2XNYkdpCi8</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

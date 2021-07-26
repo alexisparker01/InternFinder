@@ -3,9 +3,7 @@ package com.example.internfinder.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,7 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.internfinder.ProfileActivity;
+import com.example.internfinder.activities.OpenPostActivity;
+import com.example.internfinder.activities.ProfileActivity;
 import com.example.internfinder.R;
 import com.example.internfinder.models.Post;
 import com.google.android.gms.maps.GoogleMap;
@@ -148,15 +147,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                     i.putExtra("Post", Parcels.wrap(post));
                     i.putExtra("User", Parcels.wrap(post.getUser()));
                     context.startActivity(i);
+
+
                 }
             });
 
-/*
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    Intent i = new Intent(context, OpenPost.class);
+                    Intent i = new Intent(context, OpenPostActivity.class);
                     i.putExtra("Post", Parcels.wrap(post));
                     context.startActivity(i);
 
@@ -164,10 +165,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             });
 
 
- */
+
 
             // DOUBLE TAP FEATURE
-
+/*
             itemView.setOnTouchListener(new View.OnTouchListener() {
 
                 private GestureDetector gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
@@ -182,16 +183,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     gestureDetector.onTouchEvent(event);
-                    // Intent i = new Intent(context, OpenPost.class);
+                    // Intent i = new Intent(context, OpenPostActivity.class);
                     // i.putExtra("Post", Parcels.wrap(post));
                     //  context.startActivity(i);
                     return true;
                 }
 
             });
-
+*/
 
         }
+
+
 
         public void clear() {
             posts.clear();
@@ -203,3 +206,4 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             notifyDataSetChanged();
         }
     }
+}
