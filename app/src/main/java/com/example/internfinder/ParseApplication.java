@@ -2,6 +2,9 @@ package com.example.internfinder;
 
 import android.app.Application;
 
+import com.example.internfinder.models.Comment;
+import com.example.internfinder.models.Follow;
+import com.example.internfinder.models.Post;
 import com.parse.Parse;
 import com.parse.ParseObject;
 

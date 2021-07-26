@@ -4,11 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-
+<RelativeLayout
+    android:id="@+id/rlComment"
+    android:layout_height="wrap_content"
+                android:layout_width="wrap_content">
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivProfilePicComment"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="5dp"
         tools:src="@tools:sample/avatars"
         tools:srcCompat="@tools:sample/avatars" />
 
@@ -17,9 +21,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="22dp"
+        android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/ivProfilePicComment"
         android:fontFamily="sans-serif-light"
-        android:textSize="15sp"
+        android:textSize="12sp"
         tools:text="@username" />
 
     <TextView
@@ -27,20 +32,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvUsernameComment"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="30dp"
         android:layout_toEndOf="@+id/ivProfilePicComment"
         android:fontFamily="sans-serif-light"
-        android:textSize="15sp"
+        android:textSize="12sp"
         tools:text="comment text" />
 
     <TextView
         android:id="@+id/tvCreatedAtComment"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvTextComment"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="62dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/tvTextComment"
         android:fontFamily="sans-serif-light"
-        android:textSize="15sp"
+        android:textSize="10sp"
         tools:text="5m" />
+
+</RelativeLayout>
+
 </RelativeLayout>

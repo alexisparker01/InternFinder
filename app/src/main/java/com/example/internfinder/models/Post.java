@@ -1,7 +1,8 @@
-package com.example.internfinder;
+package com.example.internfinder.models;
 
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -17,6 +18,9 @@ public class Post extends ParseObject {
     public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_IMAGE = "image";
     public static final String KEY_USER = "user";
+    public static final String KEY_TYPE = "type";
+    public static final String KEY_LOCATION = "location";
+    public static final String KEY_LATLNG = "latlng";
 
     public String getDescription() {
 
@@ -47,6 +51,37 @@ public class Post extends ParseObject {
     public void setUser(ParseUser parseUser) {
 
         put(KEY_USER, parseUser);
+    }
+
+
+    public String getType() {
+
+        return getString(KEY_TYPE);
+    }
+
+    public void setType(String type) {
+
+        put(KEY_TYPE, type);
+    }
+    public String getLocation() {
+
+        return getString(KEY_LOCATION);
+    }
+
+    public void setLocation(String location) {
+
+        put(KEY_LOCATION, location);
+    }
+
+    public ParseGeoPoint getLatLng() {
+
+        return getParseGeoPoint(KEY_LATLNG);
+    }
+
+    public void setLatLng(ParseGeoPoint point) {
+
+        put(KEY_LATLNG, point);
+
     }
 
     public static String calculateTimeAgo(Date createdAt) {

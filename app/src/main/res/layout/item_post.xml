@@ -6,17 +6,107 @@
     android:layout_height="wrap_content">
 
 
-    <TextView
-        android:id="@+id/tvUsernamePD"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="0dp"
-        android:layout_toEndOf="@+id/profilePic"
-        android:fontFamily="sans-serif-thin"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textSize="15sp"
-        tools:text="@janedoetheintern" />
+    <RelativeLayout
+        android:id="@+id/topStuff"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/firstNamePost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvUsernamePD"
+            android:layout_marginStart="11dp"
+            android:layout_marginTop="7dp"
+            android:layout_toEndOf="@+id/profilePic"
+            android:fontFamily="sans-serif-light"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            tools:text="Alexis" />
+
+        <TextView
+            android:id="@+id/lastNamePost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvUsernamePD"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="7dp"
+            android:layout_toEndOf="@+id/firstNamePost"
+            android:fontFamily="sans-serif-light"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            tools:text="Parker" />
+
+        <TextView
+            android:id="@+id/tvCreatedAtPD"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvUsernamePD"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="7dp"
+            android:layout_toEndOf="@+id/postType"
+            android:fontFamily="sans-serif-light"
+            android:textSize="12sp"
+            tools:text="5 minutes ago" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profilePic"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            tools:src="@tools:sample/avatars"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tvUsernamePD"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="9dp"
+            android:layout_marginTop="22dp"
+            android:layout_toEndOf="@+id/profilePic"
+            android:fontFamily="sans-serif-thin"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textSize="15sp"
+            tools:text="@janedoetheintern" />
+
+        <TextView
+            android:id="@+id/postType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvUsernamePD"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="7dp"
+            android:layout_toEndOf="@+id/lastNamePost"
+            android:fontFamily="sans-serif-light"
+            android:textSize="12sp"
+            tools:text="posted a picture" />
+
+        <TextView
+            android:id="@+id/tvPostLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profilePic"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="10dp"
+            android:autoLink="map"
+            android:fontFamily="sans-serif-light"
+            android:linksClickable="true"
+            android:visibility="visible"
+            tools:text="Hacker Way, Menlo Park, CA" />
+    </RelativeLayout>
+
+
+    <ImageView
+        android:id="@+id/ivPostImageFeed"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_below="@+id/topStuff"
+        android:layout_marginTop="10dp"
+        android:scaleType="centerCrop"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
 
 
     <TextView
@@ -24,42 +114,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivPostImageFeed"
-        android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="18dp"
-        android:layout_toEndOf="@+id/profilePic"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="25dp"
+        android:layout_toEndOf="@+id/tvUser2"
         android:fontFamily="sans-serif-light"
-        android:textSize="15sp"
+        android:textSize="13sp"
         tools:text="i'm so hungry who wants to get dinner with me!" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profilePic"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        tools:src="@tools:sample/avatars"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <ImageView
-        android:id="@+id/ivPostImageFeed"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_below="@+id/tvUsernamePD"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="9dp"
-        android:layout_toEndOf="@+id/profilePic"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
     <TextView
-        android:id="@+id/tvCreatedAtPD"
+        android:id="@+id/tvUser2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvDescriptionPD"
+        android:layout_below="@+id/ivPostImageFeed"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="19dp"
-        android:layout_marginBottom="30dp"
-        android:fontFamily="sans-serif-condensed-light"
+        android:layout_marginTop="7dp"
+        android:fontFamily="sans-serif-light"
+        android:text="@janedoetheintern"
         android:textSize="14sp"
-        tools:text="5m" />
+        android:textStyle="bold" />
 
 
 </RelativeLayout>

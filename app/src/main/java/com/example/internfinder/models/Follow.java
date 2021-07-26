@@ -1,4 +1,4 @@
-package com.example.internfinder;
+package com.example.internfinder.models;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
@@ -6,8 +6,6 @@ import com.parse.ParseUser;
 
 
 import org.parceler.Parcel;
-
-import java.util.Date;
 
 @Parcel(analyze= Follow.class)
 @ParseClassName("Follow")

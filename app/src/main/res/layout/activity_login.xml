@@ -31,6 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvLogo"
         android:layout_centerHorizontal="true"
+        android:background="@drawable/white_border"
         android:layout_marginTop="20dp"
         android:ems="10"
         android:fontFamily="sans-serif-light"
@@ -43,6 +44,7 @@
 
     <EditText
         android:id="@+id/etPassword"
+        android:background="@drawable/white_border"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/etUsername"
@@ -56,6 +58,7 @@
         android:textColorHighlight="#000000"
         android:textColorHint="#000000"
         android:textColorLink="#000000" />
+
 
     <Button
         android:id="@+id/btnLoginChoice"

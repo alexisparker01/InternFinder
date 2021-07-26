@@ -12,8 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.internfinder.Comment;
 import com.example.internfinder.R;
+import com.example.internfinder.models.Comment;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 
@@ -32,6 +32,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         this.context = context;
         this.comments = theComments;
     }
+
 
     @NonNull
     @Override
@@ -70,7 +71,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         }
 
         public void bind(Comment comment) {
-            // Bind the comment data to the view elements
 
             try {
                 Log.i("CommentAdapter", comment.getParseUser("user").fetchIfNeeded().getString("username"));
@@ -99,14 +99,11 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     }
 
 
-
-    // Clean all elements of the recycler
     public void clear() {
         comments.clear();
         notifyDataSetChanged();
     }
 
-    // Add a list of items -- change to type used
     public void addAll(List<Comment> list) {
         comments.addAll(list);
         notifyDataSetChanged();

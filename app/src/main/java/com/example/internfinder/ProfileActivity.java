@@ -1,10 +1,5 @@
 package com.example.internfinder;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,8 +8,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bumptech.glide.Glide;
 import com.example.internfinder.adapters.PostAdapter;
+import com.example.internfinder.models.Follow;
+import com.example.internfinder.models.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -29,22 +31,22 @@ import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    TextView tvUsernameProfile;
-    TextView tvFirstname;
-    TextView tvLastname;
-    TextView tvBio;
-    ImageView ivProfilePicProfile;
-    Button btnEditProfile;
-    TextView tvIndustry;
+    private static final String TAG = "ProfileActivity";
+    private TextView tvUsernameProfile;
+    private TextView tvFirstname;
+    private TextView tvLastname;
+    private TextView tvBio;
+    private ImageView ivProfilePicProfile;
+    private Button btnEditProfile;
+    private TextView tvIndustry;
     private Button btnFollow;
 
-    ParseUser user;
-    Post post;
-    Follow follow;
+    private ParseUser user;
+    private Post post;
+    private Follow follow;
 
     boolean fromPost;
     boolean fromUser;
-
 
     private SwipeRefreshLayout swipeContainer;
     private RecyclerView rvPosts;
@@ -56,6 +58,7 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
@@ -63,6 +66,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         post = Parcels.unwrap(getIntent().getParcelableExtra("Post"));
         user = Parcels.unwrap(getIntent().getParcelableExtra("User"));
+        
+        Log.i(TAG, "user: " + user.getUsername());
 
         if(post != null) {
             fromPost = true;
@@ -135,7 +140,7 @@ public class ProfileActivity extends AppCompatActivity {
                 tvFirstname.setText(post.getUser().getString("firstname"));
                 tvLastname.setText(post.getUser().getString("lastname"));
                 tvBio.setText(post.getUser().getString("bio"));
-                tvUsernameProfile.setText(post.getUser().getString("username"));
+                tvUsernameProfile.setText("@" + post.getUser().getString("username"));
                 tvIndustry.setText(post.getUser().getString("industry"));
 
                 ParseFile profilePic = post.getUser().getParseFile("profilePicture");
@@ -164,7 +169,7 @@ public class ProfileActivity extends AppCompatActivity {
                 tvFirstname.setText(user.getString("firstname"));
                 tvLastname.setText(user.getString("lastname"));
                 tvBio.setText(user.getString("bio"));
-                tvUsernameProfile.setText(user.getString("username"));
+                tvUsernameProfile.setText("@" + user.getString("username"));
                 tvIndustry.setText(user.getString("industry"));
 
                 ParseFile profilePic = user.getParseFile("profilePicture");

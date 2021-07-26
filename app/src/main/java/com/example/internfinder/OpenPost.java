@@ -1,10 +1,5 @@
 package com.example.internfinder;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,8 +8,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bumptech.glide.Glide;
 import com.example.internfinder.adapters.CommentAdapter;
+import com.example.internfinder.models.Comment;
+import com.example.internfinder.models.Post;
+import com.example.internfinder.models.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -32,16 +35,19 @@ import java.util.List;
 public class OpenPost extends AppCompatActivity {
 
 
-    TextView tvUsernameProfileOpenPost;
-    TextView tvFirstnameOpenPost;
-    TextView tvLastnameOpenPost;
-    ImageView ivProfilePicProfileOpenPost;
-    TextView tvCreatedAtOpenPost;
-    Post post;
-    User user;
-    ImageView ivImageOpenPost;
-    EditText etComment;
-    Button btnSubmitComment;
+    private TextView tvUsernameProfileOpenPost;
+    private TextView tvFirstnameOpenPost;
+    private TextView tvLastnameOpenPost;
+    private ImageView ivProfilePicProfileOpenPost;
+    private TextView tvCreatedAtOpenPost;
+    private TextView tvDescriptionOpenPost;
+    private Post post;
+    private User user;
+    private ImageView ivImageOpenPost;
+    private EditText etComment;
+    private Button btnSubmitComment;
+    private TextView tvLocation;
+
 
     private SwipeRefreshLayout swipeContainerComments;
     private RecyclerView rvComments;
@@ -66,10 +72,12 @@ public class OpenPost extends AppCompatActivity {
         tvLastnameOpenPost = findViewById(R.id.tvLastnameOpenPost);
         tvCreatedAtOpenPost = findViewById(R.id.tvCreatedAtOpenPost);
         ivProfilePicProfileOpenPost = findViewById(R.id.ivProfilePictureOpenPost);
+        tvDescriptionOpenPost = findViewById(R.id.tvDescriptionOpenPost);
         rvComments = findViewById(R.id.rvComments);
         ivImageOpenPost = findViewById(R.id.ivImageOpenPost);
         etComment = findViewById(R.id.etComment);
         btnSubmitComment = findViewById(R.id.btnSubmitComment);
+        tvLocation = findViewById(R.id.tvPostLocation2);
 
 
         btnSubmitComment.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +100,7 @@ public class OpenPost extends AppCompatActivity {
                                                 }
                                             });
 
+        /** swipe refresher and adapter for comments **/
         swipeContainerComments = (SwipeRefreshLayout) findViewById(R.id.swipeContainerComment);
         // Setup refresh listener which triggers new data loading
         swipeContainerComments.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -104,16 +113,13 @@ public class OpenPost extends AppCompatActivity {
             }
         });
 
-
         // Configure the refreshing colors
         swipeContainerComments.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-
-
-        // initialize the array that will hold posts and create the adapter for the profile
+        // initialize the array that will hold comments and create the adapter for the profile
         allComments = new ArrayList<>();
         adapter = new CommentAdapter(this, allComments);
 
@@ -131,9 +137,14 @@ public class OpenPost extends AppCompatActivity {
         tvFirstnameOpenPost.setText(post.getUser().getString("firstname"));
         tvLastnameOpenPost.setText(post.getUser().getString("lastname"));
         tvUsernameProfileOpenPost.setText("@" + post.getUser().getUsername());
+        tvDescriptionOpenPost.setText(post.getDescription());
         Date createdAt = post.getCreatedAt();
         String timeAgo = Post.calculateTimeAgo(createdAt);
         tvCreatedAtOpenPost.setText(timeAgo);
+
+        if(post.getType().equals("event")) {
+            tvLocation.setText(post.getLocation());
+        }
 
         // load profile pic
         ParseFile profilePic = ParseUser.getCurrentUser().getParseFile("profilePicture");
@@ -147,6 +158,49 @@ public class OpenPost extends AppCompatActivity {
         } else {
             ivImageOpenPost.setVisibility(View.GONE);
         }
+
+    }
+
+    private void queryReplyComments() {
+        // specifying that i am querying data from the Comment.class
+        ParseQuery<Comment> query = ParseQuery.getQuery(Comment.class);
+
+        // include data referred by post key
+        query.include(Comment.KEY_POST);
+        // the problem is that post.getobjectid() is a string and i need the parse object of the post
+        query.whereEqualTo(Comment.KEY_POST, post);
+
+        // limit query to latest 15 posts
+        query.setLimit(15);
+
+        // order posts by creation date (newest first)
+        query.addDescendingOrder("createdAt");
+
+        // start an asynchronous call for posts
+        query.findInBackground(new FindCallback<Comment>() {
+            @Override
+            public void done(List<Comment> comments, ParseException e) {
+                // check for errors
+                if (e != null) {
+                    Log.e("OpenPost", "Problem with fetching comments", e);
+                    return;
+                }
+
+
+                // printing each of the posts I get to see if I'm getting all the posts from the server
+
+                for (Comment comment: comments) {
+
+                    Log.i("OpenPost", "comment: " + comment.getUser());
+
+                }
+
+                // save received posts to list and notify adapter of new data
+                allComments.clear();
+                allComments.addAll(comments);
+                adapter.notifyDataSetChanged();
+            }
+        });
 
     }
 

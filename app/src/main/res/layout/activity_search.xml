@@ -4,12 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginLeft="10dp"
     tools:context=".SearchActivity">
 
     <EditText
         android:id="@+id/etSearch"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:hint="Search for other users!"
+        android:imeActionLabel="Search"
+        android:imeOptions="actionSearch"
+        android:inputType="text">
 
     </EditText>
 
@@ -17,17 +23,9 @@
         android:id="@+id/rvUsers"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/btnSubmitSearch"
-        android:layout_marginTop="9dp">
+        android:layout_below="@+id/etSearch"
+        android:layout_marginTop="14dp">
 
     </androidx.recyclerview.widget.RecyclerView>
-
-    <Button
-        android:id="@+id/btnSubmitSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/etSearch"
-        android:layout_marginTop="11dp"
-        tools:text="Search" />
 
 </RelativeLayout>

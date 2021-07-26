@@ -12,9 +12,10 @@
         android:id="@+id/ivProfilePic"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginEnd="156dp"
+        android:foregroundGravity="center_vertical|center|center_horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.071"
         tools:src="@tools:sample/avatars"
@@ -26,14 +27,17 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/ivProfilePic"
         android:fontFamily="sans-serif-light"
-        android:textSize="20sp"
+        android:foregroundGravity="center_vertical|center|center_horizontal"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/ivProfilePic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        tools:text="username" /><![CDATA[
+        tools:text="@username" /><![CDATA[
 
 
 
@@ -45,6 +49,14 @@
         app:layout_constraintTop_toBottomOf="@+id/ivProfilePic"
         app:layout_constraintVertical_bias="0.027"
         tools:text="19 year old Product Design intern in NYC this summer! I love watching movies, thrifting, and meeting new people! :)" />
+
+
+
+
+
+
+
+
 
 
 
@@ -72,10 +84,10 @@
         android:fontFamily="sans-serif-light"
         android:hint="Firstname"
         android:textSize="18sp"
-        android:textStyle="normal"
+        android:textStyle="normal|bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/ivProfilePic"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.109"
@@ -86,14 +98,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvUsername"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="70dp"
         android:layout_toEndOf="@+id/etFirstName"
         android:fontFamily="sans-serif-light"
         android:hint="Lastname"
         android:textSize="18sp"
-        android:textStyle="normal"
+        android:textStyle="normal|bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -136,16 +148,19 @@
         android:id="@+id/btnFollow2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="Follow"
-        tools:layout_editor_absoluteX="161dp"
-        tools:layout_editor_absoluteY="214dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvIndustry" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainer"
-        android:layout_width="379dp"
-        android:layout_height="476dp"
+        android:layout_width="378dp"
+        android:layout_height="438dp"
         android:layout_below="@+id/btnEditProfile"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

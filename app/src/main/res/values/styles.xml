@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="counterOverride">ff0000</style>
+
+    <style name="counterText">000000</style>
+</resources>

@@ -10,46 +10,173 @@
         android:id="@+id/spinnerPostType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
         android:background="@android:drawable/btn_dropdown"
         android:clipChildren="false"
         android:prompt="@string/title"
         android:spinnerMode="dropdown" />
 
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="430dp"
+        android:layout_below="@+id/spinnerPostType"
+        tools:context=".MapsActivity" />
+
     <ImageView
         android:id="@+id/ivPostImage"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
         android:layout_below="@+id/spinnerPostType"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="14dp"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+        android:layout_marginTop="21dp"
+        tools:srcCompat="@tools:sample/avatars" />
 
-    <EditText
-        android:id="@+id/etPostText"
+    <RelativeLayout
+        android:id="@+id/relLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignTop="@+id/map"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/white_border"
+        android:elevation="10dp">
+
+        <ImageView
+            android:id="@+id/ic_magnify2"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_magnify" />
+
+        <EditText
+            android:id="@+id/input_search2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="11dp"
+            android:layout_toRightOf="@+id/ic_magnify2"
+            android:background="@null"
+            android:fontFamily="sans-serif-light"
+            android:hint="Enter Address, City, or Zip Code of where you'd like to have your event"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:imeActionLabel="Search"
+            android:textColor="#000"
+            android:textSize="15sp" />
+
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/relLayout2"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:scaleType="centerCrop"
+        android:id="@+id/ic_gps2"
+        android:src="@drawable/ic_gps"
+        android:layout_marginTop="10dp"/>
+
+
+    <!-- <fragment
+    android:id="@+id/autocomplete_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ivPostImage"
-        android:layout_marginTop="19dp"
+        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+        android:layout_below="@+id/relLayout2"
+        android:background="@drawable/white_border"
         android:ems="10"
-        android:hint="Enter some text you'd like to share!"
-        android:inputType="textPersonName" />
+        android:gravity="start|top"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="3dp" />
+        -->
 
-    <Button
-        android:id="@+id/btnSubmitPost"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/etPostText"
-        android:layout_marginTop="36dp"
-        android:text="submit"
-        tools:text="submit" />
+    <RelativeLayout
+        android:id="@+id/relLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_below="@+id/map">
+
+        <TextView
+            android:id="@+id/tvLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:autoLink="map"
+            android:fontFamily="sans-serif-light"
+            android:linksClickable="true"
+            tools:text="Location" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profilePicCreate"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/tvLocation"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            tools:src="@tools:sample/avatars"></de.hdodenhof.circleimageview.CircleImageView>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvLocation"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@+id/profilePicCreate"
+            app:counterEnabled="true"
+            app:counterMaxLength="200"
+            app:counterOverflowTextAppearance="@style/counterOverride"
+            app:counterTextAppearance="@style/counterText">
+
+            <EditText
+                android:id="@+id/etPostText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/profilePicCreate"
+                android:background="@drawable/white_border"
+                android:ems="10"
+                android:fontFamily="sans-serif-light"
+                android:gravity="start|top"
+                android:hint="Enter some text you'd like to share!"
+                android:minLines="5" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <Button
+            android:id="@+id/btnSubmitPost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etLayout"
+            android:layout_marginStart="300dp"
+            android:layout_marginTop="5dp"
+            android:backgroundTint="#9C27B0"
+            android:fontFamily="sans-serif-light"
+            android:text="submit"
+            tools:text="submit" />
+
+    </RelativeLayout>
 
     <Button
         android:id="@+id/btnCam"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btnSubmitPost"
-        android:layout_marginTop="6dp"
+        android:layout_below="@+id/spinnerPostType"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="-5dp"
+        android:backgroundTint="#9C27B0"
+        android:fontFamily="sans-serif-light"
         android:text="take picture"
         tools:text="take picture" />
+
 
 </RelativeLayout>

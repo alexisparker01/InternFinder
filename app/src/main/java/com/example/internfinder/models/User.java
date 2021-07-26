@@ -1,4 +1,4 @@
-package com.example.internfinder;
+package com.example.internfinder.models;
 
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
@@ -20,10 +20,7 @@ public class User extends ParseObject {
     public static  final String KEY_LASTNAME = "lastname";
     public static  final String KEY_USER = "user";
     public static  final String KEY_USERNAME = "username";
-    public static  final String KEY_PASSWORD = "password";
     public static  final String KEY_INDUSTRY = "industry";
-
-
 
     public ParseFile getProfilePicture() {
 

@@ -7,101 +7,143 @@
     tools:context=".OpenPost">
 
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/ivProfilePictureOpenPost"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        tools:src="@tools:sample/avatars"
-        tools:srcCompat="@tools:sample/avatars" />
+    <RelativeLayout
+        android:id="@+id/rl1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tvFirstnameOpenPost"
-        android:layout_width="wrap_content"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ivProfilePictureOpenPost"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            tools:src="@tools:sample/avatars"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tvFirstnameOpenPost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvUsernameOpenPost"
+            android:layout_marginStart="9dp"
+            android:layout_marginTop="6dp"
+            android:layout_toEndOf="@+id/ivProfilePictureOpenPost"
+            android:fontFamily="sans-serif-light"
+            android:textSize="13sp"
+            tools:text="firstname" />
+
+        <TextView
+            android:id="@+id/tvUsernameOpenPost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="30dp"
+            android:layout_toEndOf="@+id/ivProfilePictureOpenPost"
+            android:fontFamily="sans-serif-light"
+            android:textSize="14sp"
+            tools:text="@username" />
+
+        <TextView
+            android:id="@+id/tvCreatedAtOpenPost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="100dp"
+            android:layout_marginTop="30dp"
+            android:layout_toEndOf="@+id/tvUsernameOpenPost"
+            android:fontFamily="sans-serif-light"
+            android:textSize="12sp"
+            tools:text="5m" />
+
+        <TextView
+            android:id="@+id/tvPostLocation2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvFirstnameOpenPost"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginBottom="10dp"
+            android:autoLink="map"
+            android:fontFamily="sans-serif-light"
+            android:linksClickable="true"
+            android:visibility="visible"
+            tools:text="Hacker Way, Menlo Park, CA" />
+
+        <TextView
+            android:id="@+id/tvLastnameOpenPost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvUsernameOpenPost"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="6dp"
+            android:layout_toEndOf="@+id/tvFirstnameOpenPost"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-light"
+            android:textSize="13sp"
+            tools:text="lastname" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl2"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvUsernameOpenPost"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_toEndOf="@+id/ivProfilePictureOpenPost"
-        android:fontFamily="sans-serif-light"
-        android:textSize="18sp"
-        tools:text="firstname" />
+        android:layout_below="@+id/rl1"
+        android:layout_marginTop="5dp">
 
-    <TextView
-        android:id="@+id/tvDescriptionOpenPost"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvFirstnameOpenPost"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="19dp"
-        android:layout_marginBottom="50dp"
-        android:layout_toEndOf="@+id/ivProfilePictureOpenPost"
-        android:fontFamily="sans-serif-light"
-        android:textSize="18sp"
-        tools:text="Description" />
+        <ImageView
+            android:id="@+id/ivImageOpenPost"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:scaleType="centerCrop"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
-    <TextView
-        android:id="@+id/tvUsernameOpenPost"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_toEndOf="@+id/ivProfilePictureOpenPost"
-        android:fontFamily="sans-serif-light"
-        android:textSize="18sp"
-        tools:text="@username" />
+        <Button
+            android:id="@+id/btnSubmitComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etComment"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="-1dp"
+            android:text="SUBMIT"
+            android:textSize="12sp" />
 
-    <TextView
-        android:id="@+id/tvLastnameOpenPost"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvUsernameOpenPost"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_toEndOf="@+id/tvFirstnameOpenPost"
-        android:layout_weight="1"
-        android:fontFamily="sans-serif-light"
-        android:textSize="18sp"
-        tools:text="lastname" />
+        <EditText
+            android:id="@+id/etComment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvDescriptionOpenPost"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="10dp"
+            android:ems="10"
+            android:hint="Leave a comment!"
+            android:inputType="textPersonName"
+            android:textSize="14sp" />
 
-    <TextView
-        android:id="@+id/tvCreatedAtOpenPost"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="200dp"
-        android:layout_toEndOf="@+id/tvUsernameOpenPost"
-        tools:text="5m" />
-
-    <ImageView
-        android:id="@+id/ivImageOpenPost"
-        android:layout_width="195dp"
-        android:layout_height="183dp"
-        android:layout_below="@+id/tvDescriptionOpenPost"
-        android:layout_centerHorizontal="true"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
-    <EditText
-        android:id="@+id/etComment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ivImageOpenPost"
-        android:layout_marginTop="7dp"
-        android:ems="10"
-        android:hint="Comment"
-        android:inputType="textPersonName" />
-
-    <Button
-        android:id="@+id/btnSubmitComment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/etComment"
-        android:layout_marginTop="9dp"
-        android:text="SUBMIT" />
+        <TextView
+            android:id="@+id/tvDescriptionOpenPost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivImageOpenPost"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="sans-serif-light"
+            android:textSize="14sp"
+            tools:text="Description" />
+    </RelativeLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainerComment"
-        android:layout_width="match_parent"
-        android:layout_height="192dp"
-        android:layout_below="@+id/btnSubmitComment"
-        android:layout_marginTop="2dp">
+        android:layout_width="363dp"
+        android:layout_height="302dp"
+        android:layout_below="@+id/rl2"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvComments"

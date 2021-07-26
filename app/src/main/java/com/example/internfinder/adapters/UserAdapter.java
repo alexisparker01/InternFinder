@@ -27,13 +27,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private List<ParseUser> users;
 
 
-
     public UserAdapter(Context context, List<ParseUser> usersList) {
         this.context = context;
         this.users = usersList;
 
     }
-
 
     @NonNull
     @Override
@@ -77,9 +75,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         public void bind(ParseUser user) {
 
-
-            // Bind the user data to the view elements
-
             tvUsernameGrid.setText("@" + user.getString("username"));
 
             tvFirstnameGrid.setText(user.getString("firstname"));
@@ -97,22 +92,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                 @Override
                 public void onClick(View v) {
 
-                    if (user.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
-                        Intent i = new Intent(context, ProfileActivity.class);
-                        context.startActivity(i);
-                    } else {
                         Intent i = new Intent(context, ProfileActivity.class);
                         i.putExtra("User", Parcels.wrap(user));
                         context.startActivity(i);
                     }
-                }
+
             });
-
-
-        }
-
-
     }
+}
 
     // Clean all elements of the recycler
     public void clear() {
@@ -122,7 +109,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     // Add a list of items -- change to type used
     public void addAll(List<ParseUser> list) {
-
         users.addAll(list);
         notifyDataSetChanged();
     }
