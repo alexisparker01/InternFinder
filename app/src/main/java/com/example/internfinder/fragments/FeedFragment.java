@@ -18,9 +18,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.internfinder.activities.CreatePostActivity;
 import com.example.internfinder.R;
+import com.example.internfinder.activities.CreatePostActivity;
 import com.example.internfinder.adapters.PostAdapter;
+import com.example.internfinder.models.Follow;
 import com.example.internfinder.models.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -42,8 +43,15 @@ public class FeedFragment extends Fragment {
     protected List<Post> allPosts;
     RecyclerView rvFeedPosts;
     private SwipeRefreshLayout swipeContainer;
-    Button btnCreatePost;
+    private Button btnCreate;
     private Spinner spinnerFeed;
+
+    private boolean followingBoolean;
+    private boolean nearYouBoolean;
+    private boolean industryBoolean;
+
+    private boolean hasQueriedPosts = false;
+
 
 
     public FeedFragment() {
@@ -61,7 +69,7 @@ public class FeedFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rvFeedPosts = view.findViewById(R.id.rvFeedPosts);
-        btnCreatePost = view.findViewById(R.id.btnCreatePost);
+        btnCreate = view.findViewById(R.id.btnCreate);
         spinnerFeed = view.findViewById(R.id.spinnerFeed);
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainerFeedActivity);
 
@@ -72,7 +80,17 @@ public class FeedFragment extends Fragment {
                 // Your code to refresh the list here.
                 // Make sure you call swipeContainer.setRefreshing(false)
                 // once the network request has completed successfully.
-                queryPosts("");
+                if(followingBoolean) {
+                    queryPosts("Following");
+                } else if (nearYouBoolean) {
+                    queryPosts("Near You");
+                } else if(industryBoolean) {
+
+                    queryPosts("industry");
+                } else {
+                   // queryPosts("");
+                }
+
             }
         });
         // Configure the refreshing colors
@@ -82,7 +100,7 @@ public class FeedFragment extends Fragment {
                 android.R.color.holo_red_light);
 
 
-        btnCreatePost.setOnClickListener(new View.OnClickListener() {
+        btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -105,31 +123,46 @@ public class FeedFragment extends Fragment {
 
 
                 if (parent.getItemAtPosition(position).equals("Following")) {
+                    nearYouBoolean = false;
+                    industryBoolean = false;
+                    followingBoolean = true;
 
-                    queryPosts("Following");
+                    if(!hasQueriedPosts) {
+                        queryPosts("Following");
+                    }
 
 
                 } else if (parent.getItemAtPosition(position).equals("Near You")) {
 
+                    nearYouBoolean = true;
+                    followingBoolean = false;
+                    industryBoolean = false;
                     queryPosts("Near You");
 
 
                 } else if (parent.getItemAtPosition(position).equals("Industry")) {
 
+                    industryBoolean = true;
+                    followingBoolean = false;
+                    nearYouBoolean = false;
+
                     queryPosts("Industry");
 
+                } else {
+                   // queryOnlyFollowing();
                 }
             }
 
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
-                Log.i(TAG, "Nothing Selected");
+                queryOnlyFollowing();
             }
         });
 
 
+
+       // allPosts2 = new ArrayList<>();
         allPosts = new ArrayList<>();
         adapter = new PostAdapter(getContext(), allPosts);
 
@@ -139,18 +172,74 @@ public class FeedFragment extends Fragment {
         rvFeedPosts.setLayoutManager(new LinearLayoutManager(getContext()));
 
 
+
     }
+    private void queryOnlyFollowing() {
+        hasQueriedPosts = true;
+        Log.i(TAG, "queryOnlyFollowing: starting the method");
+        allPosts.clear();
+        adapter.notifyDataSetChanged();
+
+        ParseQuery<Follow> query = ParseQuery.getQuery(Follow.class);
+        query.whereEqualTo("from", ParseUser.getCurrentUser());
+        query.findInBackground(new FindCallback<Follow>() {
+            @Override
+            public void done(List<Follow> followList, ParseException e) {
+                // check for errors
+                if (e != null) {
+                    Log.i(TAG, "NULL REACHED 1: " + e.getMessage());
+                    return;
+                }
+
+                for(Follow follow:followList) {
+                    Log.i(TAG, "size of follow list: " + followList.size());
+                   // Log.i(TAG, "person the current user follows: " + follow.getParseUser("to").getUsername());
+                    // e == null --> success
+                    ParseQuery<Post> query2 = ParseQuery.getQuery(Post.class);
+                    query2.whereEqualTo("user", follow.getTo());
+                    query2.include("user");
+                    query2.setLimit(20);
+
+                    query2.findInBackground(new FindCallback<Post>() {
+                        @Override
+                        public void done(List<Post> posts, ParseException e) {
+                            Log.i(TAG, "size of post list: " + posts.size());
+                            // check for errors
+                            if (e != null) {
+                                Log.i(TAG, "NULL REACHED 2");
+                                return;
+                            }
+
+                            // e == null --> success
+                            // adds post from user
+                                for(Post post : posts) {
+                                    Log.i(TAG, "post description: " + post.getDescription() + " post type: " + post.getType());
+                                    allPosts.add(post);
+                                    adapter.notifyDataSetChanged();
+                                }
+                        }
+                    });
+                }
+
+                swipeContainer.setRefreshing(false);
+
+            }
+        });
+
+    }
+
     private void queryPosts(String option) {
         // specify what type of data we want to query - Post.class
-        ParseQuery<Post> query;
-        query = ParseQuery.getQuery(Post.class);
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         if(option.equals("Near You")) {
             query.whereWithinMiles("latlng", ParseUser.getCurrentUser().getParseGeoPoint("location"), 10);
         } else if (option.equals("Industry")) {
             query.whereMatches("industry", ParseUser.getCurrentUser().getString("industry"));
+        } else if(option.equals("Following")) {
+            queryOnlyFollowing();
+            return;
         }
         query.include(Post.KEY_USER);
-
 
         // limit query to latest 20 items
         query.setLimit(20);

@@ -35,12 +35,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.example.internfinder.R;
-import com.example.internfinder.fragments.FeedFragment;
 import com.example.internfinder.models.Post;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -215,13 +212,11 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
         tvLocation.setVisibility(View.GONE);
 
 
-        ParseFile profilePicture = ParseUser.getCurrentUser().getParseFile("profilePicture");
-        if (profilePic != null) {
+        ParseFile profilePicture = ParseUser.getCurrentUser().getParseFile("profilePic");
+        if (profilePicture != null) {
             Glide.with(this).load(profilePicture.getUrl()).into(profilePic);
 
         }
-
-
 
         /** set up for spinner widget **/
 
@@ -589,10 +584,14 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
 
         */
 
-        Fragment fragment = new FeedFragment();
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.flFeed, fragment);
-        ft.commit();
+        Intent intent = new Intent(CreatePostActivity.this, MainActivity.class);
+        intent.putExtra("openFeedFragment",true);
+        overridePendingTransition(0, 0);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        finish();
+        startActivity(intent);
+
+
     }
 
 
@@ -614,7 +613,6 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
             // start the image capture intent to take photo
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         }
-
     }
 
     public File getPhotoFileUri(String fileName) {

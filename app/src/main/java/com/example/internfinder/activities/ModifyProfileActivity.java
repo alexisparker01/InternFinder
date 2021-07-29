@@ -25,9 +25,7 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import org.parceler.Parcels;
-
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -40,8 +38,8 @@ public class ModifyProfileActivity extends AppCompatActivity {
     private EditText etBio;
     private Button btnSave;
     private ImageView ivProfilePic;
-    private Button btnLogout2;
     private Spinner spinnerIndustry;
+    private ParseFile file;
 
     public static final int GET_FROM_GALLERY = 3;
 
@@ -57,7 +55,6 @@ public class ModifyProfileActivity extends AppCompatActivity {
         etBio = findViewById(R.id.etBioEditProfile);
         btnSave = findViewById(R.id.btnSave);
         ivProfilePic = findViewById(R.id.ivProfilePic);
-        btnLogout2 = findViewById(R.id.btnLogout2);
 
         String[] postSelections = new String[]{"Technology", "Finance", "Arts", "Medical"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, postSelections);
@@ -189,15 +186,7 @@ public class ModifyProfileActivity extends AppCompatActivity {
             }
         });
 
-        btnLogout2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ParseUser.logOut();
-                Intent i = new Intent(ModifyProfileActivity.this, LoginActivity.class);
-                startActivity(i);
-                finish();
-            }
-        });
+
     }
 
     private void saveProfile(String firstname, String lastname, String bio, String username, ParseUser currentUser) {
@@ -206,6 +195,7 @@ public class ModifyProfileActivity extends AppCompatActivity {
         currentUser.put("lastname", lastname);
         currentUser.put("bio", bio);
         currentUser.put("username", username);
+      //  currentUser.put("profilePic", file);
 
         currentUser.saveInBackground(new SaveCallback() {
             @Override
@@ -227,13 +217,31 @@ public class ModifyProfileActivity extends AppCompatActivity {
     }
 
     private void goToProfile() {
-
+/*
         Intent i = new Intent(ModifyProfileActivity.this, ProfileActivity.class);
         i.putExtra("User", Parcels.wrap(ParseUser.getCurrentUser()));
         startActivity(i);
 
+ */
+
+        Intent intent = new Intent(ModifyProfileActivity.this, MainActivity.class);
+        intent.putExtra("openProfileFragment",true);
+        overridePendingTransition(0, 0);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        finish();
+        startActivity(intent);
+
 
     }
+
+    public ParseFile conversionBitmapParseFile(Bitmap imageBitmap){
+        ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
+        byte[] imageByte = byteArrayOutputStream.toByteArray();
+        ParseFile parseFile = new ParseFile("image_file.png",imageByte);
+        return parseFile;
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -254,10 +262,20 @@ public class ModifyProfileActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            final ParseFile imageFile = new ParseFile(new File(selectedImage.getPath()));
 
-            if (imageFile != null) {
-                Glide.with(this).load(imageFile.getUrl()).into(ivProfilePic);
+
+            //BitmapFactory.decodeFile(selectedImage.getPath());
+
+          //  ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            // Compress image to lower quality scale 1 - 100
+         //   bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
+
+            ParseFile file = conversionBitmapParseFile(bitmap);
+            if (file != null) {
+                Glide.with(this).load(file).into(ivProfilePic);
+
+
             }
         }
     }

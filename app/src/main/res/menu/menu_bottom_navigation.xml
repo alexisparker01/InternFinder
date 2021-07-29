@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!--
     <item
         android:id="@+id/action_profile"
         android:enabled="true"
         android:icon="@drawable/ic_profile"
         android:title="profile"
         app:showAsAction="ifRoom" />
+        -->
     <item
-        android:id="@+id/action_feed"
+        android:id="@+id/action_profile"
         android:enabled="true"
-        android:icon="@drawable/ic_baseline_home_24"
-        android:title="feed"
+        android:icon="@drawable/ic_profile"
+        android:title="profile"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_map"
@@ -20,9 +22,20 @@
         android:title="map"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/action_feed"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="feed"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/action_search"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_search_24"
         android:title="search"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_logout"
+        android:icon="@drawable/ic_map"
+        android:title="logout" />
+
 </menu>

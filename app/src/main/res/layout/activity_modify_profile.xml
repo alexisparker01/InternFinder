@@ -66,17 +66,10 @@
         android:id="@+id/btnSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btnLogout2"
+        android:layout_below="@+id/etBioEditProfile"
         android:layout_marginTop="29dp"
         android:text="SAVE" />
 
-    <Button
-        android:id="@+id/btnLogout2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/etBioEditProfile"
-        android:layout_marginTop="296dp"
-        android:text="Logout" />
 
     <Spinner
         android:id="@+id/spinnerIndustry"

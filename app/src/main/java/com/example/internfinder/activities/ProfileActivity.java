@@ -41,6 +41,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Button btnEditProfile;
     private TextView tvIndustry;
     private Button btnFollow;
+    private ImageView ivBackProfile;
 
     private ParseUser user;
     private Post post;
@@ -68,7 +69,7 @@ public class ProfileActivity extends AppCompatActivity {
         post = Parcels.unwrap(getIntent().getParcelableExtra("Post"));
         user = Parcels.unwrap(getIntent().getParcelableExtra("User"));
         
-        Log.i(TAG, "user: " + user.getUsername());
+        Log.i(TAG, "profile activity uuser: " + user.getUsername());
 
         if(post != null) {
             fromPost = true;
@@ -89,9 +90,25 @@ public class ProfileActivity extends AppCompatActivity {
         rvPosts = findViewById(R.id.rvUserPosts);
         tvIndustry = findViewById(R.id.tvIndustry);
         btnFollow = findViewById(R.id.btnFollow2);
+        ivBackProfile = findViewById(R.id.ivBackProfile);
+
+
+        ivBackProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+                intent.putExtra("openFeedFragment",true);
+                overridePendingTransition(0, 0);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                finish();
+                startActivity(intent);
+            }
+        });
 
         btnFollow.setVisibility(View.GONE);
         btnEditProfile.setVisibility(View.GONE);
+
+
 
 
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
@@ -111,7 +128,7 @@ public class ProfileActivity extends AppCompatActivity {
             tvIndustry.setText(ParseUser.getCurrentUser().getString("industry"));
 
             // load profile pic
-            ParseFile profilePic = ParseUser.getCurrentUser().getParseFile("profilePicture");
+            ParseFile profilePic = ParseUser.getCurrentUser().getParseFile("profilePic");
             if (profilePic != null) {
                 Glide.with(this).load(profilePic.getUrl()).into(ivProfilePicProfile);
 
@@ -214,8 +231,6 @@ public class ProfileActivity extends AppCompatActivity {
                                });
 
 
-
-
             btnFollow.setOnClickListener(new View.OnClickListener() {
                                              @Override
                                              public void onClick(View v) {
@@ -223,11 +238,12 @@ public class ProfileActivity extends AppCompatActivity {
                                                  if (btnFollow.getText().toString().equals("Follow")) {
 
 
-                                                     ParseUser otherUser = post.getUser();
+                                                    // ParseUser otherUser = post.getParseUser("user");
+                                                     ParseUser otherUser = user;
 
                                                      // create an entry in the Follow table
                                                      follow.setFrom(ParseUser.getCurrentUser());
-                                                     follow.setTo(otherUser);
+                                                     follow.setTo(user);
                                                      //  follow.put("date", Date());
                                                      follow.saveInBackground();
 

@@ -2,7 +2,6 @@ package com.example.internfinder.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.internfinder.R;
 import com.example.internfinder.activities.OpenPostActivity;
 import com.example.internfinder.activities.ProfileActivity;
-import com.example.internfinder.R;
 import com.example.internfinder.models.Post;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
@@ -69,8 +66,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         private TextView postType;
         private TextView tvUser2;
         private TextView tvPostLocation;
-        private SupportMapFragment mapFragment;
-        private GoogleMap map;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -97,15 +92,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
             if (post.getType().equals("event")) {
                 tvPostLocation.setText(post.getLocation());
-
+            } else {
+                tvPostLocation.setVisibility(View.GONE);
             }
 
-
             tvDescription.setText(post.getDescription());
-
-
-            Log.i("Adapter", post.getUser().getUsername());
             tvUsername.setText("@" + post.getUser().getUsername());
+
             Date createdAt = post.getCreatedAt();
             String timeAgo = Post.calculateTimeAgo(createdAt);
             tvCreatedAt.setText(timeAgo);
@@ -127,7 +120,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             }
 
 
-            ParseFile profilePic = ParseUser.getCurrentUser().getParseFile("profilePicture");
+            ParseFile profilePic = ParseUser.getCurrentUser().getParseFile("profilePic");
             if (profilePic != null) {
                 Glide.with(context).load(profilePic.getUrl()).into(ivProfilePic);
             }
@@ -151,7 +144,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
                 }
             });
-
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

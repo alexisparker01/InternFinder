@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,10 +21,13 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.internfinder.R;
 import com.example.internfinder.activities.LoginActivity;
 import com.example.internfinder.activities.OpenPostActivity;
-import com.example.internfinder.R;
+import com.example.internfinder.adapters.UserAdapter;
 import com.example.internfinder.models.Post;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -34,14 +38,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickListener {
@@ -52,6 +56,13 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
     private Marker myMarker;
     private TextView tvMapTitle;
     Post post;
+
+    private ImageView gps;
+
+    private RecyclerView hsvInterns;
+    private TextView tvInternTitle;
+    protected UserAdapter adapter;
+    protected List<ParseUser> allUsers;
 
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private Boolean mLocationPermissionsGranted = false;
@@ -64,7 +75,6 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
     LocationManager locationManager;
 
 
-
     public MapFragment() {
         // Required empty public constructor
     }
@@ -73,7 +83,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_map, container, false);
+        View view = inflater.inflate(R.layout.fragment_map, container, false);
 
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapFeed);
         locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
@@ -88,7 +98,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
 
                 map.setMyLocationEnabled(true);
                 map.getUiSettings().setMyLocationButtonEnabled(false);
-                getDeviceLocation();
+                getLocationPermission();
                 queryPosts();
             }
         });
@@ -104,10 +114,68 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
         super.onViewCreated(view, savedInstanceState);
 
         tvMapTitle = view.findViewById(R.id.tvMapTitle);
-       getLocationPermission();
+        tvInternTitle = view.findViewById(R.id.tvInternTitle);
+        hsvInterns = view.findViewById(R.id.hsvInterns);
+        gps = view.findViewById(R.id.ic_gps2);
+
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
+
+
+        gps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: clicked GPS icon");
+                getLocation();
+            }
+        });
+
+
+        // initialize the array that will hold posts and create the adapter for the profile
+        allUsers = new ArrayList<>();
+        adapter = new UserAdapter(getContext(), allUsers);
+
+        // set the adapter on the recycler view
+        hsvInterns.setAdapter(adapter);
+
+        // set the layout manager on the recycler view
+        hsvInterns.setLayoutManager(new LinearLayoutManager(getContext()));
+
+
+        queryUsers();
+
 
     }
 
+    public void getLocation() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mFusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    Log.d(TAG, "onComplete: found your location! You are at: " + location);
+                    ParseGeoPoint currentUserGeoPoint = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
+                    saveCurrentUserLocation(currentUserGeoPoint);
+                    //geoLocate(currentUserGeoPoint, "My Location");
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentUserGeoPoint.getLatitude(), currentUserGeoPoint.getLongitude()), 11f));
+
+                } else {
+                    Log.d(TAG, "onComplete: location is null");
+                    Toast.makeText(getContext(), "unable to get current location", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    /*
     private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the devices location");
 
@@ -115,25 +183,31 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
         try {
             if (mLocationPermissionsGranted) {
                 Task location = mFusedLocationProviderClient.getLastLocation();
-                location.addOnCompleteListener(new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if (task.isSuccessful()) {
-                            Location currentLocation = (Location) task.getResult();
-                            Log.d(TAG, "onComplete: found your location! You are at: " + currentLocation);
-                            ParseGeoPoint currentUserGeoPoint = new ParseGeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
-                            saveCurrentUserLocation(currentUserGeoPoint);
-                            geoLocate(currentUserGeoPoint, "My Location");
+                if(location == null) {
 
+                    Log.e(TAG, "LOCATION IS NULL");
 
+                } else {
+                    location.addOnCompleteListener(new OnCompleteListener() {
+                        @Override
+                        public void onComplete(@NonNull Task task) {
+                            if (task.isSuccessful()) {
+                                Location currentLocation = (Location) task.getResult();
+                                Log.d(TAG, "onComplete: found your location! You are at: " + currentLocation);
+                                ParseGeoPoint currentUserGeoPoint = new ParseGeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
+                                saveCurrentUserLocation(currentUserGeoPoint);
+                                //geoLocate(currentUserGeoPoint, "My Location");
+                                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentUserGeoPoint.getLatitude(), currentUserGeoPoint.getLongitude()), 11f));
 
-                        } else {
-                            Log.d(TAG, "onComplete: location is null");
-                            Toast.makeText(getContext(), "unable to get current location", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Log.d(TAG, "onComplete: location is null");
+                                Toast.makeText(getContext(), "unable to get current location", Toast.LENGTH_SHORT).show();
+
+                            }
 
                         }
-                    }
-                });
+                    });
+                }
             }
 
         } catch (SecurityException e) {
@@ -142,6 +216,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
 
 
     }
+*/
 
     private void getLocationPermission() {
         Log.d(TAG, "getLocationPermission: getting location permissions ");
@@ -151,7 +226,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
         if (ContextCompat.checkSelfPermission(getContext(), FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             if (ContextCompat.checkSelfPermission(getContext(), COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mLocationPermissionsGranted = true;
-                getDeviceLocation();
+                getLocation();
             } else {
                 ActivityCompat.requestPermissions(getActivity(), permissions, LOCATION_PERMISSION_REQUEST_CODE);
             }
@@ -177,7 +252,6 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
 
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
@@ -199,7 +273,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
                     // saveCurrentUserLocation();
                     mLocationPermissionsGranted = true;
                     //initialize the map
-                    getDeviceLocation();
+                    getLocationPermission();
                 }
             }
         }
@@ -209,16 +283,18 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
     private void saveCurrentUserLocation(ParseGeoPoint point) {
         Log.i(TAG, "Saving the user's current location");
         // requesting permission to get user's location
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+/*        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
         }
+
+ */
         if (point != null) {
             // if it isn't, save it to Back4App Dashboard
 
             ParseUser currentUser = ParseUser.getCurrentUser();
 
             if (currentUser != null) {
-                currentUser.put("location", point);
+                currentUser.put("currentLocation", point);
                 currentUser.saveInBackground();
             } else {
                 // do something like coming back to the login activity
@@ -231,8 +307,6 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
     private void geoLocate(ParseGeoPoint point, String title) {
         Log.e(TAG, "GeoLocating...");
         Geocoder geocoder = new Geocoder(getContext());
-
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(point.getLatitude(), point.getLongitude()), 12f));
 
         if (!title.equals("My Location")) {
             Log.e(TAG, "Adding user post...");
@@ -249,14 +323,13 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
 
         query.whereWithinMiles("latlng", getCurrentUserLocation(), 15);
-
+        query.include("latlng");
 
         // limit query to latest 15 posts
         query.setLimit(15);
 
         // order posts by creation date (newest first)
-        // query.addDescendingOrder("createdAt");
-
+        query.addDescendingOrder("createdAt");
         // start an asynchronous call for posts
 
         query.findInBackground(new FindCallback<Post>() {
@@ -270,26 +343,66 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
 
                 // printing each of the posts I get to see if I'm getting all the posts from the server
 
+
                 for (Post thePost : posts) {
                     post = thePost;
                     Log.i("MapFragment", "user: " + thePost.getLatLng() + " " + thePost.getLocation());
                     if (thePost.getLatLng() != null) {
                         geoLocate(thePost.getLatLng(), thePost.getLocation());
                     }
+                }
 
                 }
 
+            });
+    }
+
+
+    public void queryUsers() {
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+
+        query.whereWithinMiles("location", getCurrentUserLocation(), 20);
+
+        // limit query to latest 15 posts
+        query.setLimit(15);
+
+        // order posts by creation date (newest first)
+       // query.addDescendingOrder("createdAt");
+        query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> users, ParseException e) {
+                // check for errors
+                if (e != null) {
+                    Log.e("ProfileActivity", "Problem with fetching posts", e);
+                    return;
+                }
+
+                // printing each of the posts I get to see if I'm getting all the posts from the server
+                ParseUser currentUser = new ParseUser();
+
+                for (ParseUser user: users) {
+
+                    if(user.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
+                        currentUser = user;
+                    }
+
+                }
+                users.remove(currentUser);
+
+                // save received posts to list and notify adapter of new data
+                allUsers.clear();
+                allUsers.addAll(users);
+                adapter.notifyDataSetChanged();
             }
         });
 
     }
 
-
     @Override
     public boolean onMarkerClick(@NonNull Marker marker) {
         Intent i = new Intent(getContext(), OpenPostActivity.class);
         i.putExtra("Post", post);
-        startActivity(i);
+        getContext().startActivity(i);
         return false;
     }
 }

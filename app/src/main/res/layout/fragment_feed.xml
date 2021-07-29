@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/flFeed"
     android:layout_width="match_parent"
@@ -10,6 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <Button
+            android:id="@+id/btnCreate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/swipeContainerFeedActivity"
+            android:layout_marginTop="13dp"
+            android:clickable="true"
+            android:text="MAKE A POST" />
+
         <Spinner
             android:id="@+id/spinnerFeed"
             android:layout_width="match_parent"
@@ -19,15 +29,15 @@
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeContainerFeedActivity"
             android:layout_width="match_parent"
-            android:layout_height="590dp"
+            android:layout_height="600dp"
             android:layout_below="@+id/spinnerFeed"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="6dp"
             android:backgroundTint="#FFF9C9">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvFeedPosts"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="600dp"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_marginBottom="20dp"
@@ -35,15 +45,6 @@
                 android:padding="8dp" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-        <Button
-            android:id="@+id/btnCreatePost"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/swipeContainerFeedActivity"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="-1dp"
-            android:text="create post" />
 
     </RelativeLayout>
 

@@ -84,7 +84,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
             tvIndustryGrid.setText(user.getString("industry"));
 
-            ParseFile profilePic = user.getParseFile("profilePicture");
+            ParseFile profilePic = user.getParseFile("profilePic");
             if (profilePic != null) {
                 Glide.with(context).load(profilePic.getUrl()).into(ivProfilePictureGrid);
             }
