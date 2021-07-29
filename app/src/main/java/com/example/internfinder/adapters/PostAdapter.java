@@ -27,6 +27,8 @@ import java.util.List;
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     private Context context;
     private List<Post> posts;
+    public static final String PLACES_URL = "https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
+
 
 
     public PostAdapter(Context context, List<Post> thePosts) {

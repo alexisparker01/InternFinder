@@ -82,4 +82,7 @@ dependencies {
     implementation "com.google.android.material:material:${designSupportVersion}"
     implementation "androidx.transition:transition:1.1.0"
 
+    // asynch
+    implementation 'com.codepath.libraries:asynchttpclient:2.0.0'
+
 }

@@ -37,6 +37,8 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
+import com.codepath.asynchttpclient.AsyncHttpClient;
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.internfinder.R;
 import com.example.internfinder.models.Post;
 import com.google.android.gms.common.ConnectionResult;
@@ -57,15 +59,29 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreatePostActivity extends AppCompatActivity implements OnMapReadyCallback  {
+import okhttp3.Headers;
+
+public class CreatePostActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     // tag variable for logging
     public static final String TAG = "CreatePostActivity";
+
+    public String URL = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?";
+    public String textinput;
+    public String inputType = "inputtype=textinput";
+    public String API = "AIzaSyABbgxUaKHBgwuaVndt5G0tR2XNYkdpCi8";
+
+
+
 
     // currentUser var
     ParseUser currentUser;
@@ -112,7 +128,9 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
     private ParseGeoPoint eventLatLng;
     private LatLng currentLocationLatLng;
 
+
     //private AutocompleteSupportFragment autocompleteFragment;
+
 
 
     @Override
@@ -137,14 +155,46 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
 
     }
 
+    public void api(String url) {
+    AsyncHttpClient client = new AsyncHttpClient();
+            client.get(url, new JsonHttpResponseHandler() {
+        @Override
+        public void onSuccess(int i, Headers headers, JsonHttpResponseHandler.JSON json) {
+            Log.d(TAG, "onSuccess");
+            JSONObject jsonObject = json.jsonObject;
+            try {
+                JSONArray results = jsonObject.getJSONArray("candidates");
+                Log.i(TAG, "Results: " + results.toString());
+                // movies.addAll(Movie.fromJsonArray(results));
+                // movieAdapter.notifyDataSetChanged();
+                //  Log.i(TAG, "Movies: " + movies.toString());
+            } catch (JSONException e) {
+                Log.e(TAG, "Hit json exception", e);
+
+            }
+        }
+
+        @Override
+        public void onFailure(int i, Headers headers, String s, Throwable throwable) {
+            Log.d(TAG, "onFailure");
+        }
+    });
+
+}
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_post);
 
 
+
         /** autocomplete stuff **/
         /*
+
+
 
         Places.initialize(getApplicationContext(), "AIzaSyABbgxUaKHBgwuaVndt5G0tR2XNYkdpCi8");
         PlacesClient placesClient = Places.createClient(this);
@@ -217,6 +267,7 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
             Glide.with(this).load(profilePicture.getUrl()).into(profilePic);
 
         }
+
 
         /** set up for spinner widget **/
 
@@ -394,18 +445,37 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
         hideSoftKeyboard(CreatePostActivity.this);
     }
 
+    public String setupURL() {
+
+        String URL = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?";
+        String API = "AIzaSyABbgxUaKHBgwuaVndt5G0tR2XNYkdpCi8";
+        String finalURL = URL+"input="+mSearchText.getText()+"&inputtype=textquery&fields=photos,formatted_address,name&key="+API;
+        Log.i(TAG, "API URL: " + finalURL);
+
+        return finalURL;
+
+    }
+
+
     private void geoLocate() {
+
+
 
         Log.d(TAG, "geoLocation: geolocating");
         String searchString = mSearchText.getText().toString();
         Geocoder geocoder = new Geocoder(CreatePostActivity.this);
         List<Address> list = new ArrayList<>();
+
         try {
             list = geocoder.getFromLocationName(searchString, 1);
+            api(setupURL());
         } catch (IOException e) {
             Log.e(TAG, "geoLocation: IOException: " + e.getMessage());
         }
         if (list.size() > 0) {
+            for(Address a:list) {
+                Log.i(TAG, String.valueOf(a));
+            }
             Address address = list.get(0);
             Log.i(TAG, "geoLocate: found location: " + address.toString());
             moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM, address.getAddressLine(0));
@@ -418,6 +488,9 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
 
 
     }
+
+
+
 
     private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the devices location");

@@ -41,6 +41,7 @@ public class FeedFragment extends Fragment {
     private static final String TAG = "FeedFragment";
     protected PostAdapter adapter;
     protected List<Post> allPosts;
+    List<Post> followingPosts;
     RecyclerView rvFeedPosts;
     private SwipeRefreshLayout swipeContainer;
     private Button btnCreate;
@@ -127,9 +128,8 @@ public class FeedFragment extends Fragment {
                     industryBoolean = false;
                     followingBoolean = true;
 
-                    if(!hasQueriedPosts) {
+
                         queryPosts("Following");
-                    }
 
 
                 } else if (parent.getItemAtPosition(position).equals("Near You")) {
@@ -193,11 +193,12 @@ public class FeedFragment extends Fragment {
 
                 for(Follow follow:followList) {
                     Log.i(TAG, "size of follow list: " + followList.size());
-                   // Log.i(TAG, "person the current user follows: " + follow.getParseUser("to").getUsername());
+                    // Log.i(TAG, "person the current user follows: " + follow.getParseUser("to").getUsername());
                     // e == null --> success
                     ParseQuery<Post> query2 = ParseQuery.getQuery(Post.class);
                     query2.whereEqualTo("user", follow.getTo());
                     query2.include("user");
+                    query2.addDescendingOrder("createdAt");
                     query2.setLimit(20);
 
                     query2.findInBackground(new FindCallback<Post>() {
@@ -212,11 +213,38 @@ public class FeedFragment extends Fragment {
 
                             // e == null --> success
                             // adds post from user
-                                for(Post post : posts) {
-                                    Log.i(TAG, "post description: " + post.getDescription() + " post type: " + post.getType());
-                                    allPosts.add(post);
-                                    adapter.notifyDataSetChanged();
-                                }
+                            for (Post post : posts) {
+                                Log.i(TAG, "post description: " + post.getDescription() + " post type: " + post.getType());
+                                allPosts.add(post);
+                                adapter.notifyDataSetChanged();
+                            }
+                        }
+                    });
+
+
+                    query2.whereEqualTo("user", follow.getFrom());
+                    query2.include("user");
+                    query2.addDescendingOrder("createdAt");
+                    query2.setLimit(20);
+
+                    query2.findInBackground(new FindCallback<Post>() {
+                        @Override
+                        public void done(List<Post> posts, ParseException e) {
+                            Log.i(TAG, "size of post list: " + posts.size());
+                            // check for errors
+                            if (e != null) {
+                                Log.i(TAG, "NULL REACHED 2");
+                                return;
+                            }
+
+                            // e == null --> success
+                            // adds post from user
+                            for (Post post : posts) {
+                                Log.i(TAG, "post description: " + post.getDescription() + " post type: " + post.getType());
+                                allPosts.add(post);
+                                adapter.notifyDataSetChanged();
+
+                            }
                         }
                     });
                 }
@@ -232,7 +260,7 @@ public class FeedFragment extends Fragment {
         // specify what type of data we want to query - Post.class
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         if(option.equals("Near You")) {
-            query.whereWithinMiles("latlng", ParseUser.getCurrentUser().getParseGeoPoint("location"), 10);
+            query.whereWithinMiles("latlng", ParseUser.getCurrentUser().getParseGeoPoint("currentLocation"), 10);
         } else if (option.equals("Industry")) {
             query.whereMatches("industry", ParseUser.getCurrentUser().getString("industry"));
         } else if(option.equals("Following")) {
@@ -264,4 +292,5 @@ public class FeedFragment extends Fragment {
             }
         });
     }
+
 }

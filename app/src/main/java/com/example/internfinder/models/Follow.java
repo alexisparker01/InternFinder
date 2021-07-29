@@ -25,8 +25,8 @@ public class Follow extends ParseObject {
         put(KEY_FROM, parseUser);
     }
 
-    public ParseObject getTo() {
-        return getParseObject(KEY_TO);
+    public ParseUser getTo() {
+        return getParseUser(KEY_TO);
     }
 
     public void setTo(ParseUser parseUser) {

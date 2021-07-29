@@ -1,5 +1,6 @@
 package com.example.internfinder.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,8 +31,9 @@ public class MainActivity extends AppCompatActivity {
     private SupportMapFragment mapFragment;
     private GoogleMap map;
     private Marker myMarker;
-    Post post;
     private Fragment fragment;
+
+    public static boolean reached;
 
 
      public static BottomNavigationView bottomNavigationView;
@@ -115,10 +117,24 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        /** figure out why whenver i switch to other fragment it will still show that previous fragment button is selected **/
+
+
+       // Log.i(TAG, post.getDescription());
+
+
+        if(reached) {
+            Post post = Parcels.unwrap(getIntent().getParcelableExtra("Post"));
+            Intent i = new Intent(MainActivity.this, OpenPostActivity.class);
+            i.putExtra("Post", post);
+            startActivity(i);
+        }
+
 
 
     }
 
+    public static void reachedFeedFragment () {
+        reached = true;
+    }
 
 }

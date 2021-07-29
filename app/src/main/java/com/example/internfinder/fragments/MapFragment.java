@@ -26,7 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.internfinder.R;
 import com.example.internfinder.activities.LoginActivity;
-import com.example.internfinder.activities.OpenPostActivity;
+import com.example.internfinder.activities.MainActivity;
 import com.example.internfinder.adapters.UserAdapter;
 import com.example.internfinder.models.Post;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -48,14 +48,15 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickListener {
 
     private static final String TAG = "MapFragment";
     private SupportMapFragment mapFragment;
     private GoogleMap map;
-    private Marker myMarker;
     private TextView tvMapTitle;
     Post post;
+    public static boolean reached;
 
     private ImageView gps;
 
@@ -140,9 +141,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
         // set the layout manager on the recycler view
         hsvInterns.setLayoutManager(new LinearLayoutManager(getContext()));
 
-
         queryUsers();
-
 
     }
 
@@ -164,7 +163,6 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
                     Log.d(TAG, "onComplete: found your location! You are at: " + location);
                     ParseGeoPoint currentUserGeoPoint = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
                     saveCurrentUserLocation(currentUserGeoPoint);
-                    //geoLocate(currentUserGeoPoint, "My Location");
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentUserGeoPoint.getLatitude(), currentUserGeoPoint.getLongitude()), 11f));
 
                 } else {
@@ -248,7 +246,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
 
         }
         // otherwise, return the current user location
-        return currentUser.getParseGeoPoint("location");
+        return currentUser.getParseGeoPoint("currentLocation");
 
     }
 
@@ -269,8 +267,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
                         }
                     }
                     Log.d(TAG, "onRequestPermissionsResult: permission granted");
-                    //
-                    // saveCurrentUserLocation();
+
                     mLocationPermissionsGranted = true;
                     //initialize the map
                     getLocationPermission();
@@ -282,12 +279,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
 
     private void saveCurrentUserLocation(ParseGeoPoint point) {
         Log.i(TAG, "Saving the user's current location");
-        // requesting permission to get user's location
-/*        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-        }
 
- */
         if (point != null) {
             // if it isn't, save it to Back4App Dashboard
 
@@ -305,8 +297,10 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
     }
 
     private void geoLocate(ParseGeoPoint point, String title) {
+        reached = true;
         Log.e(TAG, "GeoLocating...");
         Geocoder geocoder = new Geocoder(getContext());
+        Marker myMarker;
 
         if (!title.equals("My Location")) {
             Log.e(TAG, "Adding user post...");
@@ -314,6 +308,8 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
             myMarker = map.addMarker(new MarkerOptions()
                     .position(new LatLng(point.getLatitude(), point.getLongitude()))
                     .title(title));
+
+           // onMarkerClick(myMarker);
         }
 
     }
@@ -361,7 +357,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
     public void queryUsers() {
         ParseQuery<ParseUser> query = ParseUser.getQuery();
 
-        query.whereWithinMiles("location", getCurrentUserLocation(), 20);
+        query.whereWithinMiles("currentLocation", getCurrentUserLocation(), 20);
 
         // limit query to latest 15 posts
         query.setLimit(15);
@@ -400,9 +396,12 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
 
     @Override
     public boolean onMarkerClick(@NonNull Marker marker) {
-        Intent i = new Intent(getContext(), OpenPostActivity.class);
+
+        MainActivity.reachedFeedFragment();
+        Intent i = new Intent(getContext(), MainActivity.class);
         i.putExtra("Post", post);
         getContext().startActivity(i);
+
         return false;
     }
 }
