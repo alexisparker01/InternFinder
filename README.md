@@ -52,7 +52,7 @@ InternFinder is an app where you can create a profile and meet and connect with 
 * Users can filter feed to show posts from people they are following, and people within a certain number of miles of them [x]
 * You can see a list of people attending the event
 * There is a map on the search/explore page that shows events near you on a map [x]
-* Autofill suggestions when searching event locations
+* Autofill suggestions when searching event locations [X]
 * Search page will display interns that have the same industry as you and in the same area
 * For Profile Picture, there can be an option to upload picture from camera roll or make your profile picture a picture you take on your camera then and there.
 
