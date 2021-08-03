@@ -7,18 +7,14 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -37,12 +33,12 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
-import com.codepath.asynchttpclient.AsyncHttpClient;
-import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 import com.example.internfinder.R;
 import com.example.internfinder.models.Post;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -53,36 +49,34 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.PhotoMetadata;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.RectangularBounds;
+import com.google.android.libraries.places.api.model.TypeFilter;
+import com.google.android.libraries.places.api.net.FetchPhotoRequest;
+import com.google.android.libraries.places.api.net.FetchPlaceRequest;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-
-import okhttp3.Headers;
 
 public class CreatePostActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     // tag variable for logging
     public static final String TAG = "CreatePostActivity";
 
-    public String URL = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?";
-    public String textinput;
-    public String inputType = "inputtype=textinput";
-    public String API = "AIzaSyABbgxUaKHBgwuaVndt5G0tR2XNYkdpCi8";
-
-
-
-
+    String photoRef;
     // currentUser var
     ParseUser currentUser;
 
@@ -105,6 +99,7 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     public String photoFileName = "photo.jpg";
     private File photoFile;
+    ParseFile image;
 
     // map vars
     public static final int ERROR_DIALOG_REQUEST = 9001;
@@ -128,10 +123,12 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
     private ParseGeoPoint eventLatLng;
     private LatLng currentLocationLatLng;
 
+    private AutocompleteSupportFragment fragment;
+    String placeId;
+    Boolean reached;
+
 
     //private AutocompleteSupportFragment autocompleteFragment;
-
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -148,39 +145,13 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
-            afterTypingMap();
+            //afterTypingMap();
             // gestures
             mMap.getUiSettings().setAllGesturesEnabled(true);
         }
 
     }
 
-    public void api(String url) {
-    AsyncHttpClient client = new AsyncHttpClient();
-            client.get(url, new JsonHttpResponseHandler() {
-        @Override
-        public void onSuccess(int i, Headers headers, JsonHttpResponseHandler.JSON json) {
-            Log.d(TAG, "onSuccess");
-            JSONObject jsonObject = json.jsonObject;
-            try {
-                JSONArray results = jsonObject.getJSONArray("candidates");
-                Log.i(TAG, "Results: " + results.toString());
-                // movies.addAll(Movie.fromJsonArray(results));
-                // movieAdapter.notifyDataSetChanged();
-                //  Log.i(TAG, "Movies: " + movies.toString());
-            } catch (JSONException e) {
-                Log.e(TAG, "Hit json exception", e);
-
-            }
-        }
-
-        @Override
-        public void onFailure(int i, Headers headers, String s, Throwable throwable) {
-            Log.d(TAG, "onFailure");
-        }
-    });
-
-}
 
 
     @Override
@@ -189,52 +160,10 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_post);
 
-
-
-        /** autocomplete stuff **/
-        /*
-
-
-
-        Places.initialize(getApplicationContext(), "AIzaSyABbgxUaKHBgwuaVndt5G0tR2XNYkdpCi8");
-        PlacesClient placesClient = Places.createClient(this);
-
-        // Initialize the AutocompleteSupportFragment
-        autocompleteFragment = (AutocompleteSupportFragment)
-                getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
-
-        // Specify the types of place data to return.
-
-        autocompleteFragment.setTypeFilter(TypeFilter.ESTABLISHMENT);
-
-        autocompleteFragment.setLocationBias(RectangularBounds.newInstance(
-                new LatLng(-33.880490, 151.184363),
-                new LatLng(-33.858754,151.229596)));
-
-        autocompleteFragment.setCountries("IN");
-
-        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
-
-
-        // Set up a PlaceSelectionListener to handle the response.
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(@NonNull Place place) {
-                // TODO: Get info about the selected place.
-                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
-            }
-
-
-            @Override
-            public void onError(@NonNull Status status) {
-                // TODO: Handle the error.
-                Log.i(TAG, "An error occurred: " + status);
-            }
-        });
-
-*/
         // set current user
         currentUser = ParseUser.getCurrentUser();
+
+        reached = false;
 
         // initializing widgets
         etPostText = findViewById(R.id.etPostText);
@@ -244,7 +173,7 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
         btnCam = findViewById(R.id.btnCam);
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mGps = (ImageView) findViewById(R.id.ic_gps2);
-        mSearchText = findViewById(R.id.input_search2);
+      //  mSearchText = findViewById(R.id.input_search2);
         relativeLayout = findViewById(R.id.relLayout2);
         profilePic = findViewById(R.id.profilePicCreate);
         tvLocation = findViewById(R.id.tvLocation);
@@ -268,6 +197,22 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
 
         }
 
+        mGps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: clicked GPS icon");
+                getDeviceLocation();
+            }
+        });
+
+
+        /*
+        byte[] data = "Working at Parse is great!".getBytes();
+        image = new ParseFile("resume.txt", data);
+
+
+         */
+        image = null;
 
         /** set up for spinner widget **/
 
@@ -287,14 +232,16 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
                 // if user wants to create an event post with google maps
                 if (parent.getItemAtPosition(position).equals("Event Post")) {
                     etPostText.setVisibility(View.VISIBLE);
-                    ivPostImage.setVisibility(View.GONE);
+                    ivPostImage.setVisibility(View.VISIBLE);
                     btnSubmitPost.setVisibility(View.VISIBLE);
                     btnCam.setVisibility(View.GONE);
                     relativeLayout.setVisibility(View.VISIBLE);
                     mGps.setVisibility(View.VISIBLE);
                     tvLocation.setVisibility(View.VISIBLE);
 
+
                     getSupportFragmentManager().findFragmentById(R.id.map).getView().setVisibility(View.VISIBLE);
+                    getDeviceLocation();
 
                     photoFile = null;
                     photoChosen = false;
@@ -352,6 +299,103 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
             }
         });
 
+        /** autocomplete stuff **/
+
+        Places.initialize(getApplicationContext(), "AIzaSyABbgxUaKHBgwuaVndt5G0tR2XNYkdpCi8");
+        PlacesClient placesClient = Places.createClient(this);
+
+        // Initialize the AutocompleteSupportFragment
+        fragment = (AutocompleteSupportFragment)
+                getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+
+        // Specify the types of place data to return.
+
+        fragment.setTypeFilter(TypeFilter.ESTABLISHMENT);
+
+        ParseGeoPoint point = ParseUser.getCurrentUser().getParseGeoPoint("currentLocation");
+
+        fragment.setLocationBias(RectangularBounds.newInstance(
+                new LatLng(point.getLatitude(), point.getLongitude()),
+                new LatLng(point.getLatitude() + 0.05,point.getLongitude()+0.05)));
+
+        fragment.setCountries("US");
+
+        fragment.setPlaceFields(Arrays.asList(Place.Field.LAT_LNG, Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS));
+
+
+        // Set up a PlaceSelectionListener to handle the response.
+        fragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NonNull Place place) {
+                // TODO: Get info about the selected place.
+                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() + "latlng: " + place.getAddress());
+
+                geoLocate(place);
+                placeId = place.getId();
+                tvLocation.setText(place.getAddress());
+                eventLatLng = new ParseGeoPoint(place.getLatLng().latitude, place.getLatLng().longitude);
+                eventLocation = place.getAddress();
+                // Define a Place ID.
+
+                Log.i(TAG, "inserting place location");
+
+// Specify fields. Requests for photos must always have the PHOTO_METADATAS field.
+                final List<Place.Field> fields = Collections.singletonList(Place.Field.PHOTO_METADATAS);
+
+// Get a Place object (this example uses fetchPlace(), but you can also use findCurrentPlace())
+                final FetchPlaceRequest placeRequest = FetchPlaceRequest.newInstance(placeId, fields);
+
+                placesClient.fetchPlace(placeRequest).addOnSuccessListener((response) -> {
+                    final Place place2 = response.getPlace();
+
+                    // Get the photo metadata.
+                    final List<PhotoMetadata> metadata = place2.getPhotoMetadatas();
+                    if (metadata == null || metadata.isEmpty()) {
+                        Log.w(TAG, "No photo metadata.");
+                        return;
+                    }
+                    final PhotoMetadata photoMetadata = metadata.get(0);
+
+                    // Get the attribution text.
+                    final String attributions = photoMetadata.getAttributions();
+
+                    // Create a FetchPhotoRequest.
+                    final FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
+                           // .setMaxWidth(500) // Optional.
+                           // .setMaxHeight(300) // Optional.
+                            .build();
+                    placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
+                        Bitmap bitmap = fetchPhotoResponse.getBitmap();
+                      //  ivPostImage.setImageBitmap(bitmap);
+
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                        byte[] bitmapBytes = stream.toByteArray();
+
+                        image = new ParseFile("myImage", bitmapBytes);
+
+                    }).addOnFailureListener((exception) -> {
+                        if (exception instanceof ApiException) {
+                            final ApiException apiException = (ApiException) exception;
+                            Log.e(TAG, "Place not found: " + exception.getMessage());
+                            final int statusCode = apiException.getStatusCode();
+                            // TODO: Handle error with given status code.
+                        }
+                    });
+                });
+
+            }
+
+
+            @Override
+            public void onError(@NonNull Status status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
+
+
+
         /** onClickListeners for button widgets **/
 
         // when the user clicks on the camera button they will launch the camera
@@ -379,7 +423,7 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
                     return;
                 }
 
-                savePost(description, currentUser, photoFile);
+                savePost(description, currentUser, photoFile, image);
             }
         });
     }
@@ -412,6 +456,7 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
     /**
      * other methods for GoogleMaps API
      **/
+    /*
     private void afterTypingMap() {
         Log.d(TAG, "afterTyping: initializing");
         mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -423,7 +468,7 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
                         || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER
                 ) {
                     // execute method for searching
-                    geoLocate();
+                    //geoLocate();
                     hideSoftKeyboard(CreatePostActivity.this);
                     return true;
 
@@ -434,33 +479,14 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
             }
         });
 
-        mGps.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: clicked GPS icon");
-                getDeviceLocation();
-                mSearchText.setText("");
-            }
-        });
-        hideSoftKeyboard(CreatePostActivity.this);
-    }
 
-    public String setupURL() {
-
-        String URL = "https://maps.googleapis.com/maps/api/place/findplacefromtext/json?";
-        String API = "AIzaSyABbgxUaKHBgwuaVndt5G0tR2XNYkdpCi8";
-        String finalURL = URL+"input="+mSearchText.getText()+"&inputtype=textquery&fields=photos,formatted_address,name&key="+API;
-        Log.i(TAG, "API URL: " + finalURL);
-
-        return finalURL;
-
-    }
+     */
 
 
-    private void geoLocate() {
+    private void geoLocate(Place place) {
 
 
-
+        /*
         Log.d(TAG, "geoLocation: geolocating");
         String searchString = mSearchText.getText().toString();
         Geocoder geocoder = new Geocoder(CreatePostActivity.this);
@@ -473,7 +499,7 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
             Log.e(TAG, "geoLocation: IOException: " + e.getMessage());
         }
         if (list.size() > 0) {
-            for(Address a:list) {
+            for (Address a : list) {
                 Log.i(TAG, String.valueOf(a));
             }
             Address address = list.get(0);
@@ -484,6 +510,12 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
             tvLocation.setText(eventLocation);
 
         }
+
+         */
+
+        moveCamera(place.getLatLng(), DEFAULT_ZOOM, place.getAddress());
+        tvLocation.setText(place.getAddress());
+
 
 
 
@@ -545,7 +577,7 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
 
         }
 
-        hideSoftKeyboard(CreatePostActivity.this);
+       // hideSoftKeyboard(CreatePostActivity.this);
 
     }
 
@@ -610,7 +642,7 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
      * submit and photo taking methods
      **/
 
-    private void savePost(String description, ParseUser currentUser, File photoFile) {
+    private void savePost(String description, ParseUser currentUser, File photoFile, ParseFile image) {
         Post post = new Post();
         post.setDescription(description);
         post.put("industry", currentUser.getString("industry"));
@@ -629,10 +661,14 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
             post.setType("event");
             post.setLocation(eventLocation);
             post.setLatLng(eventLatLng);
+            if(image != null) {
+                post.setImage(image);
+            }
         }
 
 
         post.setUser(currentUser);
+
         post.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
