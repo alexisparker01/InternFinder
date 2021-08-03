@@ -57,14 +57,16 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:18.0.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
 
-    //autocomplete
-    implementation 'com.google.android.libraries.places:places:2.2.0'
+    //places
+    implementation 'com.google.android.libraries.places:places:2.4.0'
+   // implementation 'com.google.android.libraries.places:places:1.0.0'
     
     // circular
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
     //ParseApplication
     implementation "com.github.parse-community.Parse-SDK-Android:parse:1.18.5"
+
 
     //Parceler
     implementation 'org.parceler:parceler-api:1.1.12'
@@ -84,5 +86,9 @@ dependencies {
 
     // asynch
     implementation 'com.codepath.libraries:asynchttpclient:2.0.0'
+
+    // UI
+    compile 'com.melnykov:floatingactionbutton:1.3.0'
+
 
 }

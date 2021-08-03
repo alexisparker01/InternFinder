@@ -34,6 +34,12 @@
             android:layout_marginTop="6dp"
             android:backgroundTint="#FFF9C9">
 
+            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:fab="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvFeedPosts"
                 android:layout_width="match_parent"
@@ -43,6 +49,21 @@
                 android:layout_marginBottom="20dp"
                 android:backgroundTint="#F1ECC4"
                 android:padding="8dp" />
+
+
+                <com.melnykov.fab.FloatingActionButton
+                    android:id="@+id/fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|right"
+                    android:layout_margin="16dp"
+                    android:src="@drawable/ic_magnify"
+                    fab:fab_colorNormal="#039821"
+                    fab:fab_colorPressed="#320938"
+                    fab:fab_colorRipple="#494000" />
+            </FrameLayout>
+
+
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

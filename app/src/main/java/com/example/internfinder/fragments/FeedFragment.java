@@ -23,6 +23,7 @@ import com.example.internfinder.activities.CreatePostActivity;
 import com.example.internfinder.adapters.PostAdapter;
 import com.example.internfinder.models.Follow;
 import com.example.internfinder.models.Post;
+import com.melnykov.fab.FloatingActionButton;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -74,6 +75,7 @@ public class FeedFragment extends Fragment {
         spinnerFeed = view.findViewById(R.id.spinnerFeed);
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainerFeedActivity);
 
+
         // Setup refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -101,15 +103,6 @@ public class FeedFragment extends Fragment {
                 android.R.color.holo_red_light);
 
 
-        btnCreate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent i = new Intent(getContext(), CreatePostActivity.class);
-                startActivity(i);
-
-            }
-        });
 
         String[] postSelections = new String[]{"Following", "Near You", "Industry"};
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, postSelections);
@@ -166,6 +159,18 @@ public class FeedFragment extends Fragment {
         allPosts = new ArrayList<>();
         adapter = new PostAdapter(getContext(), allPosts);
 
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fab.attachToRecyclerView(rvFeedPosts);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent i = new Intent(getContext(), CreatePostActivity.class);
+                startActivity(i);
+
+            }
+        });
         // set the adapter on the recycler view
         rvFeedPosts.setAdapter(adapter);
         // set the layout manager on the recycler view
@@ -191,7 +196,7 @@ public class FeedFragment extends Fragment {
                     return;
                 }
 
-                for(Follow follow:followList) {
+                for (Follow follow : followList) {
                     Log.i(TAG, "size of follow list: " + followList.size());
                     // Log.i(TAG, "person the current user follows: " + follow.getParseUser("to").getUsername());
                     // e == null --> success
@@ -250,8 +255,10 @@ public class FeedFragment extends Fragment {
                 }
 
                 swipeContainer.setRefreshing(false);
-
             }
+
+
+
         });
 
     }
@@ -292,5 +299,7 @@ public class FeedFragment extends Fragment {
             }
         });
     }
+
+
 
 }
