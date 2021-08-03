@@ -44,7 +44,6 @@ public class ProfileFragment extends Fragment {
     private TextView tvIndustry;
     private TextView tvCity;
 
-
     private SwipeRefreshLayout swipeContainer;
     private RecyclerView rvPosts;
     protected PostAdapter adapter;
@@ -58,7 +57,9 @@ public class ProfileFragment extends Fragment {
     public int followersCount;
     public int followingCount;
 
-    private void followCount(String type) {
+    private int followCount(String type) {
+
+        Log.i(TAG, "followCount method starting");
 
         ParseQuery<Follow> query = ParseQuery.getQuery(Follow.class);
         if(type.equals("following")) {
@@ -81,12 +82,11 @@ public class ProfileFragment extends Fragment {
 
                     if(type.equals("following")) {
                         followingCount = followList.size();
-                         return;
+                        Log.i(TAG, "following count: " + followingCount);
                     } else {
                         followersCount = followList.size();
-                        return;
+                        Log.i(TAG, "followers count: " + followersCount);
                     }
-
 
                 }
 
@@ -94,7 +94,15 @@ public class ProfileFragment extends Fragment {
 
         });
 
+        if(type.equals("following")) {
+            Log.i(TAG, "following count right before return: " + followingCount);
+            return followingCount;
+        } else if (type.equals("followers")) {
+            Log.i(TAG, "followers count: " + followersCount);
+            return followersCount;
+        }
 
+        return 0;
     }
 
     public ProfileFragment() {
@@ -127,8 +135,8 @@ public class ProfileFragment extends Fragment {
         tvFollowers = view.findViewById(R.id.tvFollowers);
         tvFollowing = view.findViewById(R.id.tvFollowing);
 
-        followCount("following");
-        followCount("followers");
+       followingCount = followCount("following");
+       followersCount = followCount("followers");
 
         Log.i(TAG, "following count: " + followingCount);
         Log.i(TAG, "followers count: " + followersCount);

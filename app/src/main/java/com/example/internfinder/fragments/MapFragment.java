@@ -26,7 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.internfinder.R;
 import com.example.internfinder.activities.LoginActivity;
-import com.example.internfinder.activities.MainActivity;
+import com.example.internfinder.activities.OpenPostActivity;
 import com.example.internfinder.adapters.UserAdapter;
 import com.example.internfinder.models.Post;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -45,6 +45,8 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,10 +57,13 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
     private SupportMapFragment mapFragment;
     private GoogleMap map;
     private TextView tvMapTitle;
-    Post post;
+
     public static boolean reached;
 
     private ImageView gps;
+
+    private List<Post> allPosts;
+
 
     private RecyclerView hsvInterns;
     private TextView tvInternTitle;
@@ -89,6 +94,8 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapFeed);
         locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
 
+
+
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
@@ -103,6 +110,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
                 queryPosts();
             }
         });
+
 
 
         return view;
@@ -121,7 +129,6 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
 
-
         gps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,6 +139,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
 
 
         // initialize the array that will hold posts and create the adapter for the profile
+        allPosts = new ArrayList<>();
         allUsers = new ArrayList<>();
         adapter = new UserAdapter(getContext(), allUsers);
 
@@ -154,6 +162,9 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
+
+
+
             return;
         }
         mFusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
@@ -163,7 +174,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
                     Log.d(TAG, "onComplete: found your location! You are at: " + location);
                     ParseGeoPoint currentUserGeoPoint = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
                     saveCurrentUserLocation(currentUserGeoPoint);
-                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentUserGeoPoint.getLatitude(), currentUserGeoPoint.getLongitude()), 11f));
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentUserGeoPoint.getLatitude(), currentUserGeoPoint.getLongitude()), 12f));
 
                 } else {
                     Log.d(TAG, "onComplete: location is null");
@@ -302,15 +313,14 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
         Geocoder geocoder = new Geocoder(getContext());
         Marker myMarker;
 
-        if (!title.equals("My Location")) {
-            Log.e(TAG, "Adding user post...");
+        Log.e(TAG, "Adding user post...");
+
             map.setOnMarkerClickListener(this);
             myMarker = map.addMarker(new MarkerOptions()
                     .position(new LatLng(point.getLatitude(), point.getLongitude()))
                     .title(title));
 
            // onMarkerClick(myMarker);
-        }
 
     }
 
@@ -341,12 +351,13 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
 
 
                 for (Post thePost : posts) {
-                    post = thePost;
                     Log.i("MapFragment", "user: " + thePost.getLatLng() + " " + thePost.getLocation());
                     if (thePost.getLatLng() != null) {
                         geoLocate(thePost.getLatLng(), thePost.getLocation());
                     }
                 }
+
+                allPosts.addAll(posts);
 
                 }
 
@@ -394,14 +405,29 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
 
     }
 
-    @Override
     public boolean onMarkerClick(@NonNull Marker marker) {
 
-        MainActivity.reachedFeedFragment();
-        Intent i = new Intent(getContext(), MainActivity.class);
-        i.putExtra("Post", post);
-        getContext().startActivity(i);
+              Post post = queryPostsByTitle(marker.getTitle());
+              Intent i = new Intent(getActivity(), OpenPostActivity.class);
+              i.putExtra("Post", Parcels.wrap(post));
+              startActivity(i);
 
-        return false;
+            return false;
+
+
     }
-}
+
+    private Post queryPostsByTitle(String title) {
+
+        Post correctPost = new Post();
+        for(Post p:allPosts) {
+            if(p.getLocation().equals(title)) {
+                correctPost = p;
+            }
+        }
+
+return correctPost;
+        }
+
+
+    }

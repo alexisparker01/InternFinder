@@ -1,140 +1,269 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.QuestionnaireActivity">
 
-    <TextView
-        android:id="@+id/tvQuestionnaireTitle"
-        android:layout_marginBottom="10dp"
-        android:text="Answer these fun questions so interns can learn more about you"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
 
-    <!-- Industry Question -->
-    <TextView
-        android:id="@+id/tvIndustryQuestionTitle"
-        android:layout_below="@id/tvQuestionnaireTitle"
-        android:text="What industry do you work in?"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
 
-    <RadioGroup
-        android:id="@+id/radioGroupIndustry"
+    <RelativeLayout
+        android:id="@+id/rlQuestions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvIndustryQuestionTitle">
+        android:visibility="visible"
+        tools:visibility="visible">
 
-        <RadioButton
-            android:id="@+id/industry_option1"
+        <TextView
+            android:id="@+id/tvAnswers"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/tvAnswers2"
+            android:layout_below="@id/tvAnswers"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:text="" />
+
+
+        <TextView
+            android:id="@+id/tvQuestionnaireTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvIndustryQuestionTitle"
-            android:layout_marginTop="14dp"
-            android:text="Technology" />
+            android:layout_marginBottom="10dp"
+            android:text="Answer these fun questions so interns can learn more about you" />
 
-
-        <RadioButton
-            android:id="@+id/industry_option2"
+        <!-- Industry Question -->
+        <TextView
+            android:id="@+id/tvIndustryQuestionTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Finance" />
+            android:layout_below="@id/tvQuestionnaireTitle"
+            android:text="What industry do you work in?" />
 
-        <RadioButton
-            android:id="@+id/industry_option3"
+        <RadioGroup
+            android:id="@+id/radioGroupIndustry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fine Arts" />
+            android:layout_below="@+id/tvIndustryQuestionTitle">
 
-        <RadioButton
-            android:id="@+id/industry_option4"
+            <RadioButton
+                android:id="@+id/industry_option1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvIndustryQuestionTitle"
+                android:layout_marginTop="14dp"
+                android:text="Technology" />
+
+
+            <RadioButton
+                android:id="@+id/industry_option2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Finance" />
+
+            <RadioButton
+                android:id="@+id/industry_option3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fine Arts" />
+
+            <RadioButton
+                android:id="@+id/industry_option4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Business" />
+
+            <RadioButton
+                android:id="@+id/industry_option5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Engineering" />
+
+            <RadioButton
+                android:id="@+id/industry_option6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Science" />
+
+        </RadioGroup>
+
+        <!-- Question 1 -->
+        <TextView
+            android:id="@+id/tvQuestion1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Business" />
+            android:layout_below="@id/radioGroupIndustry"
+            android:text="What do you like to do outside of work?" />
 
-        <RadioButton
-            android:id="@+id/industry_option5"
+        <RadioGroup
+            android:id="@+id/radioGroupQuestion1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Engineering" />
+            android:layout_below="@id/tvQuestion1">
 
-        <RadioButton
-            android:id="@+id/industry_option6"
+            <RadioButton
+                android:id="@+id/question1_option1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Go out with friends like seeing a movie, going to a restaurant, going to a concert, going to an event/party." />
+
+            <RadioButton
+                android:id="@+id/question1_option2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Get outdoors. Going for a walk or having a picnic with some friends is the best." />
+
+            <RadioButton
+                android:id="@+id/question1_option3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chill at home and do something casual and laidback with friends like homemade dinner" />
+
+        </RadioGroup>
+
+
+        <!-- Question 2 -->
+        <TextView
+            android:id="@+id/tvQuestion2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Science" />
+            android:layout_below="@id/radioGroupQuestion1"
+            android:text="What do you like to do on the weekends?" />
 
-    </RadioGroup>
-
-    <!-- Question 1 -->
-    <TextView
-        android:id="@+id/tvQuestion1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/radioGroupIndustry"
-        android:text="What do you like to do outside of work?" />
-    <RadioGroup
-        android:id="@+id/radioGroupQuestion1"
-        android:layout_below="@id/tvQuestion1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <RadioButton
-            android:id="@+id/question1_option1"
+        <RadioGroup
+            android:id="@+id/radioGroupQuestion2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Go out with friends like seeing a movie, going to a restaurant, going to a concert, going to an event/party." />
+            android:layout_below="@id/tvQuestion2">
 
-        <RadioButton
-            android:id="@+id/question1_option2"
+            <RadioButton
+                android:id="@+id/question2_option1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Eat out a restaurant, I’m starving after work!" />
+
+            <RadioButton
+                android:id="@+id/question2_option2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Go do something fun with friends like see a movie" />
+
+            <RadioButton
+                android:id="@+id/question2_option3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Get outdoors. I’ve been inside all day. Going for a walk or having a picnic with some friends is the best.
+" />
+
+            <RadioButton
+                android:id="@+id/question2_option4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" Do something casual at home" />
+
+        </RadioGroup>
+
+        <!-- Questions 3 -->
+
+        <TextView
+            android:id="@+id/tvQuestion3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Get outdoors. Going for a walk or having a picnic with some friends is the best."/>
-        <RadioButton
-            android:id="@+id/question1_option3"
+            android:layout_below="@id/radioGroupQuestion2"
+            android:text="What do you like to do on the weekends?" />
+
+        <RadioGroup
+            android:id="@+id/radioGroupQuestion3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chill at home and do something casual and laidback with friends like homemade dinner"/>
+            android:layout_below="@id/tvQuestion3">
 
-    </RadioGroup>
+            <RadioButton
+                android:id="@+id/question3_option1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Eat out a restaurant, I’m starving after work!" />
+
+            <RadioButton
+                android:id="@+id/question3_option2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Go do something fun with friends like see a movie" />
+
+            <RadioButton
+                android:id="@+id/question3_option3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Get outdoors. I’ve been inside all day. Going for a walk or having a picnic with some friends is the best.
+" />
+
+            <RadioButton
+                android:id="@+id/question3_option4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" Do something casual at home" />
+
+        </RadioGroup>
 
 
+        <!-- Questions 4 -->
 
-<!-- Question 2 -->
-    <TextView
-        android:id="@+id/tvQuestion2"
-        android:layout_width="wrap_content"
-        android:layout_below="@id/radioGroupQuestion1"
-        android:layout_height="wrap_content"
-        android:text="What do you like to do on the weekends?" />
-    <RadioGroup
-        android:layout_below="@id/tvQuestion2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <RadioButton
-            android:id="@+id/question2_option1"
+        <TextView
+            android:id="@+id/tvQuestion4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Eat out a restaurant, I’m starving after work!"/>
-        <RadioButton
-            android:id="@+id/question2_option2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Go do something fun with friends like see a movie"/>
-        <RadioButton
-            android:id="@+id/question2_option3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Get outdoors. I’ve been inside all day. Going for a walk or having a picnic with some friends is the best.
-"/>
-        <RadioButton
-            android:id="@+id/question2_option4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" Do something casual at home"/>
+            android:layout_below="@id/radioGroupQuestion3"
+            android:text="What do you like to do on the weekends?" />
 
-    </RadioGroup>
+        <RadioGroup
+            android:id="@+id/radioGroupQuestion4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvQuestion4">
 
-  </RelativeLayout>
+            <RadioButton
+                android:id="@+id/question4_option1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Eat out a restaurant, I’m starving after work!" />
+
+            <RadioButton
+                android:id="@+id/question4_option2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Go do something fun with friends like see a movie" />
+
+            <RadioButton
+                android:id="@+id/question4_option3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Get outdoors. I’ve been inside all day. Going for a walk or having a picnic with some friends is the best.
+" />
+
+            <RadioButton
+                android:id="@+id/question4_option4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" Do something casual at home" />
+
+        </RadioGroup>
+
+
+        <Button
+            android:id="@+id/btnApply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/radioGroupQuestion4"
+            android:layout_marginTop="8dp"
+            android:text="apply" />
+
+    </RelativeLayout>
+
+
+</ScrollView>

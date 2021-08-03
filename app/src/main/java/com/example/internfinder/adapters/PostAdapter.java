@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.internfinder.R;
+import com.example.internfinder.activities.MainActivity;
 import com.example.internfinder.activities.OpenPostActivity;
 import com.example.internfinder.activities.ProfileActivity;
 import com.example.internfinder.models.Post;
@@ -27,9 +28,6 @@ import java.util.List;
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     private Context context;
     private List<Post> posts;
-    public static final String PLACES_URL = "https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
-
-
 
     public PostAdapter(Context context, List<Post> thePosts) {
         this.context = context;
@@ -122,7 +120,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             }
 
 
-            ParseFile profilePic = ParseUser.getCurrentUser().getParseFile("profilePic");
+            ParseFile profilePic = post.getUser().getParseFile("profilePic");
             if (profilePic != null) {
                 Glide.with(context).load(profilePic.getUrl()).into(ivProfilePic);
             }
@@ -138,12 +136,21 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 @Override
                 public void onClick(View v) {
 
-                    Intent i = new Intent(context, ProfileActivity.class);
-                    i.putExtra("Post", Parcels.wrap(post));
-                    i.putExtra("User", Parcels.wrap(post.getUser()));
-                    context.startActivity(i);
+                    if(tvUsername.getText().equals("@"+ParseUser.getCurrentUser().getUsername())) {
 
+                        Intent intent = new Intent(context, MainActivity.class);
+                        intent.putExtra("openProfileFragment",true);
+                       // overridePendingTransition(0, 0);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                       // context.finish();
+                       context.startActivity(intent);
+                    } else {
+                        Intent i = new Intent(context, ProfileActivity.class);
+                        i.putExtra("Post", Parcels.wrap(post));
+                        i.putExtra("User", Parcels.wrap(post.getUser()));
+                        context.startActivity(i);
 
+                    }
                 }
             });
 

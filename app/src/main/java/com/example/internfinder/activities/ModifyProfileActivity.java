@@ -39,7 +39,8 @@ public class ModifyProfileActivity extends AppCompatActivity {
     private Button btnSave;
     private ImageView ivProfilePic;
     private Spinner spinnerIndustry;
-    private ParseFile file;
+    private ParseFile image;
+    private ImageView ivBackToQuestionnaire;
 
     public static final int GET_FROM_GALLERY = 3;
 
@@ -55,6 +56,7 @@ public class ModifyProfileActivity extends AppCompatActivity {
         etBio = findViewById(R.id.etBioEditProfile);
         btnSave = findViewById(R.id.btnSave);
         ivProfilePic = findViewById(R.id.ivProfilePic);
+        ivBackToQuestionnaire = findViewById(R.id.ivBackToQuestionnaire);
 
         String[] postSelections = new String[]{"Technology", "Finance", "Arts", "Medical"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, postSelections);
@@ -161,7 +163,7 @@ public class ModifyProfileActivity extends AppCompatActivity {
         }
 
 
-        ParseFile prof = ParseUser.getCurrentUser().getParseFile("profilePicture");
+        ParseFile prof = ParseUser.getCurrentUser().getParseFile("profilePic");
         if (prof != null) {
             Glide.with(this).load(prof.getUrl()).into(ivProfilePic);
         }
@@ -186,6 +188,14 @@ public class ModifyProfileActivity extends AppCompatActivity {
             }
         });
 
+        ivBackToQuestionnaire.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ModifyProfileActivity.this, QuestionnaireActivity.class);
+                startActivity(i);
+
+            }
+        });
 
     }
 
@@ -195,7 +205,9 @@ public class ModifyProfileActivity extends AppCompatActivity {
         currentUser.put("lastname", lastname);
         currentUser.put("bio", bio);
         currentUser.put("username", username);
-      //  currentUser.put("profilePic", file);
+        if(image != null) {
+            currentUser.put("profilePic", image);
+        }
 
         currentUser.saveInBackground(new SaveCallback() {
             @Override
@@ -210,8 +222,6 @@ public class ModifyProfileActivity extends AppCompatActivity {
                 etLastname.setText(ParseUser.getCurrentUser().getString("lastname"));
                 etBio.setText(ParseUser.getCurrentUser().getString("bio"));
                 tvUsername.setText("@" + username);
-
-
             }
         });
     }
@@ -223,7 +233,6 @@ public class ModifyProfileActivity extends AppCompatActivity {
         startActivity(i);
 
  */
-
         Intent intent = new Intent(ModifyProfileActivity.this, MainActivity.class);
         intent.putExtra("openProfileFragment",true);
         overridePendingTransition(0, 0);
@@ -231,14 +240,13 @@ public class ModifyProfileActivity extends AppCompatActivity {
         finish();
         startActivity(intent);
 
-
     }
 
     public ParseFile conversionBitmapParseFile(Bitmap imageBitmap){
         ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
-        imageBitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
         byte[] imageByte = byteArrayOutputStream.toByteArray();
-        ParseFile parseFile = new ParseFile("image_file.png",imageByte);
+        ParseFile parseFile = new ParseFile("image_file.jpeg",imageByte);
         return parseFile;
     }
 
@@ -254,6 +262,22 @@ public class ModifyProfileActivity extends AppCompatActivity {
             Bitmap bitmap = null;
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                 image = conversionBitmapParseFile(bitmap);
+                 ParseUser.getCurrentUser().put("profilePic", image);
+                 ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
+                     @Override
+                     public void done(ParseException e) {
+                         if(e!=null) {
+                             Log.i(TAG, "error saving profile pic");
+                         }
+
+                         ParseFile profilePic = ParseUser.getCurrentUser().getParseFile("profilePic");
+                         if (profilePic != null) {
+                             Glide.with(ModifyProfileActivity.this).load(profilePic.getUrl()).into(ivProfilePic);
+                         }
+                     }
+                 });
+
             } catch (FileNotFoundException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -271,12 +295,7 @@ public class ModifyProfileActivity extends AppCompatActivity {
          //   bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 
 
-            ParseFile file = conversionBitmapParseFile(bitmap);
-            if (file != null) {
-                Glide.with(this).load(file).into(ivProfilePic);
 
-
-            }
         }
     }
 }

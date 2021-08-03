@@ -2,7 +2,6 @@ package com.example.internfinder.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
         if (ParseUser.getCurrentUser() != null) {
-          goProfileActivity();
+          goToQuestionnaire();
         }
 
         if (getSupportActionBar() != null) {
@@ -116,22 +115,18 @@ public class LoginActivity extends AppCompatActivity {
                 user.signUpInBackground(new SignUpCallback() {
                     public void done(ParseException e) {
                         if (e == null) {
-                            // Hooray! Let them use the app now.
                             Toast.makeText(LoginActivity.this, "Sign up successful", Toast.LENGTH_SHORT).show();
-                            /* user.put("ProfilePicture", photoFile); */
+                            goToQuestionnaire();
+
                             user.saveInBackground(new SaveCallback() {
                                 @Override
                                 public void done(ParseException e) {
-                                    // Toast.makeText(LoginActivity.this, "Save profile pic successful", Toast.LENGTH_LONG).show();
-                                    goProfileActivity();
+
                                 }
                             });
 
 
                         } else {
-                            // Sign up didn't succeed. Look at the ParseException
-                            // to figure out what went wrong
-
                             Toast.makeText(LoginActivity.this, "Sign up didn't succeed", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -164,19 +159,17 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 // TODO: navigate to the main activity if the user has signed in properly
 
-               goProfileActivity();
+               goToQuestionnaire();
              //   Toast.makeText(LoginActivity.this, "Success!", Toast.LENGTH_SHORT).show();
-
 
 
             }
         });
     }
 
-    private void goProfileActivity() {
+    private void goToQuestionnaire() {
 
-        Log.i(TAG, "Going to profile");
-        Intent i = new Intent(LoginActivity.this, ModifyProfileActivity.class);
+        Intent i = new Intent(LoginActivity.this, QuestionnaireActivity.class);
         startActivity(i);
         finish();
     }

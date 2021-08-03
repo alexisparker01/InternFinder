@@ -8,9 +8,25 @@
     tools:context=".activities.ModifyProfileActivity">
 
     <ImageView
+        android:id="@+id/ivBackToQuestionnaire"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:layout_constraintEnd_toStartOf="@+id/tvUsername"
+        app:layout_constraintHorizontal_bias="0.12"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_back" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/ivProfilePic"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="13dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/ivBackToQuestionnaire"
+        tools:src="@tools:sample/avatars"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView

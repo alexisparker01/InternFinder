@@ -12,8 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.internfinder.activities.ProfileActivity;
 import com.example.internfinder.R;
+import com.example.internfinder.activities.MainActivity;
+import com.example.internfinder.activities.ProfileActivity;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
@@ -94,17 +95,26 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                 public void onClick(View v) {
 
 
+                    if(tvUsernameGrid.getText().equals("@"+ParseUser.getCurrentUser().getUsername())) {
+
+                        Intent intent = new Intent(context, MainActivity.class);
+                        intent.putExtra("openProfileFragment",true);
+                        // overridePendingTransition(0, 0);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        // context.finish();
+                        context.startActivity(intent);
+                    } else {
                         Intent i = new Intent(context, ProfileActivity.class);
                         i.putExtra("User", Parcels.wrap(user));
                         context.startActivity(i);
 
-
-
+                    }
                 }
 
-            });
+                });
     }
 }
+
 
     // Clean all elements of the recycler
     public void clear() {

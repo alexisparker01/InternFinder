@@ -27,7 +27,7 @@
     <ImageView
         android:id="@+id/ivPostImage"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="500dp"
         android:layout_below="@+id/spinnerPostType"
         android:layout_marginTop="21dp"
         tools:srcCompat="@tools:sample/avatars" />
@@ -43,30 +43,13 @@
         android:background="@drawable/white_border"
         android:elevation="10dp">
 
-        <ImageView
-            android:id="@+id/ic_magnify2"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:src="@drawable/ic_magnify" />
 
-        <EditText
-            android:id="@+id/input_search2"
+        <fragment
+            android:id="@+id/autocomplete_fragment"
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="11dp"
-            android:layout_toRightOf="@+id/ic_magnify2"
-            android:background="@null"
-            android:fontFamily="sans-serif-light"
-            android:hint="Enter Address, City, or Zip Code of where you'd like to have your event"
-            android:imeOptions="actionSearch"
-            android:inputType="text"
-            android:imeActionLabel="Search"
-            android:textColor="#000"
-            android:textSize="15sp" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp" />
 
 
     </RelativeLayout>

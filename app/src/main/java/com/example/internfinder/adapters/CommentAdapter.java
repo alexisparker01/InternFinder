@@ -1,6 +1,7 @@
 package com.example.internfinder.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.internfinder.R;
+import com.example.internfinder.activities.ProfileActivity;
 import com.example.internfinder.models.Comment;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+
+import org.parceler.Parcels;
 
 import java.util.Date;
 import java.util.List;
@@ -74,7 +78,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
             try {
                 Log.i("CommentAdapter", comment.getParseUser("user").fetchIfNeeded().getString("username"));
-                tvUsernameComment.setText(comment.getUser().getUsername());
+                tvUsernameComment.setText("@" + comment.getUser().getUsername());
 
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -85,28 +89,38 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             tvCreatedAtComment.setText(timeAgo);
 
             try {
-            ParseFile profilePic = comment.getUser().getParseFile("profilePicture");
-            if (profilePic != null) {
-                Glide.with(context).load(profilePic.getUrl()).into(ivProfilePicComment);
+                ParseFile profilePic = comment.getUser().getParseFile("profilePic");
+                if (profilePic != null) {
+                    Glide.with(context).load(profilePic.getUrl()).into(ivProfilePicComment);
 
-            }
-            }
-            catch (Exception e) {
+                }
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent i = new Intent(context, ProfileActivity.class);
+                    i.putExtra("User", Parcels.wrap(comment.getUser()));
+                    context.startActivity(i);
+
+                }
+            });
+
         }
+
+
+        public void clear() {
+            comments.clear();
+            notifyDataSetChanged();
+        }
+
+        public void addAll(List<Comment> list) {
+            comments.addAll(list);
+            notifyDataSetChanged();
+        }
+
     }
-
-
-    public void clear() {
-        comments.clear();
-        notifyDataSetChanged();
-    }
-
-    public void addAll(List<Comment> list) {
-        comments.addAll(list);
-        notifyDataSetChanged();
-    }
-
 }

@@ -14,6 +14,8 @@ public class Follow extends ParseObject {
     public static final String KEY_FROM = "from";
     public static final String KEY_TO = "to";
 
+    public Follow() {
+    }
 
     public ParseUser getFrom() {
 

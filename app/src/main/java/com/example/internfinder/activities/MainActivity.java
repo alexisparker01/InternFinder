@@ -1,6 +1,5 @@
 package com.example.internfinder.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,11 +31,11 @@ public class MainActivity extends AppCompatActivity {
     private GoogleMap map;
     private Marker myMarker;
     private Fragment fragment;
-
     public static boolean reached;
+    Post post;
 
 
-     public static BottomNavigationView bottomNavigationView;
+    public static BottomNavigationView bottomNavigationView;
 
 
     @Override
@@ -48,11 +47,14 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+        /*Intent i = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(i);
+
+         */
+
+
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         FragmentManager fragmentManager = getSupportFragmentManager();
-
-
-
 
 
         fragment = Parcels.unwrap(getIntent().getParcelableExtra("Fragment"));
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                                 fragment = new FeedFragment();
                                 break;
                             case R.id.action_search:
-                                fragment  = new SearchFragment();
+                                fragment = new SearchFragment();
                                 break;
                             case R.id.action_profile:
                                 fragment = new ProfileFragment();
@@ -99,42 +101,29 @@ public class MainActivity extends AppCompatActivity {
         Fragment profileFragment = new ProfileFragment();
         Fragment feedFragment = new FeedFragment();
 
-        if(extras!=null && extras.containsKey("openProfileFragment"))
+        if (extras != null && extras.containsKey("openProfileFragment"))
             openF2 = extras.getBoolean("openProfileFragment");
-        if(openF2){
+        if (openF2) {
             View view = MainActivity.bottomNavigationView.findViewById(R.id.action_profile);
             fragmentManagerProfile.beginTransaction().replace(R.id.flContainer, profileFragment).commit();
             view.performClick();
 
         }
-        if(extras!=null && extras.containsKey("openFeedFragment"))
+        if (extras != null && extras.containsKey("openFeedFragment"))
             openF3 = extras.getBoolean("openFeedFragment");
-        if(openF3) {
+        if (openF3) {
             View view = MainActivity.bottomNavigationView.findViewById(R.id.action_feed);
             fragmentManagerProfile.beginTransaction().replace(R.id.flContainer, feedFragment).commit();
             view.performClick();
         }
 
+        /*
+
+        Intent i = new Intent(this, QuestionnaireActivity.class);
+        startActivity(i);
 
 
-
-
-       // Log.i(TAG, post.getDescription());
-
-
-        if(reached) {
-            Post post = Parcels.unwrap(getIntent().getParcelableExtra("Post"));
-            Intent i = new Intent(MainActivity.this, OpenPostActivity.class);
-            i.putExtra("Post", post);
-            startActivity(i);
-        }
-
-
+         */
 
     }
-
-    public static void reachedFeedFragment () {
-        reached = true;
-    }
-
 }

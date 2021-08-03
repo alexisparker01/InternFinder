@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,6 +17,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.example.internfinder.R;
 import com.example.internfinder.adapters.PostAdapter;
+import com.example.internfinder.models.Answers;
 import com.example.internfinder.models.Follow;
 import com.example.internfinder.models.Post;
 import com.parse.FindCallback;
@@ -24,6 +26,7 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.parceler.Parcels;
 
@@ -42,6 +45,7 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView tvIndustry;
     private Button btnFollow;
     private ImageView ivBackProfile;
+    private TextView tvArea;
 
     private ParseUser user;
     private Post post;
@@ -55,12 +59,14 @@ public class ProfileActivity extends AppCompatActivity {
     protected PostAdapter adapter;
     protected List<Post> allPosts;
 
+    private TextView tvPercent;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        
+
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
@@ -68,17 +74,17 @@ public class ProfileActivity extends AppCompatActivity {
 
         post = Parcels.unwrap(getIntent().getParcelableExtra("Post"));
         user = Parcels.unwrap(getIntent().getParcelableExtra("User"));
-        
+
+
         Log.i(TAG, "profile activity uuser: " + user.getUsername());
 
-        if(post != null) {
+        if (post != null) {
             fromPost = true;
         }
 
         if (user != null) {
             fromUser = true;
         }
-
 
 
         tvUsernameProfile = findViewById(R.id.tvUsername);
@@ -91,17 +97,14 @@ public class ProfileActivity extends AppCompatActivity {
         tvIndustry = findViewById(R.id.tvIndustry);
         btnFollow = findViewById(R.id.btnFollow2);
         ivBackProfile = findViewById(R.id.ivBackProfile);
+        tvArea = findViewById(R.id.tvArea);
+        tvPercent = findViewById(R.id.tvPercent);
 
 
         ivBackProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
-                intent.putExtra("openFeedFragment",true);
-                overridePendingTransition(0, 0);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 finish();
-                startActivity(intent);
             }
         });
 
@@ -109,15 +112,12 @@ public class ProfileActivity extends AppCompatActivity {
         btnEditProfile.setVisibility(View.GONE);
 
 
-
-
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
 
-        follow = new Follow();
 
 
         // if we are on the logged in user's profile
-        if(ParseUser.getCurrentUser().getUsername().equals(user.getUsername())) {
+        if (ParseUser.getCurrentUser().getUsername().equals(user.getUsername())) {
             btnFollow.setVisibility(View.GONE);
             btnEditProfile.setVisibility(View.VISIBLE);
 
@@ -126,6 +126,7 @@ public class ProfileActivity extends AppCompatActivity {
             tvBio.setText(ParseUser.getCurrentUser().getString("bio"));
             tvUsernameProfile.setText("@" + ParseUser.getCurrentUser().getString("username"));
             tvIndustry.setText(ParseUser.getCurrentUser().getString("industry"));
+            tvArea.setText(ParseUser.getCurrentUser().getString("area"));
 
             // load profile pic
             ParseFile profilePic = ParseUser.getCurrentUser().getParseFile("profilePic");
@@ -151,7 +152,8 @@ public class ProfileActivity extends AppCompatActivity {
         } else {
             // if we are on another user's profile
 
-            if(fromPost == true) {
+            if (fromPost == true) {
+
                 btnFollow.setVisibility(View.VISIBLE);
                 btnEditProfile.setVisibility(View.GONE);
 
@@ -160,8 +162,9 @@ public class ProfileActivity extends AppCompatActivity {
                 tvBio.setText(post.getUser().getString("bio"));
                 tvUsernameProfile.setText("@" + post.getUser().getString("username"));
                 tvIndustry.setText(post.getUser().getString("industry"));
+                tvArea.setText(post.getUser().getString("area"));
 
-                ParseFile profilePic = post.getUser().getParseFile("profilePicture");
+                ParseFile profilePic = post.getUser().getParseFile("profilePic");
                 if (profilePic != null) {
                     Glide.with(this).load(profilePic.getUrl()).into(ivProfilePicProfile);
 
@@ -189,8 +192,9 @@ public class ProfileActivity extends AppCompatActivity {
                 tvBio.setText(user.getString("bio"));
                 tvUsernameProfile.setText("@" + user.getString("username"));
                 tvIndustry.setText(user.getString("industry"));
+                tvArea.setText(user.getString("area"));
 
-                ParseFile profilePic = user.getParseFile("profilePicture");
+                ParseFile profilePic = user.getParseFile("profilePic");
                 if (profilePic != null) {
                     Glide.with(this).load(profilePic.getUrl()).into(ivProfilePicProfile);
 
@@ -208,85 +212,113 @@ public class ProfileActivity extends AppCompatActivity {
                 queryPosts(user);
             }
 
-
-
+            tvPercent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(ProfileActivity.this, QuestionnaireActivity.class);
+                    i.putExtra("User", Parcels.wrap(user));
+                    startActivity(i);
+                }
+            });
         }
 
-         // set up the query on the Follow table
+        // set up the query on the Follow table
+
+
+
+        follow = new Follow();
+
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Follow");
         query.whereEqualTo("to", user);
         query.whereEqualTo("from", ParseUser.getCurrentUser());
 
         // execute the query
         query.findInBackground(new FindCallback<ParseObject>() {
-                                   public void done(List<ParseObject> followList, ParseException e) {
+            public void done(List<ParseObject> followList, ParseException e) {
 
-                                       if (followList.size() > 0) {
+                if (followList.size() > 0) {
 
-                                           btnFollow.setText("Following");
-                                           btnFollow.setBackgroundColor(getResources().getColor(R.color.lime));
+                    btnFollow.setText("Following");
+                    btnFollow.setBackgroundColor(getResources().getColor(R.color.lime));
 
-                                       }
-                                   }
-                               });
-
-
-            btnFollow.setOnClickListener(new View.OnClickListener() {
-                                             @Override
-                                             public void onClick(View v) {
-
-                                                 if (btnFollow.getText().toString().equals("Follow")) {
+                }
+            }
+        });
 
 
-                                                    // ParseUser otherUser = post.getParseUser("user");
-                                                     ParseUser otherUser = user;
+        btnFollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                                                     // create an entry in the Follow table
-                                                     follow.setFrom(ParseUser.getCurrentUser());
-                                                     follow.setTo(user);
-                                                     //  follow.put("date", Date());
-                                                     follow.saveInBackground();
-
-                                                     btnFollow.setText("Following");
-                                                     btnFollow.setBackgroundColor(getResources().getColor(R.color.lime));
-
-                                                 } else if (btnFollow.getText().toString().equals("Following")) {
+                if (btnFollow.getText().toString().equals("Follow")) {
 
 
-                                                     ParseQuery<Follow> query = ParseQuery.getQuery(Follow.class);
-                                                     query.include(Follow.KEY_TO);
-                                                     query.include(Follow.KEY_FROM);
-                                                     query.whereEqualTo(Follow.KEY_TO, post.getUser());
-                                                     query.whereEqualTo(Follow.KEY_FROM, ParseUser.getCurrentUser());
+                    // ParseUser otherUser = post.getParseUser("user");
+                    // create an entry in the Follow table
+                    follow.setFrom(ParseUser.getCurrentUser());
+                    if(fromPost) {
+                        follow.setTo(post.getUser());
+                    } else {
+                        follow.setTo(user);
+                    }
+                    follow.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if(e != null) {
+                                Log.e(TAG, "error saving follow");
+                            }
+                        }
+                    });
 
-                                                     query.findInBackground(new FindCallback<Follow>() {
-                                                         @Override
-                                                         public void done(List<Follow> follows, ParseException e) {
-                                                             try {
-                                                                 for (Follow follow : follows) {
+                    btnFollow.setText("Following");
+                    btnFollow.setBackgroundColor(getResources().getColor(R.color.lime));
 
-                                                                         follow.delete();
-                                                                         follow.saveInBackground();
-                                                                         btnFollow.setText("Follow");
-                                                                         btnFollow.setBackgroundColor(getResources().getColor(R.color.purple_200));
-                                                                         Log.i("OtherUser", "deleted follow");
-
-                                                                 }
-                                                             }catch (ParseException parseException) {
-                                                                 parseException.printStackTrace();
-                                                                 Log.i("OtherUser", "problem with deleting follow");
-                                                             }
-                                                         }
-                                                     });
+                } else if (btnFollow.getText().toString().equals("Following")) {
 
 
-                                                     }}});
+                    ParseQuery<Follow> query = ParseQuery.getQuery(Follow.class);
+                    query.include(Follow.KEY_TO);
+                    query.include(Follow.KEY_FROM);
+                    if(fromPost) {
+                        query.whereEqualTo(Follow.KEY_TO, post.getUser());
+                    } else {
+                        query.whereEqualTo(Follow.KEY_TO, user);
+                    }
+                    query.whereEqualTo(Follow.KEY_FROM, ParseUser.getCurrentUser());
+
+                    query.findInBackground(new FindCallback<Follow>() {
+                        @Override
+                        public void done(List<Follow> follows, ParseException e) {
+                            try {
+                                for (Follow follow : follows) {
+
+                                    follow.delete();
+                                    follow.saveInBackground(new SaveCallback() {
+                                        @Override
+                                        public void done(ParseException e) {
+
+                                            if(e!=null) {
+                                                Log.e(TAG, "error deleting follow");
+                                            }
+                                            btnFollow.setText("Follow");
+                                            btnFollow.setBackgroundColor(getResources().getColor(R.color.purple_200));
+                                            Log.i("OtherUser", "successfully deleted follow");
+                                            Toast.makeText(ProfileActivity.this, "you unfollowed @" + user.getUsername(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                }
+                            } catch (ParseException parseException) {
+                                parseException.printStackTrace();
+                                Log.i("OtherUser", "problem with deleting follow");
+                            }
+                        }
+                    });
 
 
-
-
-
-
+                }
+            }
+        });
 
 
         // Configure the refreshing colors
@@ -306,15 +338,6 @@ public class ProfileActivity extends AppCompatActivity {
         // set the layout manager on the recycler view
         rvPosts.setLayoutManager(new LinearLayoutManager(this));
 
-
-        // edit profile button click listener
-        btnEditProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(ProfileActivity.this, ModifyProfileActivity.class);
-                startActivity(i);
-            }
-        });
     }
 
 
@@ -343,7 +366,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                 // printing each of the posts I get to see if I'm getting all the posts from the server
 
-                for (Post post: posts) {
+                for (Post post : posts) {
 
                     Log.i("ProfileActivity", "user: " + post.getUser().getUsername() + " desc: " + post.getDescription());
 
@@ -356,5 +379,36 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+
+    public void checkCompatability() {
+
+        QuestionnaireActivity questionnaireActivity = new QuestionnaireActivity();
+        questionnaireActivity.getAnswers(ParseUser.getCurrentUser());
+        ParseQuery<Answers> query = ParseQuery.getQuery("Answers");
+        query.whereEqualTo("user", ParseUser.getCurrentUser());
+        // query.selectKeys(Arrays.asList("question1", "question2", "question3", "question4"));
+        query.setLimit(15);
+        query.addDescendingOrder("createdAt");
+        query.findInBackground(new FindCallback<Answers>() {
+            @Override
+            public void done(List<Answers> answers, ParseException e) {
+                // check for errors
+                if (e != null) {
+                    Log.e("ProfileActivity", "Problem with fetching posts", e);
+                    return;
+                }
+
+                for (Answers answer : answers) {
+
+                    Log.i("ProfileActivity", answer.getQuestion1());
+
+                }
+
+                // save received posts to list and notify adapter of new data
+            }
+
+        });
     }
 }

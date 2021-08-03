@@ -17,6 +17,8 @@ public class Comment extends ParseObject {
     public static final String KEY_USER = "user";
     public static final String KEY_TEXT = "text";
 
+    public Comment() {
+    }
 
     public ParseUser getUser() {
 

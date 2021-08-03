@@ -134,21 +134,30 @@ public class OpenPostActivity extends AppCompatActivity {
         queryComments();
 
 
+       // Log.i("TAG", "post: " + post.getParseUser("user").getString("firstname"));
         // add user data to fields
-        tvFirstnameOpenPost.setText(post.getUser().getString("firstname"));
-        tvLastnameOpenPost.setText(post.getUser().getString("lastname"));
-        tvUsernameProfileOpenPost.setText("@" + post.getUser().getUsername());
+       // fetchIfNeeded()getParseObject("content");
+        try {
+            tvFirstnameOpenPost.setText(post.getUser().fetchIfNeeded().getString("firstname"));
+            tvLastnameOpenPost.setText(post.getUser().fetchIfNeeded().getString("lastname"));
+            tvUsernameProfileOpenPost.setText("@" + post.getParseUser("user").fetchIfNeeded().getUsername());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         tvDescriptionOpenPost.setText(post.getDescription());
         Date createdAt = post.getCreatedAt();
         String timeAgo = Post.calculateTimeAgo(createdAt);
         tvCreatedAtOpenPost.setText(timeAgo);
+
 
         if(post.getType().equals("event")) {
             tvLocation.setText(post.getLocation());
         }
 
         // load profile pic
-        ParseFile profilePic = ParseUser.getCurrentUser().getParseFile("profilePicture");
+
+        ParseFile profilePic = post.getUser().getParseFile("profilePic");
         if (profilePic != null) {
             Glide.with(this).load(profilePic.getUrl()).into(ivProfilePicProfileOpenPost);
         }
@@ -161,51 +170,6 @@ public class OpenPostActivity extends AppCompatActivity {
         }
 
     }
-
-    private void queryReplyComments() {
-        // specifying that i am querying data from the Comment.class
-        ParseQuery<Comment> query = ParseQuery.getQuery(Comment.class);
-
-        // include data referred by post key
-        query.include(Comment.KEY_POST);
-        // the problem is that post.getobjectid() is a string and i need the parse object of the post
-        query.whereEqualTo(Comment.KEY_POST, post);
-
-        // limit query to latest 15 posts
-        query.setLimit(15);
-
-        // order posts by creation date (newest first)
-        query.addDescendingOrder("createdAt");
-
-        // start an asynchronous call for posts
-        query.findInBackground(new FindCallback<Comment>() {
-            @Override
-            public void done(List<Comment> comments, ParseException e) {
-                // check for errors
-                if (e != null) {
-                    Log.e("OpenPostActivity", "Problem with fetching comments", e);
-                    return;
-                }
-
-
-                // printing each of the posts I get to see if I'm getting all the posts from the server
-
-                for (Comment comment: comments) {
-
-                    Log.i("OpenPostActivity", "comment: " + comment.getUser());
-
-                }
-
-                // save received posts to list and notify adapter of new data
-                allComments.clear();
-                allComments.addAll(comments);
-                adapter.notifyDataSetChanged();
-            }
-        });
-
-    }
-
-
 
     private void queryComments() {
         // specifying that i am querying data from the Comment.class

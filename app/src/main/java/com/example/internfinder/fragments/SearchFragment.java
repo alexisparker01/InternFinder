@@ -100,12 +100,12 @@ public class SearchFragment extends Fragment {
 
         ParseQuery<ParseUser> query = ParseUser.getQuery();
 
+        // compound query parse
+
         query.include("username");
-        // query.include("firstname");
+        //query.include("firstname");
         // query.include("lastname");
         query.whereContains("username", letter.toLowerCase());
-        // query.whereContains("firstname", letter.toLowerCase());
-        // query.whereContains("lastname", letter.toLowerCase());
 
 
         query.findInBackground((users, e) -> {
