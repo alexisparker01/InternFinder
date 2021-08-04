@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
         if (ParseUser.getCurrentUser() != null) {
-          goToQuestionnaire();
+          goToFeed();
         }
 
         if (getSupportActionBar() != null) {
@@ -147,6 +147,15 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    private void goToFeed() {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.putExtra("openFeedFragment",true);
+        overridePendingTransition(0, 0);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        finish();
+        startActivity(intent);
+    }
+
     private void loginUser(String username, String password) {
 
         ParseUser.logInInBackground(username, password, new LogInCallback() {
@@ -159,7 +168,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 // TODO: navigate to the main activity if the user has signed in properly
 
-               goToQuestionnaire();
+               goToFeed();
              //   Toast.makeText(LoginActivity.this, "Success!", Toast.LENGTH_SHORT).show();
 
 
@@ -171,7 +180,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Intent i = new Intent(LoginActivity.this, QuestionnaireActivity.class);
         startActivity(i);
-        finish();
+        //finish();
     }
 
 

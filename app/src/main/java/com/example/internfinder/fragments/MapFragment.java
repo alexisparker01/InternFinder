@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -145,11 +144,9 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
 
         // set the adapter on the recycler view
         hsvInterns.setAdapter(adapter);
-
+queryUsers();
         // set the layout manager on the recycler view
         hsvInterns.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        queryUsers();
 
     }
 
@@ -310,7 +307,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
     private void geoLocate(ParseGeoPoint point, String title) {
         reached = true;
         Log.e(TAG, "GeoLocating...");
-        Geocoder geocoder = new Geocoder(getContext());
+      //  Geocoder geocoder = new Geocoder(getContext());
         Marker myMarker;
 
         Log.e(TAG, "Adding user post...");
@@ -389,6 +386,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
 
                 for (ParseUser user: users) {
 
+                    Log.i(TAG, "USERS IN MAP" +  user.getUsername());
                     if(user.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
                         currentUser = user;
                     }

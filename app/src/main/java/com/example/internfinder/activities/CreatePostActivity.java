@@ -121,6 +121,7 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private String eventLocation;
     private ParseGeoPoint eventLatLng;
+    private String eventName;
     private LatLng currentLocationLatLng;
 
     private AutocompleteSupportFragment fragment;
@@ -205,13 +206,6 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
             }
         });
 
-
-        /*
-        byte[] data = "Working at Parse is great!".getBytes();
-        image = new ParseFile("resume.txt", data);
-
-
-         */
         image = null;
 
         /** set up for spinner widget **/
@@ -335,6 +329,7 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
                 tvLocation.setText(place.getAddress());
                 eventLatLng = new ParseGeoPoint(place.getLatLng().latitude, place.getLatLng().longitude);
                 eventLocation = place.getAddress();
+                eventName = place.getName();
                 // Define a Place ID.
 
                 Log.i(TAG, "inserting place location");
@@ -661,6 +656,7 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
             post.setType("event");
             post.setLocation(eventLocation);
             post.setLatLng(eventLatLng);
+            post.setLocationName(eventName);
             if(image != null) {
                 post.setImage(image);
             }

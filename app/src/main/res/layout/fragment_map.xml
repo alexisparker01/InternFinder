@@ -14,7 +14,7 @@
             android:id="@+id/mapFeed"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="450dp"
             android:layout_marginTop="50dp"
             tools:context=".MapsActivity" />
 
@@ -54,9 +54,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/hsvInterns"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="163dp"
             android:layout_below="@+id/tvInternTitle"
-            android:layout_marginTop="19dp">
+            android:layout_marginTop="10dp">
 
         </androidx.recyclerview.widget.RecyclerView>
 

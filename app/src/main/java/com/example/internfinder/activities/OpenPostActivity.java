@@ -1,5 +1,6 @@
 package com.example.internfinder.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -48,6 +49,7 @@ public class OpenPostActivity extends AppCompatActivity {
     private EditText etComment;
     private Button btnSubmitComment;
     private TextView tvLocation;
+    private TextView tvLocationName;
 
 
     private SwipeRefreshLayout swipeContainerComments;
@@ -79,27 +81,48 @@ public class OpenPostActivity extends AppCompatActivity {
         etComment = findViewById(R.id.etComment);
         btnSubmitComment = findViewById(R.id.btnSubmitComment);
         tvLocation = findViewById(R.id.tvPostLocation2);
+        tvLocationName = findViewById(R.id.tvLocationName);
 
+        tvUsernameProfileOpenPost.setOnClickListener(new View.OnClickListener() {
+                                                         @Override
+                                                         public void onClick(View v) {
+                                                             if(tvUsernameProfileOpenPost.getText().equals("@"+ParseUser.getCurrentUser().getUsername())) {
 
-        btnSubmitComment.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-                                                    Comment comment = new Comment();
-                                                    comment.setText(etComment.getText().toString());
-                                                    comment.setUser(ParseUser.getCurrentUser());
-                                                    comment.setPost(post);
-                                                    comment.saveInBackground(new SaveCallback() {
-                                                        @Override
-                                                        public void done(ParseException e) {
-                                                            if (e != null) {
-                                                                Log.e("openpost", "error while saving");
-                                                            }
-                                                            etComment.setText("");
-                                                            Log.i("openpost", "SAVED SUCCESFFULLY");
-                                                        }
-                                                    });
-                                                }
-                                            });
+                                                                 Intent intent = new Intent(OpenPostActivity.this, MainActivity.class);
+                                                                 intent.putExtra("openProfileFragment",true);
+                                                                 // overridePendingTransition(0, 0);
+                                                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                                                 // context.finish();
+                                                                startActivity(intent);
+                                                             } else {
+                                                                 Intent i = new Intent(OpenPostActivity.this, ProfileActivity.class);
+                                                                 i.putExtra("User", Parcels.wrap(post.getUser()));
+                                                                 i.putExtra("Post", Parcels.wrap(post));
+                                                                 startActivity(i);
+
+                                                             }
+                                                         }
+                                                     });
+
+                btnSubmitComment.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Comment comment = new Comment();
+                        comment.setText(etComment.getText().toString());
+                        comment.setUser(ParseUser.getCurrentUser());
+                        comment.setPost(post);
+                        comment.saveInBackground(new SaveCallback() {
+                            @Override
+                            public void done(ParseException e) {
+                                if (e != null) {
+                                    Log.e("openpost", "error while saving");
+                                }
+                                etComment.setText("");
+                                Log.i("openpost", "SAVED SUCCESFFULLY");
+                            }
+                        });
+                    }
+                });
 
         /** swipe refresher and adapter for comments **/
         swipeContainerComments = (SwipeRefreshLayout) findViewById(R.id.swipeContainerComment);
@@ -111,6 +134,8 @@ public class OpenPostActivity extends AppCompatActivity {
                 // Make sure you call swipeContainer.setRefreshing(false)
                 // once the network request has completed successfully.
                 queryComments();
+                swipeContainerComments.setRefreshing(false);
+
             }
         });
 
@@ -145,6 +170,7 @@ public class OpenPostActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+
         tvDescriptionOpenPost.setText(post.getDescription());
         Date createdAt = post.getCreatedAt();
         String timeAgo = Post.calculateTimeAgo(createdAt);
@@ -153,6 +179,7 @@ public class OpenPostActivity extends AppCompatActivity {
 
         if(post.getType().equals("event")) {
             tvLocation.setText(post.getLocation());
+            tvLocationName.setText(post.getLocationName());
         }
 
         // load profile pic

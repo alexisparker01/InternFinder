@@ -21,6 +21,7 @@ public class Post extends ParseObject {
     public static final String KEY_TYPE = "type";
     public static final String KEY_LOCATION = "location";
     public static final String KEY_LATLNG = "latlng";
+    private static final String KEY_LOCATIONNAME = "locationName";
 
     public Post() {
     }
@@ -35,6 +36,7 @@ public class Post extends ParseObject {
         put(KEY_DESCRIPTION, description);
 
     }
+
 
     public ParseFile getImage() {
 
@@ -84,6 +86,16 @@ public class Post extends ParseObject {
     public void setLatLng(ParseGeoPoint point) {
 
         put(KEY_LATLNG, point);
+
+    }
+    public String getLocationName() {
+
+        return getString(KEY_LOCATIONNAME);
+    }
+
+    public void setLocationName(String locationName) {
+
+        put(KEY_LOCATIONNAME, locationName);
 
     }
 

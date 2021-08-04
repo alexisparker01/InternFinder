@@ -46,9 +46,9 @@
 
         <TextView
             android:id="@+id/tvCreatedAtOpenPost"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
+            android:layout_marginStart="178dp"
             android:layout_marginTop="30dp"
             android:layout_toEndOf="@+id/tvUsernameOpenPost"
             android:fontFamily="sans-serif-light"
@@ -59,13 +59,31 @@
             android:id="@+id/tvPostLocation2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tvFirstnameOpenPost"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="13dp"
+            android:layout_below="@+id/tvLocationName"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="1dp"
             android:layout_marginBottom="10dp"
             android:autoLink="map"
             android:fontFamily="sans-serif-light"
             android:linksClickable="true"
+            android:textSize="12sp"
+            android:visibility="visible"
+            tools:text="Hacker Way, Menlo Park, CA" />
+
+        <TextView
+            android:id="@+id/tvLocationName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivProfilePictureOpenPost"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="sans-serif-light"
+            android:linksClickable="true"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textSize="14sp"
+            android:textStyle="bold"
             android:visibility="visible"
             tools:text="Hacker Way, Menlo Park, CA" />
 
@@ -94,7 +112,7 @@
         <ImageView
             android:id="@+id/ivImageOpenPost"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="300dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:scaleType="centerCrop"
@@ -105,20 +123,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/etComment"
+            android:layout_marginStart="0dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="-1dp"
+            android:layout_marginTop="-51dp"
+            android:layout_toEndOf="@+id/etComment"
             android:text="SUBMIT"
             android:textSize="12sp" />
 
         <EditText
             android:id="@+id/etComment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="273dp"
+            android:layout_height="53dp"
             android:layout_below="@+id/tvDescriptionOpenPost"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="18dp"
             android:layout_marginRight="10dp"
+            android:background="@drawable/white_border"
             android:ems="10"
+            android:fontFamily="sans-serif-light"
             android:hint="Leave a comment!"
             android:inputType="textPersonName"
             android:textSize="14sp" />
@@ -129,6 +151,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/ivImageOpenPost"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:fontFamily="sans-serif-light"
             android:textSize="14sp"
@@ -141,7 +164,7 @@
         android:layout_height="302dp"
         android:layout_below="@+id/rl2"
         android:layout_marginLeft="50dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="6dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp">
 

@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp">
 
 
     <RelativeLayout
@@ -17,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvUsernamePD"
             android:layout_marginStart="11dp"
-            android:layout_marginTop="7dp"
+            android:layout_marginTop="12dp"
             android:layout_toEndOf="@+id/profilePic"
             android:fontFamily="sans-serif-light"
             android:textSize="12sp"
@@ -30,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvUsernamePD"
             android:layout_marginStart="4dp"
-            android:layout_marginTop="7dp"
+            android:layout_marginTop="12dp"
             android:layout_toEndOf="@+id/firstNamePost"
             android:fontFamily="sans-serif-light"
             android:textSize="12sp"
@@ -43,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvUsernamePD"
             android:layout_marginStart="3dp"
-            android:layout_marginTop="7dp"
+            android:layout_marginTop="12dp"
             android:layout_toEndOf="@+id/postType"
             android:fontFamily="sans-serif-light"
             android:textSize="12sp"
@@ -51,8 +53,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profilePic"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             tools:src="@tools:sample/avatars"
@@ -67,7 +69,7 @@
             android:layout_toEndOf="@+id/profilePic"
             android:fontFamily="sans-serif-thin"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textSize="15sp"
+            android:textSize="14sp"
             tools:text="@janedoetheintern" />
 
         <TextView
@@ -75,8 +77,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvUsernamePD"
-            android:layout_marginStart="3dp"
-            android:layout_marginTop="7dp"
+            android:layout_marginStart="3.5dp"
+            android:layout_marginTop="12dp"
             android:layout_toEndOf="@+id/lastNamePost"
             android:fontFamily="sans-serif-light"
             android:textSize="12sp"
@@ -86,13 +88,31 @@
             android:id="@+id/tvPostLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/profilePic"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="7dp"
+            android:layout_below="@+id/tvLocationName"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="-2dp"
             android:layout_marginBottom="10dp"
             android:autoLink="map"
             android:fontFamily="sans-serif-light"
             android:linksClickable="true"
+            android:textSize="11sp"
+            android:visibility="visible"
+            tools:text="10 Hacker Way Street, Menlo Park, CA" />
+
+        <TextView
+            android:id="@+id/tvLocationName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/postType"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="10dp"
+            android:fontFamily="sans-serif-light"
+            android:linksClickable="true"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textSize="14sp"
+            android:textStyle="bold"
             android:visibility="visible"
             tools:text="Hacker Way, Menlo Park, CA" />
     </RelativeLayout>
@@ -108,13 +128,12 @@
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
 
-
     <TextView
         android:id="@+id/tvDescriptionPD"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivPostImageFeed"
-        android:layout_marginStart="11dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="7dp"
         android:layout_marginBottom="25dp"
         android:layout_toEndOf="@+id/tvUser2"
@@ -127,7 +146,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivPostImageFeed"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="7dp"
         android:fontFamily="sans-serif-light"
         android:text="@janedoetheintern"

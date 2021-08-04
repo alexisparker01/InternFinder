@@ -30,6 +30,20 @@
             android:layout_marginBottom="10dp"
             android:text="" />
 
+        <TextView
+            android:id="@+id/tvAnswers3"
+            android:layout_below="@id/tvAnswers2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:text="" />
+
+        <Button
+            android:id="@+id/btnProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvAnswers3"
+            android:text="GO TO MODIFY PROFILE" />
 
         <TextView
             android:id="@+id/tvQuestionnaireTitle"
@@ -262,6 +276,8 @@
             android:layout_below="@+id/radioGroupQuestion4"
             android:layout_marginTop="8dp"
             android:text="apply" />
+
+
 
     </RelativeLayout>
 

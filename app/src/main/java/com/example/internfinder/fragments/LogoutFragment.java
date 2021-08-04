@@ -50,6 +50,7 @@ public class LogoutFragment extends Fragment {
                     case DialogInterface.BUTTON_POSITIVE:
                         Toast.makeText(getContext(), "You are logging out!", Toast.LENGTH_SHORT).show();
                         logout();
+                        getActivity().finish();
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
@@ -80,7 +81,7 @@ public class LogoutFragment extends Fragment {
         ParseUser.logOut();
         Intent i = new Intent(getContext(), LoginActivity.class);
         startActivity(i);
-      //  finish();
+
     }
 
     }

@@ -7,14 +7,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.internfinder.R;
 import com.example.internfinder.models.Answers;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -26,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QuestionnaireActivity extends AppCompatActivity {
+
     private static final String TAG = "QuestionnaireActivity";
     RadioGroup radioGroupIndustry;
     RadioGroup radioGroupQuestion1;
@@ -39,7 +38,9 @@ public class QuestionnaireActivity extends AppCompatActivity {
     RadioButton radioButtonQuestion3;
     RadioButton radioButtonQuestion4;
 
-    Button btnApply;
+    private Button btnApply;
+    private Button btnProfile;
+
     TextView tvQuestionnaireTitle;
     TextView tvIndustryQuestionTitle;
     TextView tvQuestion1;
@@ -48,20 +49,21 @@ public class QuestionnaireActivity extends AppCompatActivity {
     TextView tvQuestion4;
     TextView tvAnswers;
     TextView tvAnswers2;
+    TextView tvAnswers3;
 
     ParseUser user;
 
-    private RelativeLayout rlQuestions;
-
     Answers answer;
 
-    List<Answers> currentUserAnswersList;
-    List<Answers> otherUserAnswersList;
+    protected List<Answers> currentUserAnswersList;
+    protected List<Answers> otherUserAnswersList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questionnaire);
+
+        Log.i(TAG, "Entering Questionnaire Activity");
 
         radioGroupIndustry = findViewById(R.id.radioGroupIndustry);
         radioGroupQuestion1 = findViewById(R.id.radioGroupQuestion1);
@@ -78,34 +80,56 @@ public class QuestionnaireActivity extends AppCompatActivity {
 
         tvAnswers = findViewById(R.id.tvAnswers);
         tvAnswers2 = findViewById(R.id.tvAnswers2);
+        tvAnswers3 = findViewById(R.id.tvAnswers3);
 
+        btnProfile = findViewById(R.id.btnProfile);
 
         currentUserAnswersList = new ArrayList<>();
         otherUserAnswersList = new ArrayList<>();
 
         answer = null;
 
+        user = Parcels.unwrap(getIntent().getParcelableExtra("User"));
+
+
         btnApply = findViewById(R.id.btnApply);
 
-        user = Parcels.unwrap(getIntent().getParcelableExtra("User"));
-        Log.i(TAG, "QUESTIONAIRE USER USERNAME: " + user.getUsername());
+        btnProfile.setVisibility(View.GONE);
 
-        if(!user.equals(ParseUser.getCurrentUser())) {
 
-            afterEdit();
+
+        if(user!=null) {
+
+
+            if (!user.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
+
+                viewOtherUserAnswers();
+            }
         }
+
+        btnProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(QuestionnaireActivity.this, ModifyProfileActivity.class);
+                startActivity(i);
+            }
+        });
 
         btnApply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnProfile.setVisibility(View.GONE);
 
-               getAnswers(ParseUser.getCurrentUser());
-                    Log.i(TAG, "REACHED QUESTIONAIRE IF: " + user.getUsername());
-                    if (answer == null) {
+                    getAnswers(ParseUser.getCurrentUser());
+
+                    if (currentUserAnswersList.size() > 0) {
+                        answer = currentUserAnswersList.get(0);
+                    } else {
                         answer = new Answers();
                         answer.setUser(ParseUser.getCurrentUser());
 
                     }
+
                     // industry
 
                     int radioIDIndustry = radioGroupIndustry.getCheckedRadioButtonId();
@@ -167,38 +191,38 @@ public class QuestionnaireActivity extends AppCompatActivity {
                         }
                     });
 
-                    getAnswers(ParseUser.getCurrentUser());
-
-
-                radioGroupIndustry.setVisibility(View.GONE);
-                radioGroupQuestion1.setVisibility(View.GONE);
-                radioGroupQuestion2.setVisibility(View.GONE);
-                radioGroupQuestion3.setVisibility(View.GONE);
-                radioGroupQuestion4.setVisibility(View.GONE);
-
-                tvIndustryQuestionTitle.setVisibility(View.GONE);
-                tvQuestionnaireTitle.setVisibility(View.GONE);
-                tvQuestion1.setVisibility(View.INVISIBLE);
-                tvQuestion2.setVisibility(View.INVISIBLE);
-                tvQuestion3.setVisibility(View.INVISIBLE);
-                tvQuestion4.setVisibility(View.INVISIBLE);
-
-                btnApply.setVisibility(View.GONE);
-
-                tvAnswers.setText(tvQuestion1.getText().toString() + "\n" + radioButtonQuestion1.getText() + "\n\n" +
-                        tvQuestion2.getText().toString() + "\n" + radioButtonQuestion2.getText() + "\n\n" +
-                        tvQuestion3.getText().toString() + "\n" + radioButtonQuestion3.getText() + "\n\n" +
-                        tvQuestion4.getText().toString() + "\n" + radioButtonQuestion4.getText() + "\n\n");
-
-                Intent i = new Intent(QuestionnaireActivity.this, ModifyProfileActivity.class);
-                startActivity(i);
+                    viewYourAnswers();
             }
         });
-
-
     }
 
-    private void afterEdit() {
+    private void viewYourAnswers() {
+        btnApply.setVisibility(View.GONE);
+        btnProfile.setVisibility(View.VISIBLE);
+        radioGroupIndustry.setVisibility(View.GONE);
+        radioGroupQuestion1.setVisibility(View.GONE);
+        radioGroupQuestion2.setVisibility(View.GONE);
+        radioGroupQuestion3.setVisibility(View.GONE);
+        radioGroupQuestion4.setVisibility(View.GONE);
+
+        tvIndustryQuestionTitle.setVisibility(View.GONE);
+        tvQuestionnaireTitle.setVisibility(View.GONE);
+        tvQuestion1.setVisibility(View.INVISIBLE);
+        tvQuestion2.setVisibility(View.INVISIBLE);
+        tvQuestion3.setVisibility(View.INVISIBLE);
+        tvQuestion4.setVisibility(View.INVISIBLE);
+
+            getAnswers(ParseUser.getCurrentUser());
+
+        tvAnswers.setText(tvQuestion1.getText().toString() + "\n" + currentUserAnswersList.get(0).getQuestion1());
+        tvAnswers2.setText("\n\n" + tvQuestion2.getText().toString() + "\n" + currentUserAnswersList.get(0).getQuestion2());
+        tvAnswers3.setText("\n\n" + tvQuestion3.getText().toString() + "\n" + currentUserAnswersList.get(0).getQuestion3()+"\n\n" + tvQuestion4.getText().toString() + "\n" +  currentUserAnswersList.get(0).getQuestion4() + "\n\n");
+
+}
+
+
+    public void viewOtherUserAnswers() {
+
         btnApply.setVisibility(View.GONE);
         radioGroupIndustry.setVisibility(View.GONE);
         radioGroupQuestion1.setVisibility(View.GONE);
@@ -215,53 +239,32 @@ public class QuestionnaireActivity extends AppCompatActivity {
 
         getAnswers(user);
 
-        Log.i(TAG, "username of answer " + answer.getUser().getUsername());
-
-        //tvAnswers.setText(tvQuestion1.getText().toString() + "\n" + answer.getQuestion1() + "\n\n" + tvQuestion2.getText().toString() + "\n" + answer.getQuestion2());
-        //tvAnswers2.setText("\n\n" + tvQuestion3.getText().toString() + "\n" + currentUserAnswersList.get(2)+ "\n\n" + tvQuestion4.getText().toString() + "\n" +     currentUserAnswersList.get(3) + "\n\n");
+        tvAnswers.setText(tvQuestion1.getText().toString() + "\n" + otherUserAnswersList.get(0).getQuestion1());
+        tvAnswers2.setText("\n\n" + tvQuestion2.getText().toString() + "\n" + otherUserAnswersList.get(0).getQuestion2());
+        tvAnswers3.setText("\n\n" + tvQuestion3.getText().toString() + "\n" + otherUserAnswersList.get(0).getQuestion3()+"\n\n" + tvQuestion4.getText().toString() + "\n" +  otherUserAnswersList.get(0).getQuestion4() + "\n\n");
     }
 
 
     public void getAnswers(ParseUser user) {
+
         ParseQuery<Answers> query = ParseQuery.getQuery("Answers");
+
+
         query.whereEqualTo("user", user);
         query.setLimit(15);
         query.addDescendingOrder("createdAt");
-        query.findInBackground(new FindCallback<Answers>() {
-            @Override
-            public void done(List<Answers> objects, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Problem with fetching posts", e);
-                    return;
-                } else {
-
-                    Log.i(TAG, "successfully got answers from method");
-                    Log.i(TAG, "answers size in method: " + objects.size());
-                    //answer = objects.get(0);
-                }
+        try {
+            if(user.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
+                currentUserAnswersList = query.find();
+            } else {
+                otherUserAnswersList = query.find();
             }
-        });
-    }
-
-    public void checkCompatability() {
-
-        int score = 0;
-
-        //otherUserAnswersList = getAnswers(post.getUser());
-
-        if(currentUserAnswersList.get(0).getQuestion1().equals(otherUserAnswersList.get(0).getQuestion1())) {
-            score++;
-        } else if(currentUserAnswersList.get(0).getQuestion2().equals(otherUserAnswersList.get(0).getQuestion2())) {
-            score++;
-        } else if(currentUserAnswersList.get(0).getQuestion3().equals(otherUserAnswersList.get(0).getQuestion3())) {
-            score++;
-        } else if (currentUserAnswersList.get(0).getQuestion4().equals(otherUserAnswersList.get(0).getQuestion4())) {
-            score++;
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
-        float finalScore =  score/5;
-
-      //  percentage.setText("You and this user are " + finalScore + "% compatible");
 
     }
+
 }
+

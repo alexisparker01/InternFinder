@@ -172,23 +172,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvBio"
-            android:layout_centerInParent="false"
-            android:layout_centerHorizontal="false"
             android:layout_marginLeft="75dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="5dp"
             android:fontFamily="sans-serif-light"
-            android:text="500 followers" />
+            android:text="500 followers"
+            android:textAlignment="center"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvFollowing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvBio"
-            android:layout_marginStart="78dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginStart="91dp"
+            android:layout_marginTop="3dp"
             android:layout_toEndOf="@+id/tvFollowers"
             android:fontFamily="sans-serif-light"
-            android:text="500 following" />
+            android:text="500 following"
+            android:textAlignment="center"
+            android:textStyle="bold" />
 
     </RelativeLayout>
 </FrameLayout>

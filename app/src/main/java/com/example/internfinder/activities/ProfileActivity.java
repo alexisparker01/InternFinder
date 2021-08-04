@@ -41,15 +41,20 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView tvLastname;
     private TextView tvBio;
     private ImageView ivProfilePicProfile;
-    private Button btnEditProfile;
     private TextView tvIndustry;
     private Button btnFollow;
     private ImageView ivBackProfile;
     private TextView tvArea;
+    protected List<Answers> currentUserAnswersList;
+    protected List<Answers> otherUserAnswersList;
 
+    protected List<Follow> followingList;
+    protected List<Follow> followersList;
     private ParseUser user;
     private Post post;
     private Follow follow;
+
+    private int score = 0;
 
     boolean fromPost;
     boolean fromUser;
@@ -60,6 +65,96 @@ public class ProfileActivity extends AppCompatActivity {
     protected List<Post> allPosts;
 
     private TextView tvPercent;
+
+    private TextView tvFollowers;
+    private TextView tvFollowing;
+
+
+    public void followCount(String key) {
+
+        ParseQuery<Follow> query = ParseQuery.getQuery("Follow");
+
+        if(key.equals(Follow.KEY_FROM)) {
+            query.whereEqualTo("from", user);
+            query.setLimit(15);
+            query.addDescendingOrder("createdAt");
+            try {
+                followingList = query.find();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        } else {
+            query.whereEqualTo("to", user);
+            query.setLimit(15);
+            query.addDescendingOrder("createdAt");
+            try {
+                followersList = query.find();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    public void getAnswers(ParseUser user) {
+
+        ParseQuery<Answers> query = ParseQuery.getQuery("Answers");
+
+
+        query.whereEqualTo("user", user);
+        query.setLimit(15);
+        query.addDescendingOrder("createdAt");
+        try {
+            if(user.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
+                currentUserAnswersList = query.find();
+            } else {
+                otherUserAnswersList = query.find();
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public float checkCompatability() {
+
+        //otherUserAnswersList = getAnswers(post.getUser());
+
+        Log.i(TAG, "Entering checkCompatability method");
+
+
+        Log.i(TAG, String.valueOf(currentUserAnswersList.get(0).getQuestion1()));
+        Log.i(TAG, String.valueOf(currentUserAnswersList.get(0).getQuestion2()));
+        Log.i(TAG, String.valueOf(currentUserAnswersList.get(0).getQuestion3()));
+        Log.i(TAG, String.valueOf(currentUserAnswersList.get(0).getQuestion4()));
+
+        Log.i(TAG, String.valueOf(otherUserAnswersList.get(0).getQuestion1()));
+        Log.i(TAG, String.valueOf(otherUserAnswersList.get(0).getQuestion2()));
+        Log.i(TAG, String.valueOf(otherUserAnswersList.get(0).getQuestion3()));
+        Log.i(TAG, String.valueOf(otherUserAnswersList.get(0).getQuestion4()));
+
+
+
+        Log.i(TAG, currentUserAnswersList.toString());
+
+        if(currentUserAnswersList.get(0).getQuestion1().equals(otherUserAnswersList.get(0).getQuestion1())) {
+            score++;
+        } else if(currentUserAnswersList.get(0).getQuestion2().equals(otherUserAnswersList.get(0).getQuestion2())) {
+            score++;
+        } else if(currentUserAnswersList.get(0).getQuestion3().equals(otherUserAnswersList.get(0).getQuestion3())) {
+            score++;
+        } else if (currentUserAnswersList.get(0).getQuestion4().equals(otherUserAnswersList.get(0).getQuestion4())) {
+            score++;
+        }
+
+        return score;
+
+    }
+
+    public float getScore() {
+        return (checkCompatability()/4)*100;
+    }
 
 
     @Override
@@ -72,11 +167,12 @@ public class ProfileActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
 
+
         post = Parcels.unwrap(getIntent().getParcelableExtra("Post"));
         user = Parcels.unwrap(getIntent().getParcelableExtra("User"));
 
+        // score = Parcels.unwrap(getIntent().getParcelableExtra("Score"));
 
-        Log.i(TAG, "profile activity uuser: " + user.getUsername());
 
         if (post != null) {
             fromPost = true;
@@ -86,19 +182,19 @@ public class ProfileActivity extends AppCompatActivity {
             fromUser = true;
         }
 
-
         tvUsernameProfile = findViewById(R.id.tvUsername);
         tvFirstname = findViewById(R.id.etFirstName);
         tvLastname = findViewById(R.id.tvLastName);
         tvBio = findViewById(R.id.tvBio);
         ivProfilePicProfile = findViewById(R.id.ivProfilePic);
-        btnEditProfile = findViewById(R.id.btnEditProfile);
         rvPosts = findViewById(R.id.rvUserPosts);
         tvIndustry = findViewById(R.id.tvIndustry);
         btnFollow = findViewById(R.id.btnFollow2);
         ivBackProfile = findViewById(R.id.ivBackProfile);
         tvArea = findViewById(R.id.tvArea);
         tvPercent = findViewById(R.id.tvPercent);
+        tvFollowers = findViewById(R.id.tvFollowers);
+        tvFollowing = findViewById(R.id.tvFollowing);
 
 
         ivBackProfile.setOnClickListener(new View.OnClickListener() {
@@ -109,53 +205,15 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         btnFollow.setVisibility(View.GONE);
-        btnEditProfile.setVisibility(View.GONE);
 
 
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
 
 
 
-        // if we are on the logged in user's profile
-        if (ParseUser.getCurrentUser().getUsername().equals(user.getUsername())) {
-            btnFollow.setVisibility(View.GONE);
-            btnEditProfile.setVisibility(View.VISIBLE);
-
-            tvFirstname.setText(ParseUser.getCurrentUser().getString("firstname"));
-            tvLastname.setText(ParseUser.getCurrentUser().getString("lastname"));
-            tvBio.setText(ParseUser.getCurrentUser().getString("bio"));
-            tvUsernameProfile.setText("@" + ParseUser.getCurrentUser().getString("username"));
-            tvIndustry.setText(ParseUser.getCurrentUser().getString("industry"));
-            tvArea.setText(ParseUser.getCurrentUser().getString("area"));
-
-            // load profile pic
-            ParseFile profilePic = ParseUser.getCurrentUser().getParseFile("profilePic");
-            if (profilePic != null) {
-                Glide.with(this).load(profilePic.getUrl()).into(ivProfilePicProfile);
-
-            }
-
-            // Setup refresh listener which triggers new data loading
-            swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    // Your code to refresh the list here.
-                    // Make sure you call swipeContainer.setRefreshing(false)
-                    // once the network request has completed successfully.
-                    queryPosts(ParseUser.getCurrentUser());
-                }
-            });
-
-            queryPosts(ParseUser.getCurrentUser());
-
-
-        } else {
-            // if we are on another user's profile
-
-            if (fromPost == true) {
+            if (fromPost) {
 
                 btnFollow.setVisibility(View.VISIBLE);
-                btnEditProfile.setVisibility(View.GONE);
 
                 tvFirstname.setText(post.getUser().getString("firstname"));
                 tvLastname.setText(post.getUser().getString("lastname"));
@@ -178,14 +236,14 @@ public class ProfileActivity extends AppCompatActivity {
                         // Make sure you call swipeContainer.setRefreshing(false)
                         // once the network request has completed successfully.
                         queryPosts(post.getUser());
+                        swipeContainer.setRefreshing(false);
                     }
                 });
 
                 queryPosts(post.getUser());
 
-            } else if (fromUser == true) {
+            } else if (fromUser) {
                 btnFollow.setVisibility(View.VISIBLE);
-                btnEditProfile.setVisibility(View.GONE);
 
                 tvFirstname.setText(user.getString("firstname"));
                 tvLastname.setText(user.getString("lastname"));
@@ -210,7 +268,20 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 });
                 queryPosts(user);
+                swipeContainer.setRefreshing(false);
             }
+
+
+
+        currentUserAnswersList = new ArrayList<>();
+        otherUserAnswersList = new ArrayList<>();
+
+        getAnswers(ParseUser.getCurrentUser());
+        getAnswers(user);
+
+        if(currentUserAnswersList.size() > 0 && otherUserAnswersList.size() > 0) {
+            tvPercent.setVisibility(View.VISIBLE);
+            tvPercent.setText("You and this user are " + getScore() + "% compatable. Click to see their answers to the Questionnaire.");
 
             tvPercent.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -220,11 +291,11 @@ public class ProfileActivity extends AppCompatActivity {
                     startActivity(i);
                 }
             });
+        } else {
+            tvPercent.setVisibility(View.GONE);
         }
 
         // set up the query on the Follow table
-
-
 
         follow = new Follow();
 
@@ -245,6 +316,15 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+
+        followersList = new ArrayList<>();
+        followingList = new ArrayList<>();
+
+        followCount("from");
+        followCount("to");
+
+        tvFollowers.setText("Followers:\n" + followersList.size());
+        tvFollowing.setText("Following:\n" + followingList.size());
 
         btnFollow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -304,6 +384,12 @@ public class ProfileActivity extends AppCompatActivity {
                                             btnFollow.setBackgroundColor(getResources().getColor(R.color.purple_200));
                                             Log.i("OtherUser", "successfully deleted follow");
                                             Toast.makeText(ProfileActivity.this, "you unfollowed @" + user.getUsername(), Toast.LENGTH_SHORT).show();
+
+                                            followCount("from");
+                                            followCount("to");
+
+                                            tvFollowers.setText("Followers:\n" + followersList.size());
+                                            tvFollowing.setText("Following:\n" + followingList.size());
                                         }
                                     });
 
@@ -317,6 +403,13 @@ public class ProfileActivity extends AppCompatActivity {
 
 
                 }
+
+
+                followCount("from");
+                followCount("to");
+
+                tvFollowers.setText("Followers:\n" + followersList.size());
+                tvFollowing.setText("Following:\n" + followingList.size());
             }
         });
 
@@ -382,33 +475,5 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-    public void checkCompatability() {
 
-        QuestionnaireActivity questionnaireActivity = new QuestionnaireActivity();
-        questionnaireActivity.getAnswers(ParseUser.getCurrentUser());
-        ParseQuery<Answers> query = ParseQuery.getQuery("Answers");
-        query.whereEqualTo("user", ParseUser.getCurrentUser());
-        // query.selectKeys(Arrays.asList("question1", "question2", "question3", "question4"));
-        query.setLimit(15);
-        query.addDescendingOrder("createdAt");
-        query.findInBackground(new FindCallback<Answers>() {
-            @Override
-            public void done(List<Answers> answers, ParseException e) {
-                // check for errors
-                if (e != null) {
-                    Log.e("ProfileActivity", "Problem with fetching posts", e);
-                    return;
-                }
-
-                for (Answers answer : answers) {
-
-                    Log.i("ProfileActivity", answer.getQuestion1());
-
-                }
-
-                // save received posts to list and notify adapter of new data
-            }
-
-        });
-    }
 }

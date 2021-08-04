@@ -66,6 +66,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         private TextView postType;
         private TextView tvUser2;
         private TextView tvPostLocation;
+        private TextView tvLocationName;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -81,19 +82,31 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             postType = itemView.findViewById(R.id.postType);
             tvUser2 = itemView.findViewById(R.id.tvUser2);
             tvPostLocation = itemView.findViewById(R.id.tvPostLocation);
+            tvLocationName = itemView.findViewById(R.id.tvLocationName);
 
 
         }
 
         public void bind(Post post) {
             // Bind the post data to the view elements
-            ivImagePostFeed.setVisibility(View.VISIBLE);
-            tvPostLocation.setVisibility(View.VISIBLE);
+
 
             if (post.getType().equals("event")) {
+                tvPostLocation.setVisibility(View.VISIBLE);
+                tvLocationName.setVisibility(View.VISIBLE);
+                ivImagePostFeed.setVisibility(View.VISIBLE);
                 tvPostLocation.setText(post.getLocation());
-            } else {
+                tvLocationName.setText(post.getLocationName());
+                tvUser2.setVisibility(View.GONE);
+            } else if (post.getType().equals("photo")) {
                 tvPostLocation.setVisibility(View.GONE);
+                tvLocationName.setVisibility(View.GONE);
+                ivImagePostFeed.setVisibility(View.VISIBLE);
+                tvUser2.setVisibility(View.GONE);
+            } else {
+                tvUser2.setVisibility(View.VISIBLE);
+                tvPostLocation.setVisibility(View.GONE);
+                tvLocationName.setVisibility(View.GONE);
             }
 
             tvDescription.setText(post.getDescription());
@@ -105,7 +118,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
             if (post.getUser().getUsername().equals(ParseUser.getCurrentUser().getString("username"))) {
                 firstNamePost.setText("You");
-                lastNamePost.setText("");
+                lastNamePost.setVisibility(View.GONE);
             } else {
                 firstNamePost.setText(post.getUser().getString("firstname"));
                 lastNamePost.setText(post.getUser().getString("lastname"));

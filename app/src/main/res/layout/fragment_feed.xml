@@ -11,45 +11,36 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/btnCreate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/swipeContainerFeedActivity"
-            android:layout_marginTop="13dp"
-            android:clickable="true"
-            android:text="MAKE A POST" />
-
         <Spinner
             android:id="@+id/spinnerFeed"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp" />
+            android:layout_height="50dp"
+            android:background="@color/purple_200"
+            android:contentDescription="Hi idk man"
+            android:defaultFocusHighlightEnabled="false"
+            android:popupBackground="@drawable/side_nav_bar" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeContainerFeedActivity"
             android:layout_width="match_parent"
-            android:layout_height="600dp"
+            android:layout_height="683dp"
             android:layout_below="@+id/spinnerFeed"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="10dp"
             android:backgroundTint="#FFF9C9">
 
-            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:fab="http://schemas.android.com/apk/res-auto"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvFeedPosts"
-                android:layout_width="match_parent"
-                android:layout_height="600dp"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_marginBottom="20dp"
-                android:backgroundTint="#F1ECC4"
-                android:padding="8dp" />
-
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvFeedPosts"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:backgroundTint="#F1ECC4"
+                    android:padding="8dp" />
 
                 <com.melnykov.fab.FloatingActionButton
                     android:id="@+id/fab"
@@ -57,12 +48,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|right"
                     android:layout_margin="16dp"
-                    android:src="@drawable/ic_magnify"
-                    fab:fab_colorNormal="#039821"
-                    fab:fab_colorPressed="#320938"
-                    fab:fab_colorRipple="#494000" />
+                    android:src="@drawable/ic_addpost"
+                    app:fab_colorNormal="#ffffff"
+                    app:fab_colorPressed="#ffffff"
+                    app:fab_colorRipple="#ffffff" />
             </FrameLayout>
-
 
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

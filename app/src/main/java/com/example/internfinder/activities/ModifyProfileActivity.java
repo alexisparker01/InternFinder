@@ -25,6 +25,8 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.parceler.Parcels;
+
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -192,6 +194,7 @@ public class ModifyProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(ModifyProfileActivity.this, QuestionnaireActivity.class);
+                i.putExtra("User", Parcels.wrap(ParseUser.getCurrentUser()));
                 startActivity(i);
 
             }

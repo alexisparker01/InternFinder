@@ -23,7 +23,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.InternFinder">
-        <activity android:name=".activities.QuestionnaireActivity"></activity>
+        <activity android:name=".activities.QuestionnaireActivity" />
         <activity android:name=".activities.FollowListsActivity" />
         <activity android:name=".activities.CreatePostActivity" />
         <activity android:name=".activities.OpenPostActivity" />

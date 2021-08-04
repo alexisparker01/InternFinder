@@ -39,7 +39,7 @@ public class ProfileFragment extends Fragment {
     private TextView tvFirstname;
     private TextView tvLastname;
     private TextView tvBio;
-    private ImageView ivProfilePicProfile;
+    private ImageView ivProfilePic;
     private Button btnEditProfile;
     private TextView tvIndustry;
     private TextView tvCity;
@@ -57,52 +57,30 @@ public class ProfileFragment extends Fragment {
     public int followersCount;
     public int followingCount;
 
-    private int followCount(String type) {
+    public void followCount(String key) {
 
-        Log.i(TAG, "followCount method starting");
+        ParseQuery<Follow> query = ParseQuery.getQuery("Follow");
 
-        ParseQuery<Follow> query = ParseQuery.getQuery(Follow.class);
-        if(type.equals("following")) {
-            query.include(Follow.KEY_FROM);
-            query.whereEqualTo(Follow.KEY_FROM, ParseUser.getCurrentUser());
-        } else {
-            query.include(Follow.KEY_TO);
-            query.whereEqualTo(Follow.KEY_TO, ParseUser.getCurrentUser());
-        }
-
-        query.findInBackground(new FindCallback<Follow>() {
-
-            @Override
-            public void done(List<Follow> followList, ParseException e) {
-                // check for errors
-                if (e != null) {
-                    return;
-
-                } else {
-
-                    if(type.equals("following")) {
-                        followingCount = followList.size();
-                        Log.i(TAG, "following count: " + followingCount);
-                    } else {
-                        followersCount = followList.size();
-                        Log.i(TAG, "followers count: " + followersCount);
-                    }
-
-                }
-
+        if(key.equals(Follow.KEY_FROM)) {
+            query.whereEqualTo("from", ParseUser.getCurrentUser());
+            query.setLimit(15);
+            query.addDescendingOrder("createdAt");
+            try {
+                followingList = query.find();
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-
-        });
-
-        if(type.equals("following")) {
-            Log.i(TAG, "following count right before return: " + followingCount);
-            return followingCount;
-        } else if (type.equals("followers")) {
-            Log.i(TAG, "followers count: " + followersCount);
-            return followersCount;
+        } else {
+            query.whereEqualTo("to", ParseUser.getCurrentUser());
+            query.setLimit(15);
+            query.addDescendingOrder("createdAt");
+            try {
+                    followersList = query.find();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
-        return 0;
     }
 
     public ProfileFragment() {
@@ -127,7 +105,7 @@ public class ProfileFragment extends Fragment {
         tvFirstname = view.findViewById(R.id.etFirstName);
         tvLastname = view.findViewById(R.id.tvLastName);
         tvBio = view.findViewById(R.id.tvBio);
-        ivProfilePicProfile = view.findViewById(R.id.ivProfilePic);
+        ivProfilePic = view.findViewById(R.id.ivProfilePic);
         btnEditProfile = view.findViewById(R.id.btnEditProfile);
         rvPosts = view.findViewById(R.id.rvUserPosts);
         tvIndustry = view.findViewById(R.id.tvIndustry);
@@ -135,11 +113,11 @@ public class ProfileFragment extends Fragment {
         tvFollowers = view.findViewById(R.id.tvFollowers);
         tvFollowing = view.findViewById(R.id.tvFollowing);
 
-       followingCount = followCount("following");
-       followersCount = followCount("followers");
+       followCount("from");
+       followCount("to");
 
-        Log.i(TAG, "following count: " + followingCount);
-        Log.i(TAG, "followers count: " + followersCount);
+        Log.i(TAG, "following count: " + followingList.size());
+        Log.i(TAG, "followers count: " + followersList.size());
 
 
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
@@ -151,13 +129,13 @@ public class ProfileFragment extends Fragment {
             tvIndustry.setText(ParseUser.getCurrentUser().getString("industry"));
             Log.i(TAG, "this is the area: " + ParseUser.getCurrentUser().getString("area"));
             tvCity.setText(ParseUser.getCurrentUser().getString("area"));
-           tvFollowers.setText(String.valueOf(followersCount));
-           tvFollowing.setText(String.valueOf(followingCount));
+           tvFollowers.setText("Followers:\n" + String.valueOf(followersList.size()));
+           tvFollowing.setText("Following:\n" + String.valueOf(followingList.size()));
 
             // load profile pic
             ParseFile profilePic = ParseUser.getCurrentUser().getParseFile("profilePic");
             if (profilePic != null) {
-                Glide.with(this).load(profilePic.getUrl()).into(ivProfilePicProfile);
+                Glide.with(getContext()).load(profilePic.getUrl()).into(ivProfilePic);
 
             }
 
@@ -169,6 +147,7 @@ public class ProfileFragment extends Fragment {
                     // Make sure you call swipeContainer.setRefreshing(false)
                     // once the network request has completed successfully.
                     queryPosts(ParseUser.getCurrentUser());
+                    swipeContainer.setRefreshing(false);
                 }
             });
 
@@ -186,6 +165,7 @@ public class ProfileFragment extends Fragment {
 
         // set the adapter on the recycler view
         rvPosts.setAdapter(adapter);
+
 
 
         // set the layout manager on the recycler view

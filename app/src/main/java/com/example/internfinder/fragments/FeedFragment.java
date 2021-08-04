@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
@@ -45,7 +44,6 @@ public class FeedFragment extends Fragment {
     List<Post> followingPosts;
     RecyclerView rvFeedPosts;
     private SwipeRefreshLayout swipeContainer;
-    private Button btnCreate;
     private Spinner spinnerFeed;
 
     private boolean followingBoolean;
@@ -57,13 +55,11 @@ public class FeedFragment extends Fragment {
 
 
     public FeedFragment() {
-        // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_feed, container, false);
     }
 
@@ -71,12 +67,9 @@ public class FeedFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rvFeedPosts = view.findViewById(R.id.rvFeedPosts);
-        btnCreate = view.findViewById(R.id.btnCreate);
         spinnerFeed = view.findViewById(R.id.spinnerFeed);
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainerFeedActivity);
 
-
-        // Setup refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -94,20 +87,20 @@ public class FeedFragment extends Fragment {
                    // queryPosts("");
                 }
 
+                swipeContainer.setRefreshing(false);
+
             }
         });
-        // Configure the refreshing colors
+
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
 
-
         String[] postSelections = new String[]{"Following", "Near You", "Industry"};
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, postSelections);
 
-        //set the spinners adapter to the previously created one.
         spinnerFeed.setAdapter(spinnerAdapter);
 
         spinnerFeed.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -120,7 +113,6 @@ public class FeedFragment extends Fragment {
                     nearYouBoolean = false;
                     industryBoolean = false;
                     followingBoolean = true;
-
 
                         queryPosts("Following");
 
@@ -154,8 +146,6 @@ public class FeedFragment extends Fragment {
         });
 
 
-
-       // allPosts2 = new ArrayList<>();
         allPosts = new ArrayList<>();
         adapter = new PostAdapter(getContext(), allPosts);
 
@@ -171,12 +161,12 @@ public class FeedFragment extends Fragment {
 
             }
         });
+
+        swipeContainer.setRefreshing(false);
         // set the adapter on the recycler view
         rvFeedPosts.setAdapter(adapter);
         // set the layout manager on the recycler view
         rvFeedPosts.setLayoutManager(new LinearLayoutManager(getContext()));
-
-
 
     }
     private void queryOnlyFollowing() {
@@ -196,17 +186,41 @@ public class FeedFragment extends Fragment {
                     return;
                 }
 
+                ParseQuery<Post> query2 = ParseQuery.getQuery(Post.class);
+                query2.whereEqualTo("user", ParseUser.getCurrentUser());
+                query2.include("user");
+                query2.addDescendingOrder("createdAt");
+                query2.setLimit(20);
+
+                query2.findInBackground(new FindCallback<Post>() {
+                    @Override
+                    public void done(List<Post> posts, ParseException e) {
+                        Log.i(TAG, "size of post list: " + posts.size());
+
+                        if (e != null) {
+                            Log.i(TAG, "NULL REACHED 2");
+                            return;
+                        }
+
+                        for (Post post : posts) {
+                            Log.i(TAG, "post description: " + post.getDescription() + " post type: " + post.getType());
+                            allPosts.add(post);
+                            adapter.notifyDataSetChanged();
+
+                        }
+                    }
+                });
+
                 for (Follow follow : followList) {
                     Log.i(TAG, "size of follow list: " + followList.size());
-                    // Log.i(TAG, "person the current user follows: " + follow.getParseUser("to").getUsername());
-                    // e == null --> success
-                    ParseQuery<Post> query2 = ParseQuery.getQuery(Post.class);
-                    query2.whereEqualTo("user", follow.getTo());
-                    query2.include("user");
-                    query2.addDescendingOrder("createdAt");
-                    query2.setLimit(20);
 
-                    query2.findInBackground(new FindCallback<Post>() {
+                    ParseQuery<Post> query3 = ParseQuery.getQuery(Post.class);
+                    query3.whereEqualTo("user", follow.getTo());
+                    query3.include("user");
+                    query3.addDescendingOrder("createdAt");
+                    query3.setLimit(20);
+
+                    query3.findInBackground(new FindCallback<Post>() {
                         @Override
                         public void done(List<Post> posts, ParseException e) {
                             Log.i(TAG, "size of post list: " + posts.size());
@@ -216,45 +230,15 @@ public class FeedFragment extends Fragment {
                                 return;
                             }
 
-                            // e == null --> success
-                            // adds post from user
                             for (Post post : posts) {
                                 Log.i(TAG, "post description: " + post.getDescription() + " post type: " + post.getType());
                                 allPosts.add(post);
                                 adapter.notifyDataSetChanged();
-                            }
-                        }
-                    });
-
-
-                    query2.whereEqualTo("user", follow.getFrom());
-                    query2.include("user");
-                    query2.addDescendingOrder("createdAt");
-                    query2.setLimit(20);
-
-                    query2.findInBackground(new FindCallback<Post>() {
-                        @Override
-                        public void done(List<Post> posts, ParseException e) {
-                            Log.i(TAG, "size of post list: " + posts.size());
-                            // check for errors
-                            if (e != null) {
-                                Log.i(TAG, "NULL REACHED 2");
-                                return;
-                            }
-
-                            // e == null --> success
-                            // adds post from user
-                            for (Post post : posts) {
-                                Log.i(TAG, "post description: " + post.getDescription() + " post type: " + post.getType());
-                                allPosts.add(post);
-                                adapter.notifyDataSetChanged();
-
                             }
                         }
                     });
                 }
 
-                swipeContainer.setRefreshing(false);
             }
 
 
