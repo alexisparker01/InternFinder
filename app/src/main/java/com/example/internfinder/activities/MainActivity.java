@@ -47,7 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        /*Intent i = new Intent(MainActivity.this, LoginActivity.class);
+        /*
+        Intent i = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(i);
 
          */
@@ -85,7 +86,12 @@ public class MainActivity extends AppCompatActivity {
                                 break;
 
                         }
-                        fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+                        fragmentManager.beginTransaction().setCustomAnimations(
+                                R.anim.slide_in,  // enter
+                                R.anim.fade_out,  // exit
+                                R.anim.fade_in,   // popEnter
+                                R.anim.slide_out  // popExit
+                        ).replace(R.id.flContainer, fragment).addToBackStack(null).commit();
                         return true;
                     }
                 });
@@ -117,13 +123,6 @@ public class MainActivity extends AppCompatActivity {
             view.performClick();
         }
 
-        /*
-
-        Intent i = new Intent(this, QuestionnaireActivity.class);
-        startActivity(i);
-
-
-         */
 
     }
 }
