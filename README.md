@@ -88,8 +88,7 @@ InternFinder is an app where you can create a profile and meet and connect with 
 * Timeline (upper bar)
 
 ## Wireframes
-[Add picture of your hand sketched wireframes in this section]
-<img src="https://www.figma.com/proto/0yivHGyHXgUChY8IypclPc/InternFinder?node-id=1%3A2&scaling=scale-down&page-id=0%3A1" width=600>
+https://www.figma.com/proto/0yivHGyHXgUChY8IypclPc/InternFinder?node-id=1%3A2&scaling=scale-down&page-id=0%3A1
 
 ### [BONUS] Digital Wireframes & Mockups
 
