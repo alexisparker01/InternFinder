@@ -12,8 +12,6 @@ import com.parse.ParseObject;
 
 public class ParseApplication extends Application {
 
-    // Initializes Parse SDK as soon as the application is created
-
     @Override
     public void onCreate() {
 

@@ -1,7 +1,6 @@
 package com.example.internfinder.activities;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,10 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -73,14 +69,12 @@ import java.util.List;
 
 public class CreatePostActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    // tag variable for logging
+
     public static final String TAG = "CreatePostActivity";
 
-    String photoRef;
-    // currentUser var
+
     ParseUser currentUser;
 
-    // widget vars
     private Spinner spinnerPostType;
     private EditText etPostText;
     private ImageView ivPostImage;
@@ -90,18 +84,15 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
 
     private ImageView profilePic;
 
-    // boolean checker vars
     private boolean photoChosen;
     private boolean textChosen;
     private boolean eventChosen;
 
-    // camera vars
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
     public String photoFileName = "photo.jpg";
     private File photoFile;
     ParseFile image;
 
-    // map vars
     public static final int ERROR_DIALOG_REQUEST = 9001;
 
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
@@ -110,7 +101,6 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
     private static final float DEFAULT_ZOOM = 15f;
 
 
-    private EditText mSearchText;
     private ImageView mGps;
     private SupportMapFragment mapFragment;
     private RelativeLayout relativeLayout;
@@ -119,21 +109,17 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
     private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
-    private String eventLocation;
+    private String eventAddress;
     private ParseGeoPoint eventLatLng;
     private String eventName;
-    private LatLng currentLocationLatLng;
+    LatLng currentLocationLatLng;
 
     private AutocompleteSupportFragment fragment;
     String placeId;
     Boolean reached;
 
-
-    //private AutocompleteSupportFragment autocompleteFragment;
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Log.d(TAG, "OnMapReady: map is ready");
         mMap = googleMap;
 
         if (mLocationPermissionsGranted) {
@@ -142,17 +128,14 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-            // marks a little blue dot on the map to show my location
+
             mMap.setMyLocationEnabled(true);
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
-            //afterTypingMap();
-            // gestures
             mMap.getUiSettings().setAllGesturesEnabled(true);
         }
 
     }
-
 
 
     @Override
@@ -161,12 +144,12 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_post);
 
-        // set current user
+
         currentUser = ParseUser.getCurrentUser();
 
         reached = false;
 
-        // initializing widgets
+
         etPostText = findViewById(R.id.etPostText);
         ivPostImage = findViewById(R.id.ivPostImage);
         spinnerPostType = findViewById(R.id.spinnerPostType);
@@ -174,13 +157,12 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
         btnCam = findViewById(R.id.btnCam);
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mGps = (ImageView) findViewById(R.id.ic_gps2);
-      //  mSearchText = findViewById(R.id.input_search2);
+
         relativeLayout = findViewById(R.id.relLayout2);
         profilePic = findViewById(R.id.profilePicCreate);
         tvLocation = findViewById(R.id.tvLocation);
 
 
-        // set visibility of post widgets to GONE
         etPostText.setVisibility(View.GONE);
         ivPostImage.setVisibility(View.GONE);
         btnSubmitPost.setVisibility(View.GONE);
@@ -201,29 +183,26 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
         mGps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: clicked GPS icon");
                 getDeviceLocation();
             }
         });
 
         image = null;
 
-        /** set up for spinner widget **/
 
-        // set up spinner options
         String[] postSelections = new String[]{"Text Post", "Event Post", "Picture Post"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, postSelections);
 
-        // set the spinners adapter to the previously created one
+
         spinnerPostType.setAdapter(adapter);
 
-        // set onItemSelectedListener so that user can pick which post they'd like to submit
+
         spinnerPostType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
 
-                // if user wants to create an event post with google maps
+
                 if (parent.getItemAtPosition(position).equals("Event Post")) {
                     etPostText.setVisibility(View.VISIBLE);
                     ivPostImage.setVisibility(View.VISIBLE);
@@ -244,12 +223,12 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
 
                     Toast.makeText(CreatePostActivity.this, "Map is ready", Toast.LENGTH_SHORT).show();
 
-                    // initialize the map
+
                     if (isServicesOK()) {
                         getLocationPermission();
                     }
 
-                    // if user wants to create a text post/status update post
+
                 } else if (parent.getItemAtPosition(position).equals("Text Post")) {
                     etPostText.setVisibility(View.VISIBLE);
                     ivPostImage.setVisibility(View.GONE);
@@ -265,7 +244,7 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
                     eventChosen = false;
                     textChosen = true;
 
-                    // if user wants to create a picture post
+
                 } else if (parent.getItemAtPosition(position).equals("Picture Post")) {
 
                     etPostText.setVisibility(View.VISIBLE);
@@ -285,7 +264,7 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
                 }
             }
 
-            // if no option is selected
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 Toast.makeText(CreatePostActivity.this, "Nothing Selected", Toast.LENGTH_SHORT).show();
@@ -293,16 +272,14 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
             }
         });
 
-        /** autocomplete stuff **/
 
         Places.initialize(getApplicationContext(), "AIzaSyABbgxUaKHBgwuaVndt5G0tR2XNYkdpCi8");
         PlacesClient placesClient = Places.createClient(this);
 
-        // Initialize the AutocompleteSupportFragment
+
         fragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
-        // Specify the types of place data to return.
 
         fragment.setTypeFilter(TypeFilter.ESTABLISHMENT);
 
@@ -310,59 +287,43 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
 
         fragment.setLocationBias(RectangularBounds.newInstance(
                 new LatLng(point.getLatitude(), point.getLongitude()),
-                new LatLng(point.getLatitude() + 0.05,point.getLongitude()+0.05)));
+                new LatLng(point.getLatitude() + 0.05, point.getLongitude() + 0.05)));
 
         fragment.setCountries("US");
 
         fragment.setPlaceFields(Arrays.asList(Place.Field.LAT_LNG, Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS));
 
 
-        // Set up a PlaceSelectionListener to handle the response.
         fragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(@NonNull Place place) {
-                // TODO: Get info about the selected place.
-                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId() + "latlng: " + place.getAddress());
-
-                geoLocate(place);
+                moveCamera(place.getLatLng(), DEFAULT_ZOOM, place.getAddress());
+                tvLocation.setText(place.getAddress());
                 placeId = place.getId();
                 tvLocation.setText(place.getAddress());
                 eventLatLng = new ParseGeoPoint(place.getLatLng().latitude, place.getLatLng().longitude);
-                eventLocation = place.getAddress();
+                eventAddress = place.getAddress();
                 eventName = place.getName();
-                // Define a Place ID.
 
-                Log.i(TAG, "inserting place location");
-
-// Specify fields. Requests for photos must always have the PHOTO_METADATAS field.
                 final List<Place.Field> fields = Collections.singletonList(Place.Field.PHOTO_METADATAS);
 
-// Get a Place object (this example uses fetchPlace(), but you can also use findCurrentPlace())
                 final FetchPlaceRequest placeRequest = FetchPlaceRequest.newInstance(placeId, fields);
 
                 placesClient.fetchPlace(placeRequest).addOnSuccessListener((response) -> {
                     final Place place2 = response.getPlace();
 
-                    // Get the photo metadata.
                     final List<PhotoMetadata> metadata = place2.getPhotoMetadatas();
                     if (metadata == null || metadata.isEmpty()) {
-                        Log.w(TAG, "No photo metadata.");
                         return;
                     }
                     final PhotoMetadata photoMetadata = metadata.get(0);
 
-                    // Get the attribution text.
                     final String attributions = photoMetadata.getAttributions();
 
-                    // Create a FetchPhotoRequest.
                     final FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
-                           // .setMaxWidth(500) // Optional.
-                           // .setMaxHeight(300) // Optional.
                             .build();
                     placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
                         Bitmap bitmap = fetchPhotoResponse.getBitmap();
-                      //  ivPostImage.setImageBitmap(bitmap);
-
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                         byte[] bitmapBytes = stream.toByteArray();
@@ -372,9 +333,7 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
                     }).addOnFailureListener((exception) -> {
                         if (exception instanceof ApiException) {
                             final ApiException apiException = (ApiException) exception;
-                            Log.e(TAG, "Place not found: " + exception.getMessage());
                             final int statusCode = apiException.getStatusCode();
-                            // TODO: Handle error with given status code.
                         }
                     });
                 });
@@ -384,16 +343,11 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
 
             @Override
             public void onError(@NonNull Status status) {
-                // TODO: Handle the error.
-                Log.i(TAG, "An error occurred: " + status);
+                return;
             }
         });
 
 
-
-        /** onClickListeners for button widgets **/
-
-        // when the user clicks on the camera button they will launch the camera
         btnCam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -403,17 +357,14 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
             }
         });
 
-        // when the user clicks on the submit button they
         btnSubmitPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String description = etPostText.getText().toString();
                 if (description.isEmpty()) {
-                    Log.e(TAG, "Description can't be empty for any post type");
                     Toast.makeText(CreatePostActivity.this, "Description can't be empty", Toast.LENGTH_SHORT).show();
                     return;
                 } else if ((photoFile == null || ivPostImage.getDrawable() == null) && (photoChosen == true)) {
-                    Log.e(TAG, "Photo cannot be empty. Choose text or event post if you do not want to upload picture.");
                     Toast.makeText(CreatePostActivity.this, "Photo cannot be empty. Choose text or event post if you do not want to upload picture.", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -423,23 +374,13 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
         });
     }
 
-    /**
-     * start up methods for GoogleMaps API
-     **/
 
-    // checks to see the google services version of the user and if they can make map requests
     public boolean isServicesOK() {
-        Log.d(TAG, "isServicesOK: checking google services version");
-
         int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(CreatePostActivity.this);
 
         if (available == ConnectionResult.SUCCESS) {
-            //everything is fine and the user can make map requests
-            Log.d(TAG, "isServicesOK: Google Play Services is working");
             return true;
         } else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
-            // an error occurred but it is resolvable
-            Log.d(TAG, "isServicesOK: an error occurred but we can fix it");
             Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(CreatePostActivity.this, available, ERROR_DIALOG_REQUEST);
             dialog.show();
         } else {
@@ -448,79 +389,8 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
         return false;
     }
 
-    /**
-     * other methods for GoogleMaps API
-     **/
-    /*
-    private void afterTypingMap() {
-        Log.d(TAG, "afterTyping: initializing");
-        mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent keyEvent) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH
-                        || actionId == EditorInfo.IME_ACTION_DONE
-                        || keyEvent.getAction() == KeyEvent.ACTION_DOWN
-                        || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER
-                ) {
-                    // execute method for searching
-                    //geoLocate();
-                    hideSoftKeyboard(CreatePostActivity.this);
-                    return true;
-
-
-                }
-                hideSoftKeyboard(CreatePostActivity.this);
-                return false;
-            }
-        });
-
-
-     */
-
-
-    private void geoLocate(Place place) {
-
-
-        /*
-        Log.d(TAG, "geoLocation: geolocating");
-        String searchString = mSearchText.getText().toString();
-        Geocoder geocoder = new Geocoder(CreatePostActivity.this);
-        List<Address> list = new ArrayList<>();
-
-        try {
-            list = geocoder.getFromLocationName(searchString, 1);
-            api(setupURL());
-        } catch (IOException e) {
-            Log.e(TAG, "geoLocation: IOException: " + e.getMessage());
-        }
-        if (list.size() > 0) {
-            for (Address a : list) {
-                Log.i(TAG, String.valueOf(a));
-            }
-            Address address = list.get(0);
-            Log.i(TAG, "geoLocate: found location: " + address.toString());
-            moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM, address.getAddressLine(0));
-            eventLatLng = new ParseGeoPoint(address.getLatitude(), address.getLongitude());
-            eventLocation = address.getAddressLine(0);
-            tvLocation.setText(eventLocation);
-
-        }
-
-         */
-
-        moveCamera(place.getLatLng(), DEFAULT_ZOOM, place.getAddress());
-        tvLocation.setText(place.getAddress());
-
-
-
-
-    }
-
-
-
 
     private void getDeviceLocation() {
-        Log.d(TAG, "getDeviceLocation: getting the devices location");
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         try {
@@ -530,18 +400,10 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
                     @Override
                     public void onComplete(@NonNull Task task) {
                         if (task.isSuccessful()) {
-                            Log.d(TAG, "onComplete: found location!");
                             Location currentLocation = (Location) task.getResult();
                             currentLocationLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                             moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM, "My Location");
-                          /*  Intent i = new Intent(CreatePostActivity.this, MainActivity.class);
-                            i.putExtra("currentLocation", currentLocationLatLng);
-                            startActivity(i);
-
-                           */
-
                         } else {
-                            Log.d(TAG, "onComplete: location is null");
                             Toast.makeText(CreatePostActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
 
                         }
@@ -550,19 +412,18 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
             }
 
         } catch (SecurityException e) {
-            Log.e(TAG, "getDeviceLocation: security exception: " + e.getMessage());
+            Toast.makeText(CreatePostActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+
         }
-
-
 
     }
 
     private void moveCamera(LatLng latLng, float zoom, String title) {
 
-        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + " long: " + latLng.longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
-       if (!title.equals("My Location")) {
+        if (!title.equals("My Location")) {
+
             MarkerOptions options = new MarkerOptions()
                     .position(latLng)
                     .title(title);
@@ -572,17 +433,14 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
 
         }
 
-       // hideSoftKeyboard(CreatePostActivity.this);
 
     }
 
     private void initMap() {
-        Log.d(TAG, "initMap: initializing map");
         mapFragment.getMapAsync(CreatePostActivity.this);
     }
 
     private void getLocationPermission() {
-        Log.d(TAG, "getLocationPermission: getting location permissions ");
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION};
 
@@ -602,7 +460,6 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
-        Log.d(TAG, "onRequestPermissionsResult: called.");
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         mLocationPermissionsGranted = false;
         switch (requestCode) {
@@ -611,31 +468,16 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
                     for (int i = 0; i < grantResults.length; i++) {
                         if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
                             mLocationPermissionsGranted = false;
-                            Log.d(TAG, "onRequestPermissionsResult: permission failed");
                             return;
                         }
                     }
-                    Log.d(TAG, "onRequestPermissionsResult: permission granted");
                     mLocationPermissionsGranted = true;
-                    //initialize the map
                     initMap();
                 }
             }
         }
     }
 
-    public void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        if (inputMethodManager.isAcceptingText()) {
-            inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
-        }
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-    }
-
-
-    /**
-     * submit and photo taking methods
-     **/
 
     private void savePost(String description, ParseUser currentUser, File photoFile, ParseFile image) {
         Post post = new Post();
@@ -654,10 +496,10 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
         } else if (eventChosen) {
 
             post.setType("event");
-            post.setLocation(eventLocation);
+            post.setLocation(eventAddress);
             post.setLatLng(eventLatLng);
             post.setLocationName(eventName);
-            if(image != null) {
+            if (image != null) {
                 post.setImage(image);
             }
         }
@@ -682,15 +524,11 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
         goToFeed();
     }
 
-    // takes the user back to the feed after they are finished
-    private void goToFeed() {
-       /* Intent i = new Intent(CreatePostActivity.this, FeedFragment.class);
-        startActivity(i);
 
-        */
+    private void goToFeed() {
 
         Intent intent = new Intent(CreatePostActivity.this, MainActivity.class);
-        intent.putExtra("openFeedFragment",true);
+        intent.putExtra("openFeedFragment", true);
         overridePendingTransition(0, 0);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         finish();
@@ -702,35 +540,31 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
 
     private void launchCamera() {
 
-        // create Intent to take a picture and return control to the calling application
+
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-        // create a file reference for future access
+
         photoFile = getPhotoFileUri(photoFileName);
 
-        // wrap file object into a content provider
-        // required for API >= 24
         Uri fileProvider = FileProvider.getUriForFile(CreatePostActivity.this, "com.codepath.fileprovider.internfinder", photoFile);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
 
 
         if (intent.resolveActivity(getPackageManager()) != null) {
-            // start the image capture intent to take photo
+
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         }
     }
 
     public File getPhotoFileUri(String fileName) {
-        // get safe storage directory for photos
 
         File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
 
-        // create the storage directory if it does not exist
         if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
-            Log.d(TAG, "failed to create directory");
+            Toast.makeText(CreatePostActivity.this, "Failed to create directory", Toast.LENGTH_SHORT).show();
+
         }
 
-        // return the file target for the photo based on filename
         File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
         return file;
     }
@@ -741,11 +575,11 @@ public class CreatePostActivity extends AppCompatActivity implements OnMapReadyC
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                // photo
+
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-             // loading photo into image view
+
                 ivPostImage.setImageBitmap(takenImage);
-            } else { // Result was a failure
+            } else {
                 Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
         }

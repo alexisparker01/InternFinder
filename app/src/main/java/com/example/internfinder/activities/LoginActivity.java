@@ -16,11 +16,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
-/* A login screen that offers login via username/password. */
-
 public class LoginActivity extends AppCompatActivity {
-
-    public static final String TAG = "LoginActivity";
 
     private EditText etUsername;
     private EditText etPassword;
@@ -38,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
         if (ParseUser.getCurrentUser() != null) {
-          goToFeed();
+            goToFeed();
         }
 
         if (getSupportActionBar() != null) {
@@ -149,7 +145,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void goToFeed() {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        intent.putExtra("openFeedFragment",true);
+        intent.putExtra("openFeedFragment", true);
         overridePendingTransition(0, 0);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         finish();
@@ -161,15 +157,14 @@ public class LoginActivity extends AppCompatActivity {
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
-                if(e != null) {
-                    //TODO: Better error handling
-                 //   Toast.makeText(LoginActivity.this, "Issue with login", Toast.LENGTH_SHORT).show();
+                if (e != null) {
+
+                    Toast.makeText(LoginActivity.this, "Issue with login", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                // TODO: navigate to the main activity if the user has signed in properly
 
-               goToFeed();
-             //   Toast.makeText(LoginActivity.this, "Success!", Toast.LENGTH_SHORT).show();
+                goToFeed();
+                Toast.makeText(LoginActivity.this, "Success!", Toast.LENGTH_SHORT).show();
 
 
             }
@@ -180,11 +175,8 @@ public class LoginActivity extends AppCompatActivity {
 
         Intent i = new Intent(LoginActivity.this, QuestionnaireActivity.class);
         startActivity(i);
-        //finish();
+
     }
-
-
-
 
 
 }

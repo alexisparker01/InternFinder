@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:backgroundTint="#FCFFE1"
     tools:context=".activities.CreatePostActivity">
 
     <Spinner
@@ -55,15 +56,15 @@
     </RelativeLayout>
 
     <ImageView
+        android:id="@+id/ic_gps2"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_below="@id/relLayout2"
         android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
         android:scaleType="centerCrop"
-        android:id="@+id/ic_gps2"
-        android:src="@drawable/ic_gps"
-        android:layout_marginTop="10dp"/>
+        android:src="@drawable/ic_gps" />
 
 
     <!-- <fragment
@@ -83,7 +84,9 @@
         android:id="@+id/relLayout3"
         android:layout_width="match_parent"
         android:layout_height="500dp"
-        android:layout_below="@+id/map">
+        android:layout_below="@+id/map"
+        android:backgroundTint="#FCFFE1"
+        android:foregroundTint="#FCFFE1">
 
         <TextView
             android:id="@+id/tvLocation"

@@ -15,10 +15,6 @@ import com.example.internfinder.fragments.LogoutFragment;
 import com.example.internfinder.fragments.MapFragment;
 import com.example.internfinder.fragments.ProfileFragment;
 import com.example.internfinder.fragments.SearchFragment;
-import com.example.internfinder.models.Post;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.parceler.Parcels;
@@ -26,13 +22,7 @@ import org.parceler.Parcels;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "MainActivity";
-    private SupportMapFragment mapFragment;
-    private GoogleMap map;
-    private Marker myMarker;
     private Fragment fragment;
-    public static boolean reached;
-    Post post;
 
 
     public static BottomNavigationView bottomNavigationView;
@@ -46,21 +36,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-
-        /*
-        Intent i = new Intent(MainActivity.this, LoginActivity.class);
-        startActivity(i);
-
-         */
-
-
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         FragmentManager fragmentManager = getSupportFragmentManager();
 
 
         fragment = Parcels.unwrap(getIntent().getParcelableExtra("Fragment"));
 
-        // handle navigation selection
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -87,15 +68,15 @@ public class MainActivity extends AppCompatActivity {
 
                         }
                         fragmentManager.beginTransaction().setCustomAnimations(
-                                R.anim.slide_in,  // enter
-                                R.anim.fade_out,  // exit
-                                R.anim.fade_in,   // popEnter
-                                R.anim.slide_out  // popExit
+                                R.anim.slide_in,
+                                R.anim.fade_out,
+                                R.anim.fade_in,
+                                R.anim.slide_out
                         ).replace(R.id.flContainer, fragment).addToBackStack(null).commit();
                         return true;
                     }
                 });
-        // Set default selection
+
         bottomNavigationView.setSelectedItemId(R.id.action_feed);
 
         Bundle extras = getIntent().getExtras();

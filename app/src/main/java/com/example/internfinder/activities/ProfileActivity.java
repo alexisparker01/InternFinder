@@ -2,7 +2,6 @@ package com.example.internfinder.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -35,7 +34,6 @@ import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private static final String TAG = "ProfileActivity";
     private TextView tvUsernameProfile;
     private TextView tvFirstname;
     private TextView tvLastname;
@@ -74,7 +72,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         ParseQuery<Follow> query = ParseQuery.getQuery("Follow");
 
-        if(key.equals(Follow.KEY_FROM)) {
+        if (key.equals(Follow.KEY_FROM)) {
             query.whereEqualTo("from", user);
             query.setLimit(15);
             query.addDescendingOrder("createdAt");
@@ -105,7 +103,7 @@ public class ProfileActivity extends AppCompatActivity {
         query.setLimit(15);
         query.addDescendingOrder("createdAt");
         try {
-            if(user.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
+            if (user.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
                 currentUserAnswersList = query.find();
             } else {
                 otherUserAnswersList = query.find();
@@ -119,30 +117,12 @@ public class ProfileActivity extends AppCompatActivity {
 
     public float checkCompatability() {
 
-        //otherUserAnswersList = getAnswers(post.getUser());
 
-        Log.i(TAG, "Entering checkCompatability method");
-
-
-        Log.i(TAG, String.valueOf(currentUserAnswersList.get(0).getQuestion1()));
-        Log.i(TAG, String.valueOf(currentUserAnswersList.get(0).getQuestion2()));
-        Log.i(TAG, String.valueOf(currentUserAnswersList.get(0).getQuestion3()));
-        Log.i(TAG, String.valueOf(currentUserAnswersList.get(0).getQuestion4()));
-
-        Log.i(TAG, String.valueOf(otherUserAnswersList.get(0).getQuestion1()));
-        Log.i(TAG, String.valueOf(otherUserAnswersList.get(0).getQuestion2()));
-        Log.i(TAG, String.valueOf(otherUserAnswersList.get(0).getQuestion3()));
-        Log.i(TAG, String.valueOf(otherUserAnswersList.get(0).getQuestion4()));
-
-
-
-        Log.i(TAG, currentUserAnswersList.toString());
-
-        if(currentUserAnswersList.get(0).getQuestion1().equals(otherUserAnswersList.get(0).getQuestion1())) {
+        if (currentUserAnswersList.get(0).getQuestion1().equals(otherUserAnswersList.get(0).getQuestion1())) {
             score++;
-        } else if(currentUserAnswersList.get(0).getQuestion2().equals(otherUserAnswersList.get(0).getQuestion2())) {
+        } else if (currentUserAnswersList.get(0).getQuestion2().equals(otherUserAnswersList.get(0).getQuestion2())) {
             score++;
-        } else if(currentUserAnswersList.get(0).getQuestion3().equals(otherUserAnswersList.get(0).getQuestion3())) {
+        } else if (currentUserAnswersList.get(0).getQuestion3().equals(otherUserAnswersList.get(0).getQuestion3())) {
             score++;
         } else if (currentUserAnswersList.get(0).getQuestion4().equals(otherUserAnswersList.get(0).getQuestion4())) {
             score++;
@@ -153,7 +133,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public float getScore() {
-        return (checkCompatability()/4)*100;
+        return (checkCompatability() / 4) * 100;
     }
 
 
@@ -170,8 +150,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         post = Parcels.unwrap(getIntent().getParcelableExtra("Post"));
         user = Parcels.unwrap(getIntent().getParcelableExtra("User"));
-
-        // score = Parcels.unwrap(getIntent().getParcelableExtra("Score"));
 
 
         if (post != null) {
@@ -210,67 +188,60 @@ public class ProfileActivity extends AppCompatActivity {
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
 
 
+        if (fromPost) {
 
-            if (fromPost) {
+            btnFollow.setVisibility(View.VISIBLE);
 
-                btnFollow.setVisibility(View.VISIBLE);
+            tvFirstname.setText(post.getUser().getString("firstname"));
+            tvLastname.setText(post.getUser().getString("lastname"));
+            tvBio.setText(post.getUser().getString("bio"));
+            tvUsernameProfile.setText("@" + post.getUser().getString("username"));
+            tvIndustry.setText(post.getUser().getString("industry"));
+            tvArea.setText(post.getUser().getString("area"));
 
-                tvFirstname.setText(post.getUser().getString("firstname"));
-                tvLastname.setText(post.getUser().getString("lastname"));
-                tvBio.setText(post.getUser().getString("bio"));
-                tvUsernameProfile.setText("@" + post.getUser().getString("username"));
-                tvIndustry.setText(post.getUser().getString("industry"));
-                tvArea.setText(post.getUser().getString("area"));
+            ParseFile profilePic = post.getUser().getParseFile("profilePic");
+            if (profilePic != null) {
+                Glide.with(this).load(profilePic.getUrl()).into(ivProfilePicProfile);
 
-                ParseFile profilePic = post.getUser().getParseFile("profilePic");
-                if (profilePic != null) {
-                    Glide.with(this).load(profilePic.getUrl()).into(ivProfilePicProfile);
-
-                }
-
-                // Setup refresh listener which triggers new data loading
-                swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        // Your code to refresh the list here.
-                        // Make sure you call swipeContainer.setRefreshing(false)
-                        // once the network request has completed successfully.
-                        queryPosts(post.getUser());
-                        swipeContainer.setRefreshing(false);
-                    }
-                });
-
-                queryPosts(post.getUser());
-
-            } else if (fromUser) {
-                btnFollow.setVisibility(View.VISIBLE);
-
-                tvFirstname.setText(user.getString("firstname"));
-                tvLastname.setText(user.getString("lastname"));
-                tvBio.setText(user.getString("bio"));
-                tvUsernameProfile.setText("@" + user.getString("username"));
-                tvIndustry.setText(user.getString("industry"));
-                tvArea.setText(user.getString("area"));
-
-                ParseFile profilePic = user.getParseFile("profilePic");
-                if (profilePic != null) {
-                    Glide.with(this).load(profilePic.getUrl()).into(ivProfilePicProfile);
-
-                }
-                // Setup refresh listener which triggers new data loading
-                swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        // Your code to refresh the list here.
-                        // Make sure you call swipeContainer.setRefreshing(false)
-                        // once the network request has completed successfully.
-                        queryPosts(user);
-                    }
-                });
-                queryPosts(user);
-                swipeContainer.setRefreshing(false);
             }
 
+            swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+
+                    queryPosts(post.getUser());
+                    swipeContainer.setRefreshing(false);
+                }
+            });
+
+            queryPosts(post.getUser());
+
+        } else if (fromUser) {
+            btnFollow.setVisibility(View.VISIBLE);
+
+            tvFirstname.setText(user.getString("firstname"));
+            tvLastname.setText(user.getString("lastname"));
+            tvBio.setText(user.getString("bio"));
+            tvUsernameProfile.setText("@" + user.getString("username"));
+            tvIndustry.setText(user.getString("industry"));
+            tvArea.setText(user.getString("area"));
+
+            ParseFile profilePic = user.getParseFile("profilePic");
+            if (profilePic != null) {
+                Glide.with(this).load(profilePic.getUrl()).into(ivProfilePicProfile);
+
+            }
+
+            swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+
+                    queryPosts(user);
+                }
+            });
+            queryPosts(user);
+            swipeContainer.setRefreshing(false);
+        }
 
 
         currentUserAnswersList = new ArrayList<>();
@@ -279,7 +250,7 @@ public class ProfileActivity extends AppCompatActivity {
         getAnswers(ParseUser.getCurrentUser());
         getAnswers(user);
 
-        if(currentUserAnswersList.size() > 0 && otherUserAnswersList.size() > 0) {
+        if (currentUserAnswersList.size() > 0 && otherUserAnswersList.size() > 0) {
             tvPercent.setVisibility(View.VISIBLE);
             tvPercent.setText("You and this user are " + getScore() + "% compatable. Click to see their answers to the Questionnaire.");
 
@@ -295,7 +266,6 @@ public class ProfileActivity extends AppCompatActivity {
             tvPercent.setVisibility(View.GONE);
         }
 
-        // set up the query on the Follow table
 
         follow = new Follow();
 
@@ -303,7 +273,6 @@ public class ProfileActivity extends AppCompatActivity {
         query.whereEqualTo("to", user);
         query.whereEqualTo("from", ParseUser.getCurrentUser());
 
-        // execute the query
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> followList, ParseException e) {
 
@@ -332,11 +301,8 @@ public class ProfileActivity extends AppCompatActivity {
 
                 if (btnFollow.getText().toString().equals("Follow")) {
 
-
-                    // ParseUser otherUser = post.getParseUser("user");
-                    // create an entry in the Follow table
                     follow.setFrom(ParseUser.getCurrentUser());
-                    if(fromPost) {
+                    if (fromPost) {
                         follow.setTo(post.getUser());
                     } else {
                         follow.setTo(user);
@@ -344,9 +310,7 @@ public class ProfileActivity extends AppCompatActivity {
                     follow.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
-                            if(e != null) {
-                                Log.e(TAG, "error saving follow");
-                            }
+
                         }
                     });
 
@@ -359,7 +323,7 @@ public class ProfileActivity extends AppCompatActivity {
                     ParseQuery<Follow> query = ParseQuery.getQuery(Follow.class);
                     query.include(Follow.KEY_TO);
                     query.include(Follow.KEY_FROM);
-                    if(fromPost) {
+                    if (fromPost) {
                         query.whereEqualTo(Follow.KEY_TO, post.getUser());
                     } else {
                         query.whereEqualTo(Follow.KEY_TO, user);
@@ -377,12 +341,8 @@ public class ProfileActivity extends AppCompatActivity {
                                         @Override
                                         public void done(ParseException e) {
 
-                                            if(e!=null) {
-                                                Log.e(TAG, "error deleting follow");
-                                            }
                                             btnFollow.setText("Follow");
                                             btnFollow.setBackgroundColor(getResources().getColor(R.color.purple_200));
-                                            Log.i("OtherUser", "successfully deleted follow");
                                             Toast.makeText(ProfileActivity.this, "you unfollowed @" + user.getUsername(), Toast.LENGTH_SHORT).show();
 
                                             followCount("from");
@@ -396,7 +356,6 @@ public class ProfileActivity extends AppCompatActivity {
                                 }
                             } catch (ParseException parseException) {
                                 parseException.printStackTrace();
-                                Log.i("OtherUser", "problem with deleting follow");
                             }
                         }
                     });
@@ -413,59 +372,61 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        tvFollowers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ProfileActivity.this, FollowListsActivity.class);
+                i.putExtra("FollowersList", Parcels.wrap(followersList));
+                startActivity(i);
+            }
+        });
 
-        // Configure the refreshing colors
+        tvFollowing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ProfileActivity.this, FollowListsActivity.class);
+                i.putExtra("FollowingList", Parcels.wrap(followingList));
+                startActivity(i);
+            }
+        });
+
+
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        // initialize the array that will hold posts and create the adapter for the profile
+
         allPosts = new ArrayList<>();
         adapter = new PostAdapter(this, allPosts);
 
-        // set the adapter on the recycler view
+
         rvPosts.setAdapter(adapter);
 
 
-        // set the layout manager on the recycler view
         rvPosts.setLayoutManager(new LinearLayoutManager(this));
 
     }
 
 
     private void queryPosts(ParseUser theUser) {
-        // specifying that i am querying data from the Post.class
+
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
 
         query.include(Post.KEY_USER);
         query.whereEqualTo(Post.KEY_USER, theUser);
 
-        // limit query to latest 15 posts
+
         query.setLimit(15);
 
-        // order posts by creation date (newest first)
+
         query.addDescendingOrder("createdAt");
 
-        // start an asynchronous call for posts
+
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> posts, ParseException e) {
-                // check for errors
-                if (e != null) {
-                    Log.e("ProfileActivity", "Problem with fetching posts", e);
-                    return;
-                }
 
-                // printing each of the posts I get to see if I'm getting all the posts from the server
-
-                for (Post post : posts) {
-
-                    Log.i("ProfileActivity", "user: " + post.getUser().getUsername() + " desc: " + post.getDescription());
-
-                }
-
-                // save received posts to list and notify adapter of new data
                 allPosts.clear();
                 allPosts.addAll(posts);
                 adapter.notifyDataSetChanged();
@@ -473,7 +434,6 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
     }
-
 
 
 }

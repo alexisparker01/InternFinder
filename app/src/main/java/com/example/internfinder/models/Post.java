@@ -10,7 +10,7 @@ import org.parceler.Parcel;
 
 import java.util.Date;
 
-@Parcel(analyze=Post.class)
+@Parcel(analyze = Post.class)
 @ParseClassName("Post")
 
 public class Post extends ParseObject {
@@ -45,7 +45,7 @@ public class Post extends ParseObject {
 
     public void setImage(ParseFile parseFile) {
 
-        put(KEY_IMAGE,parseFile);
+        put(KEY_IMAGE, parseFile);
     }
 
     public ParseUser getUser() {
@@ -68,6 +68,7 @@ public class Post extends ParseObject {
 
         put(KEY_TYPE, type);
     }
+
     public String getLocation() {
 
         return getString(KEY_LOCATION);
@@ -88,6 +89,7 @@ public class Post extends ParseObject {
         put(KEY_LATLNG, point);
 
     }
+
     public String getLocationName() {
 
         return getString(KEY_LOCATIONNAME);

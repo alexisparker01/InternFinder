@@ -2,7 +2,6 @@ package com.example.internfinder.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ import org.parceler.Parcels;
 
 import java.util.Date;
 import java.util.List;
-
 
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder> {
@@ -77,8 +75,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         public void bind(Comment comment) {
 
             try {
-                Log.i("CommentAdapter", comment.getParseUser("user").fetchIfNeeded().getString("username"));
-                tvUsernameComment.setText("@" + comment.getUser().getUsername());
+                tvUsernameComment.setText("@" + comment.getUser().fetchIfNeeded().getUsername());
 
             } catch (ParseException e) {
                 e.printStackTrace();

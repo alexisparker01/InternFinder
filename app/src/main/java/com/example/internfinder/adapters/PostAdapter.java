@@ -2,7 +2,9 @@ package com.example.internfinder.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -149,14 +151,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 @Override
                 public void onClick(View v) {
 
-                    if(tvUsername.getText().equals("@"+ParseUser.getCurrentUser().getUsername())) {
+                    if (tvUsername.getText().equals("@" + ParseUser.getCurrentUser().getUsername())) {
 
                         Intent intent = new Intent(context, MainActivity.class);
-                        intent.putExtra("openProfileFragment",true);
-                       // overridePendingTransition(0, 0);
+                        intent.putExtra("openProfileFragment", true);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                       // context.finish();
-                       context.startActivity(intent);
+                        context.startActivity(intent);
                     } else {
                         Intent i = new Intent(context, ProfileActivity.class);
                         i.putExtra("Post", Parcels.wrap(post));
@@ -167,29 +167,16 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 }
             });
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
 
-                    Intent i = new Intent(context, OpenPostActivity.class);
-                    i.putExtra("Post", Parcels.wrap(post));
-                    context.startActivity(i);
-
-                }
-            });
-
-
-
-
-            // DOUBLE TAP FEATURE
-/*
             itemView.setOnTouchListener(new View.OnTouchListener() {
 
                 private GestureDetector gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
 
                     @Override
                     public boolean onDoubleTap(MotionEvent e) {
-                        Log.d("TEST", "onDoubleTap");
+                        Intent i = new Intent(context, OpenPostActivity.class);
+                        i.putExtra("Post", Parcels.wrap(post));
+                        context.startActivity(i);
                         return super.onDoubleTap(e);
                     }
                 });
@@ -197,17 +184,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     gestureDetector.onTouchEvent(event);
-                    // Intent i = new Intent(context, OpenPostActivity.class);
-                    // i.putExtra("Post", Parcels.wrap(post));
-                    //  context.startActivity(i);
                     return true;
                 }
 
             });
-*/
+
 
         }
-
 
 
         public void clear() {

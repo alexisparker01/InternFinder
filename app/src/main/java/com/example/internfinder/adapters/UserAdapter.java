@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.example.internfinder.R;
 import com.example.internfinder.activities.MainActivity;
 import com.example.internfinder.activities.ProfileActivity;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
@@ -78,29 +79,34 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         public void bind(ParseUser user) {
 
-            tvUsernameGrid.setText("@" + user.getString("username"));
 
-            tvFirstnameGrid.setText(user.getString("firstname"));
+            try {
+                tvUsernameGrid.setText("@" + user.fetchIfNeeded().getString("username"));
 
-            tvLastnameGrid.setText(user.getString("lastname"));
+                tvFirstnameGrid.setText(user.fetchIfNeeded().getString("firstname"));
 
-            tvIndustryGrid.setText(user.getString("industry"));
+                tvLastnameGrid.setText(user.fetchIfNeeded().getString("lastname"));
 
-            ParseFile profilePic = user.getParseFile("profilePic");
-            if (profilePic != null) {
-                Glide.with(context).load(profilePic.getUrl()).into(ivProfilePictureGrid);
+                tvIndustryGrid.setText(user.fetchIfNeeded().getString("industry"));
+
+                ParseFile profilePic = user.fetchIfNeeded().getParseFile("profilePic");
+                if (profilePic != null) {
+                    Glide.with(context).load(profilePic.getUrl()).into(ivProfilePictureGrid);
+                }
+
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
 
                     Log.i("USERADAPTER", "tvUsername " + tvUsernameGrid.getText() + " parse usr : @" + ParseUser.getCurrentUser().getUsername());
-                    if(tvUsernameGrid.getText().toString().equals("@"+ParseUser.getCurrentUser().getUsername())) {
+                    if (tvUsernameGrid.getText().toString().equals("@" + ParseUser.getCurrentUser().getUsername())) {
 
                         Intent intent = new Intent(context, MainActivity.class);
-                        intent.putExtra("openProfileFragment",true);
+                        intent.putExtra("openProfileFragment", true);
                         //overridePendingTransition(0, 0);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         //finish();
@@ -113,9 +119,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                     }
                 }
 
-                });
+            });
+        }
     }
-}
 
 
     // Clean all elements of the recycler
@@ -129,10 +135,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         users.addAll(list);
         notifyDataSetChanged();
     }
-
-
-
-
 
 
 }

@@ -2,7 +2,6 @@ package com.example.internfinder.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -25,7 +24,6 @@ import java.util.List;
 
 public class QuestionnaireActivity extends AppCompatActivity {
 
-    private static final String TAG = "QuestionnaireActivity";
     RadioGroup radioGroupIndustry;
     RadioGroup radioGroupQuestion1;
     RadioGroup radioGroupQuestion2;
@@ -63,8 +61,6 @@ public class QuestionnaireActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questionnaire);
 
-        Log.i(TAG, "Entering Questionnaire Activity");
-
         radioGroupIndustry = findViewById(R.id.radioGroupIndustry);
         radioGroupQuestion1 = findViewById(R.id.radioGroupQuestion1);
         radioGroupQuestion2 = findViewById(R.id.radioGroupQuestion2);
@@ -97,8 +93,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         btnProfile.setVisibility(View.GONE);
 
 
-
-        if(user!=null) {
+        if (user != null) {
 
 
             if (!user.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
@@ -120,78 +115,57 @@ public class QuestionnaireActivity extends AppCompatActivity {
             public void onClick(View v) {
                 btnProfile.setVisibility(View.GONE);
 
-                    getAnswers(ParseUser.getCurrentUser());
+                getAnswers(ParseUser.getCurrentUser());
 
-                    if (currentUserAnswersList.size() > 0) {
-                        answer = currentUserAnswersList.get(0);
-                    } else {
-                        answer = new Answers();
-                        answer.setUser(ParseUser.getCurrentUser());
+                if (currentUserAnswersList.size() > 0) {
+                    answer = currentUserAnswersList.get(0);
+                } else {
+                    answer = new Answers();
+                    answer.setUser(ParseUser.getCurrentUser());
+
+                }
+
+
+                int radioIDIndustry = radioGroupIndustry.getCheckedRadioButtonId();
+                radioButtonIndustry = findViewById(radioIDIndustry);
+
+                ParseUser.getCurrentUser().put("industry", radioButtonIndustry.getText());
+
+                ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                    }
+                });
+
+
+                int radioIDQuestion1 = radioGroupQuestion1.getCheckedRadioButtonId();
+                radioButtonQuestion1 = findViewById(radioIDQuestion1);
+                answer.setQuestion1((String) radioButtonQuestion1.getText());
+
+
+                int radioIDQuestion2 = radioGroupQuestion2.getCheckedRadioButtonId();
+                radioButtonQuestion2 = findViewById(radioIDQuestion2);
+                answer.setQuestion2((String) radioButtonQuestion2.getText());
+
+
+                int radioIDQuestion3 = radioGroupQuestion3.getCheckedRadioButtonId();
+                radioButtonQuestion3 = findViewById(radioIDQuestion3);
+                answer.setQuestion3((String) radioButtonQuestion3.getText());
+
+
+                int radioIDQuestion4 = radioGroupQuestion4.getCheckedRadioButtonId();
+                radioButtonQuestion4 = findViewById(radioIDQuestion4);
+                answer.setQuestion4((String) radioButtonQuestion4.getText());
+
+
+                answer.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
 
                     }
+                });
 
-                    // industry
-
-                    int radioIDIndustry = radioGroupIndustry.getCheckedRadioButtonId();
-
-                    radioButtonIndustry = findViewById(radioIDIndustry);
-
-                    ParseUser.getCurrentUser().put("industry", radioButtonIndustry.getText());
-
-                    ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e != null) {
-                                Log.e(TAG, "Error while saving!");
-                            }
-                            Log.i(TAG, "Successfully saved!");
-                        }
-                    });
-
-                    // question 1
-
-                    int radioIDQuestion1 = radioGroupQuestion1.getCheckedRadioButtonId();
-
-                    radioButtonQuestion1 = findViewById(radioIDQuestion1);
-
-                    answer.setQuestion1((String) radioButtonQuestion1.getText());
-
-                    // question 2
-
-                    int radioIDQuestion2 = radioGroupQuestion2.getCheckedRadioButtonId();
-
-                    radioButtonQuestion2 = findViewById(radioIDQuestion2);
-
-                    answer.setQuestion2((String) radioButtonQuestion2.getText());
-
-                    // question 3
-
-                    int radioIDQuestion3 = radioGroupQuestion3.getCheckedRadioButtonId();
-
-                    radioButtonQuestion3 = findViewById(radioIDQuestion3);
-
-                    answer.setQuestion3((String) radioButtonQuestion3.getText());
-
-                    // question 4
-
-                    int radioIDQuestion4 = radioGroupQuestion4.getCheckedRadioButtonId();
-
-                    radioButtonQuestion4 = findViewById(radioIDQuestion4);
-
-                    answer.setQuestion4((String) radioButtonQuestion4.getText());
-
-
-                    answer.saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e != null) {
-                                Log.e(TAG, "Error while saving!");
-                            }
-                            Log.i(TAG, "Successfully saved!");
-                        }
-                    });
-
-                    viewYourAnswers();
+                viewYourAnswers();
             }
         });
     }
@@ -212,13 +186,13 @@ public class QuestionnaireActivity extends AppCompatActivity {
         tvQuestion3.setVisibility(View.INVISIBLE);
         tvQuestion4.setVisibility(View.INVISIBLE);
 
-            getAnswers(ParseUser.getCurrentUser());
+        getAnswers(ParseUser.getCurrentUser());
 
         tvAnswers.setText(tvQuestion1.getText().toString() + "\n" + currentUserAnswersList.get(0).getQuestion1());
         tvAnswers2.setText("\n\n" + tvQuestion2.getText().toString() + "\n" + currentUserAnswersList.get(0).getQuestion2());
-        tvAnswers3.setText("\n\n" + tvQuestion3.getText().toString() + "\n" + currentUserAnswersList.get(0).getQuestion3()+"\n\n" + tvQuestion4.getText().toString() + "\n" +  currentUserAnswersList.get(0).getQuestion4() + "\n\n");
+        tvAnswers3.setText("\n\n" + tvQuestion3.getText().toString() + "\n" + currentUserAnswersList.get(0).getQuestion3() + "\n\n" + tvQuestion4.getText().toString() + "\n" + currentUserAnswersList.get(0).getQuestion4() + "\n\n");
 
-}
+    }
 
 
     public void viewOtherUserAnswers() {
@@ -241,7 +215,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
 
         tvAnswers.setText(tvQuestion1.getText().toString() + "\n" + otherUserAnswersList.get(0).getQuestion1());
         tvAnswers2.setText("\n\n" + tvQuestion2.getText().toString() + "\n" + otherUserAnswersList.get(0).getQuestion2());
-        tvAnswers3.setText("\n\n" + tvQuestion3.getText().toString() + "\n" + otherUserAnswersList.get(0).getQuestion3()+"\n\n" + tvQuestion4.getText().toString() + "\n" +  otherUserAnswersList.get(0).getQuestion4() + "\n\n");
+        tvAnswers3.setText("\n\n" + tvQuestion3.getText().toString() + "\n" + otherUserAnswersList.get(0).getQuestion3() + "\n\n" + tvQuestion4.getText().toString() + "\n" + otherUserAnswersList.get(0).getQuestion4() + "\n\n");
     }
 
 
@@ -254,7 +228,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
         query.setLimit(15);
         query.addDescendingOrder("createdAt");
         try {
-            if(user.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
+            if (user.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
                 currentUserAnswersList = query.find();
             } else {
                 otherUserAnswersList = query.find();

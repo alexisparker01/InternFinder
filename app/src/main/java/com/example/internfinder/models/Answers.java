@@ -6,7 +6,7 @@ import com.parse.ParseUser;
 
 import org.parceler.Parcel;
 
-@Parcel(analyze= Answers.class)
+@Parcel(analyze = Answers.class)
 @ParseClassName("Answers")
 public class Answers extends ParseObject {
 

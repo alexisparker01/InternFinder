@@ -4,10 +4,9 @@ import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
-
 import org.parceler.Parcel;
 
-@Parcel(analyze= Follow.class)
+@Parcel(analyze = Follow.class)
 @ParseClassName("Follow")
 public class Follow extends ParseObject {
 
@@ -34,7 +33,6 @@ public class Follow extends ParseObject {
     public void setTo(ParseUser parseUser) {
         put(KEY_TO, parseUser);
     }
-
 
 
 }

@@ -22,18 +22,13 @@ import com.parse.ParseUser;
 
 public class LogoutFragment extends Fragment {
 
-    private static final String TAG = "LogoutFragment";
-
-
     public LogoutFragment() {
-        // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_logout, container, false);
     }
 
@@ -42,11 +37,10 @@ public class LogoutFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
-
         DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switch (which){
+                switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
                         Toast.makeText(getContext(), "You are logging out!", Toast.LENGTH_SHORT).show();
                         logout();
@@ -70,7 +64,7 @@ public class LogoutFragment extends Fragment {
             }
         };
 
-       AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage("Are you sure you want to logout of your account, " + ParseUser.getCurrentUser().getString("firstname") + "?").setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show();
 
@@ -84,4 +78,4 @@ public class LogoutFragment extends Fragment {
 
     }
 
-    }
+}

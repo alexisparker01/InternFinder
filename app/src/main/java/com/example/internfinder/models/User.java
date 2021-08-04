@@ -8,7 +8,7 @@ import com.parse.ParseUser;
 import org.parceler.Parcel;
 
 
-@Parcel(analyze=User.class)
+@Parcel(analyze = User.class)
 @ParseClassName("User")
 
 
@@ -17,10 +17,10 @@ public class User extends ParseObject {
     public static final String KEY_PROFILEPICTURE = "profilePicture";
     public static final String KEY_BIO = "bio";
     public static final String KEY_FIRSTNAME = "firstname";
-    public static  final String KEY_LASTNAME = "lastname";
-    public static  final String KEY_USER = "user";
-    public static  final String KEY_USERNAME = "username";
-    public static  final String KEY_INDUSTRY = "industry";
+    public static final String KEY_LASTNAME = "lastname";
+    public static final String KEY_USER = "user";
+    public static final String KEY_USERNAME = "username";
+    public static final String KEY_INDUSTRY = "industry";
 
     public ParseFile getProfilePicture() {
 
@@ -29,7 +29,7 @@ public class User extends ParseObject {
 
     public void setProfilePicture(ParseFile parseFile) {
 
-        put(KEY_PROFILEPICTURE,parseFile);
+        put(KEY_PROFILEPICTURE, parseFile);
     }
 
     public String getBio() {

@@ -5,6 +5,7 @@
     style="@style/Theme.InternFinder.NoActionBar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FCFFE1"
     tools:context=".activities.ModifyProfileActivity">
 
     <ImageView
@@ -36,7 +37,7 @@
         android:layout_marginStart="21dp"
         android:layout_toEndOf="@+id/ivProfilePic"
         android:fontFamily="sans-serif-light"
-        android:textSize="20sp"
+        android:textSize="18sp"
         tools:text="username" />
 
     <EditText
@@ -44,6 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvUsername"
+        android:background="@drawable/white_border"
         android:layout_marginStart="21dp"
         android:layout_marginTop="10dp"
         android:layout_toEndOf="@+id/ivProfilePic"
@@ -59,8 +61,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/etFirstNameEditProfile"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="-44dp"
+        android:layout_marginTop="-25dp"
         android:layout_toEndOf="@+id/etFirstNameEditProfile"
+        android:background="@drawable/white_border"
         android:fontFamily="sans-serif-light"
         android:hint="Lastname"
         android:textSize="18sp"
@@ -71,8 +74,12 @@
         android:id="@+id/etBioEditProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/spinnerIndustry"
-        android:layout_marginTop="19dp"
+        android:layout_below="@+id/etFirstNameEditProfile"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/white_border"
         android:fontFamily="sans-serif-light"
         android:hint="Bio"
         android:textSize="16sp"
@@ -83,22 +90,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/etBioEditProfile"
-        android:layout_marginTop="29dp"
-        android:text="SAVE" />
-
-
-    <Spinner
-        android:id="@+id/spinnerIndustry"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/etFirstNameEditProfile"
-        android:layout_marginStart="19dp"
-        android:layout_marginTop="21dp"
-        android:layout_toEndOf="@+id/ivProfilePic"
-        android:clipChildren="false"
-        android:prompt="@string/title"
-        android:background="@android:drawable/btn_dropdown"
-        android:spinnerMode="dropdown" />
+        android:layout_marginTop="19dp"
+        android:backgroundTint="#FFD1D1"
+        android:text="SAVE"
+        android:textColor="@color/black" />
 
 
 </RelativeLayout>

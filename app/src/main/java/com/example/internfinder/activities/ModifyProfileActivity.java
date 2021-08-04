@@ -6,14 +6,10 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,14 +29,12 @@ import java.io.IOException;
 
 public class ModifyProfileActivity extends AppCompatActivity {
 
-    private static final String TAG = "ModifyProfileActivity";
     private TextView tvUsername;
     private EditText etFirstname;
     private EditText etLastname;
     private EditText etBio;
     private Button btnSave;
     private ImageView ivProfilePic;
-    private Spinner spinnerIndustry;
     private ParseFile image;
     private ImageView ivBackToQuestionnaire;
 
@@ -51,7 +45,6 @@ public class ModifyProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_profile);
 
-        spinnerIndustry = findViewById(R.id.spinnerIndustry);
         tvUsername = findViewById(R.id.tvUsername);
         etFirstname = findViewById(R.id.etFirstNameEditProfile);
         etLastname = findViewById(R.id.etLastNameEditProfile);
@@ -59,93 +52,6 @@ public class ModifyProfileActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.btnSave);
         ivProfilePic = findViewById(R.id.ivProfilePic);
         ivBackToQuestionnaire = findViewById(R.id.ivBackToQuestionnaire);
-
-        String[] postSelections = new String[]{"Technology", "Finance", "Arts", "Medical"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, postSelections);
-
-        //set the spinners adapter to the previously created one.
-        spinnerIndustry.setAdapter(adapter);
-
-        spinnerIndustry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
-
-
-                if (parent.getItemAtPosition(position).equals("Technology")) {
-                    ParseUser.getCurrentUser().put("industry", "Technology");
-
-                    ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e != null) {
-                                Log.e("ModifyProfileActivity", "Error while saving!");
-                            }
-
-                            Log.i("ModifyProfileActivity", "Successfully saved!");
-
-
-                        }
-                    });
-
-                } else if (parent.getItemAtPosition(position).equals("Finance")) {
-                    ParseUser.getCurrentUser().put("industry", "Finance");
-
-                    ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e != null) {
-                                Log.e("ModifyProfileActivity", "Error while saving!");
-                            }
-
-                            Log.i("ModifyProfileActivity", "Successfully saved!");
-
-
-                        }
-                    });
-
-                } else if (parent.getItemAtPosition(position).equals("Arts")) {
-
-                    ParseUser.getCurrentUser().put("industry", "Arts");
-
-                    ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e != null) {
-                                Log.e("ModifyProfileActivity", "Error while saving!");
-                            }
-
-                            Log.i("ModifyProfileActivity", "Successfully saved!");
-
-
-                        }
-                    });
-                } else if (parent.getItemAtPosition(position).equals("Medical")) {
-
-                    ParseUser.getCurrentUser().put("industry", "Medical");
-
-                    ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
-                        @Override
-                        public void done(ParseException e) {
-                            if (e != null) {
-                                Log.e("ModifyProfileActivity", "Error while saving!");
-                            }
-
-                            Log.i("ModifyProfileActivity", "Successfully saved!");
-
-
-                        }
-                    });
-                }
-            }
-
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-                Log.i(TAG, "Nothing Selected");
-            }
-        });
 
 
         ivProfilePic.setOnClickListener(new View.OnClickListener() {
@@ -208,18 +114,13 @@ public class ModifyProfileActivity extends AppCompatActivity {
         currentUser.put("lastname", lastname);
         currentUser.put("bio", bio);
         currentUser.put("username", username);
-        if(image != null) {
+        if (image != null) {
             currentUser.put("profilePic", image);
         }
 
         currentUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                if (e != null) {
-                    Log.e("ModifyProfileActivity", "Error while saving!");
-                }
-
-                Log.i("ModifyProfileActivity", "Successfully saved!");
 
                 etFirstname.setText(ParseUser.getCurrentUser().getString("firstname"));
                 etLastname.setText(ParseUser.getCurrentUser().getString("lastname"));
@@ -230,14 +131,9 @@ public class ModifyProfileActivity extends AppCompatActivity {
     }
 
     private void goToProfile() {
-/*
-        Intent i = new Intent(ModifyProfileActivity.this, ProfileActivity.class);
-        i.putExtra("User", Parcels.wrap(ParseUser.getCurrentUser()));
-        startActivity(i);
 
- */
         Intent intent = new Intent(ModifyProfileActivity.this, MainActivity.class);
-        intent.putExtra("openProfileFragment",true);
+        intent.putExtra("openProfileFragment", true);
         overridePendingTransition(0, 0);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         finish();
@@ -245,11 +141,11 @@ public class ModifyProfileActivity extends AppCompatActivity {
 
     }
 
-    public ParseFile conversionBitmapParseFile(Bitmap imageBitmap){
-        ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
-        imageBitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+    public ParseFile conversionBitmapParseFile(Bitmap imageBitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
         byte[] imageByte = byteArrayOutputStream.toByteArray();
-        ParseFile parseFile = new ParseFile("image_file.jpeg",imageByte);
+        ParseFile parseFile = new ParseFile("image_file.jpeg", imageByte);
         return parseFile;
     }
 
@@ -258,46 +154,29 @@ public class ModifyProfileActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-
-        //Detects request codes
         if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
             Uri selectedImage = data.getData();
             Bitmap bitmap = null;
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-                 image = conversionBitmapParseFile(bitmap);
-                 ParseUser.getCurrentUser().put("profilePic", image);
-                 ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
-                     @Override
-                     public void done(ParseException e) {
-                         if(e!=null) {
-                             Log.i(TAG, "error saving profile pic");
-                         }
+                image = conversionBitmapParseFile(bitmap);
+                ParseUser.getCurrentUser().put("profilePic", image);
+                ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
 
-                         ParseFile profilePic = ParseUser.getCurrentUser().getParseFile("profilePic");
-                         if (profilePic != null) {
-                             Glide.with(ModifyProfileActivity.this).load(profilePic.getUrl()).into(ivProfilePic);
-                         }
-                     }
-                 });
+                        ParseFile profilePic = ParseUser.getCurrentUser().getParseFile("profilePic");
+                        if (profilePic != null) {
+                            Glide.with(ModifyProfileActivity.this).load(profilePic.getUrl()).into(ivProfilePic);
+                        }
+                    }
+                });
 
             } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-
-
-
-            //BitmapFactory.decodeFile(selectedImage.getPath());
-
-          //  ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            // Compress image to lower quality scale 1 - 100
-         //   bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-
-
 
         }
     }

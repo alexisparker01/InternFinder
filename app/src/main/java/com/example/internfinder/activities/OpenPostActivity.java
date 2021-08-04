@@ -2,7 +2,6 @@ package com.example.internfinder.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,7 +18,6 @@ import com.example.internfinder.R;
 import com.example.internfinder.adapters.CommentAdapter;
 import com.example.internfinder.models.Comment;
 import com.example.internfinder.models.Post;
-import com.example.internfinder.models.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -44,7 +42,6 @@ public class OpenPostActivity extends AppCompatActivity {
     private TextView tvCreatedAtOpenPost;
     private TextView tvDescriptionOpenPost;
     private Post post;
-    private User user;
     private ImageView ivImageOpenPost;
     private EditText etComment;
     private Button btnSubmitComment;
@@ -62,7 +59,7 @@ public class OpenPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_open_post);
 
-       post = Parcels.unwrap(getIntent().getParcelableExtra("Post"));
+        post = Parcels.unwrap(getIntent().getParcelableExtra("Post"));
 
 
         if (getSupportActionBar() != null) {
@@ -70,7 +67,7 @@ public class OpenPostActivity extends AppCompatActivity {
         }
 
 
-        tvUsernameProfileOpenPost= findViewById(R.id.tvUsernameOpenPost);
+        tvUsernameProfileOpenPost = findViewById(R.id.tvUsernameOpenPost);
         tvFirstnameOpenPost = findViewById(R.id.tvFirstnameOpenPost);
         tvLastnameOpenPost = findViewById(R.id.tvLastnameOpenPost);
         tvCreatedAtOpenPost = findViewById(R.id.tvCreatedAtOpenPost);
@@ -84,84 +81,68 @@ public class OpenPostActivity extends AppCompatActivity {
         tvLocationName = findViewById(R.id.tvLocationName);
 
         tvUsernameProfileOpenPost.setOnClickListener(new View.OnClickListener() {
-                                                         @Override
-                                                         public void onClick(View v) {
-                                                             if(tvUsernameProfileOpenPost.getText().equals("@"+ParseUser.getCurrentUser().getUsername())) {
+            @Override
+            public void onClick(View v) {
+                if (tvUsernameProfileOpenPost.getText().equals("@" + ParseUser.getCurrentUser().getUsername())) {
 
-                                                                 Intent intent = new Intent(OpenPostActivity.this, MainActivity.class);
-                                                                 intent.putExtra("openProfileFragment",true);
-                                                                 // overridePendingTransition(0, 0);
-                                                                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                                                 // context.finish();
-                                                                startActivity(intent);
-                                                             } else {
-                                                                 Intent i = new Intent(OpenPostActivity.this, ProfileActivity.class);
-                                                                 i.putExtra("User", Parcels.wrap(post.getUser()));
-                                                                 i.putExtra("Post", Parcels.wrap(post));
-                                                                 startActivity(i);
+                    Intent intent = new Intent(OpenPostActivity.this, MainActivity.class);
+                    intent.putExtra("openProfileFragment", true);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(intent);
+                } else {
+                    Intent i = new Intent(OpenPostActivity.this, ProfileActivity.class);
+                    i.putExtra("User", Parcels.wrap(post.getUser()));
+                    i.putExtra("Post", Parcels.wrap(post));
+                    startActivity(i);
 
-                                                             }
-                                                         }
-                                                     });
+                }
+            }
+        });
 
-                btnSubmitComment.setOnClickListener(new View.OnClickListener() {
+        btnSubmitComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Comment comment = new Comment();
+                comment.setText(etComment.getText().toString());
+                comment.setUser(ParseUser.getCurrentUser());
+                comment.setPost(post);
+                comment.saveInBackground(new SaveCallback() {
                     @Override
-                    public void onClick(View v) {
-                        Comment comment = new Comment();
-                        comment.setText(etComment.getText().toString());
-                        comment.setUser(ParseUser.getCurrentUser());
-                        comment.setPost(post);
-                        comment.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                if (e != null) {
-                                    Log.e("openpost", "error while saving");
-                                }
-                                etComment.setText("");
-                                Log.i("openpost", "SAVED SUCCESFFULLY");
-                            }
-                        });
+                    public void done(ParseException e) {
+                        etComment.setText("");
                     }
                 });
+            }
+        });
 
-        /** swipe refresher and adapter for comments **/
+
         swipeContainerComments = (SwipeRefreshLayout) findViewById(R.id.swipeContainerComment);
-        // Setup refresh listener which triggers new data loading
         swipeContainerComments.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // Your code to refresh the list here.
-                // Make sure you call swipeContainer.setRefreshing(false)
-                // once the network request has completed successfully.
                 queryComments();
                 swipeContainerComments.setRefreshing(false);
 
             }
         });
 
-        // Configure the refreshing colors
         swipeContainerComments.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        // initialize the array that will hold comments and create the adapter for the profile
         allComments = new ArrayList<>();
         adapter = new CommentAdapter(this, allComments);
 
-        // set the adapter on the recycler view
         rvComments.setAdapter(adapter);
 
-        // set the layout manager on the recycler view
+
         rvComments.setLayoutManager(new LinearLayoutManager(this));
 
-        // query comments from server
+
         queryComments();
 
 
-       // Log.i("TAG", "post: " + post.getParseUser("user").getString("firstname"));
-        // add user data to fields
-       // fetchIfNeeded()getParseObject("content");
         try {
             tvFirstnameOpenPost.setText(post.getUser().fetchIfNeeded().getString("firstname"));
             tvLastnameOpenPost.setText(post.getUser().fetchIfNeeded().getString("lastname"));
@@ -177,12 +158,11 @@ public class OpenPostActivity extends AppCompatActivity {
         tvCreatedAtOpenPost.setText(timeAgo);
 
 
-        if(post.getType().equals("event")) {
+        if (post.getType().equals("event")) {
             tvLocation.setText(post.getLocation());
             tvLocationName.setText(post.getLocationName());
         }
 
-        // load profile pic
 
         ParseFile profilePic = post.getUser().getParseFile("profilePic");
         if (profilePic != null) {
@@ -199,40 +179,19 @@ public class OpenPostActivity extends AppCompatActivity {
     }
 
     private void queryComments() {
-        // specifying that i am querying data from the Comment.class
         ParseQuery<Comment> query = ParseQuery.getQuery(Comment.class);
 
-        // include data referred by post key
         query.include(Comment.KEY_POST);
-        // the problem is that post.getobjectid() is a string and i need the parse object of the post
+
         query.whereEqualTo(Comment.KEY_POST, post);
 
-            // limit query to latest 15 posts
         query.setLimit(15);
 
-        // order posts by creation date (newest first)
         query.addDescendingOrder("createdAt");
 
-        // start an asynchronous call for posts
         query.findInBackground(new FindCallback<Comment>() {
             @Override
             public void done(List<Comment> comments, ParseException e) {
-                // check for errors
-                if (e != null) {
-                    Log.e("OpenPostActivity", "Problem with fetching comments", e);
-                    return;
-                }
-
-
-                // printing each of the posts I get to see if I'm getting all the posts from the server
-
-                for (Comment comment: comments) {
-
-                   Log.i("OpenPostActivity", "comment: " + comment.getUser());
-
-                }
-
-                // save received posts to list and notify adapter of new data
                 allComments.clear();
                 allComments.addAll(comments);
                 adapter.notifyDataSetChanged();
