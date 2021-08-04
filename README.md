@@ -28,33 +28,32 @@ InternFinder is an app where you can create a profile and meet and connect with 
 
 **Required Must-have Stories**
 
-* Users can register for an account which requires email confirmation [x]
-* Users who already have an account can login [x]
-* Users can logout [x]
-* Users can set up a profile after their email in confirmed. Profiles would include: Name (EditText), Bio (EditText), Industry (Pick from a list), and Profile Picture (ImageView) [x]
-* Users can post events (event post) using Google Maps and Places SDK [x]
-* Users can post status updates (text post) [x]
-* Users can post intro posts (text post) [x]
-* Users can post picture posts (picture post) using the Camera [x]
-* Each post has a comment section so the users can communicate with each other [x]
-* Every profile has a followers and following list
-* Users can search for other users [x]
-* Gesture feature
-* Animation feature
-* External library to add visual polish
-* Navigation [x]
+* [x]	Users can register for an account which requires email confirmation
+* [x] Users who already have an account can login
+* [x] Users can logout
+* [x] Users can set up a profile
+* [x] Users can post events using Google Maps and Places SDK
+* [x] Users can post status updates
+* [x] Users can post text posts
+* [x] Users can post picture posts using the Camera
+* [x] Each post has a comment section so the users can communicate with each other
+* [x] Every profile has a followers and following list and Users can follow and follow each other
+* [x] Users can search for other users
+* [x] Gesture feature
+* [x] Animation feature
+* [x] External library to add visual polish
+* [x] Navigation between views
 
 
 **Optional Nice-to-have Stories**
 
 * You can link your LinkedIn profile to your profile
-* Bio has little prompts to answer (the answers will be multiple choice) so you can get to know someone like for example: After work what is your favorite thing to do? On the weekends what do you like to do? What's your work from home set up like?) Based on how many of the little bio questions that you have similar answers to, it'll show how alike you guys are like (you and this person are 50% compatable)
-* Users can filter feed to show posts from people they are following, and people within a certain number of miles of them [x]
-* You can see a list of people attending the event
-* There is a map on the search/explore page that shows events near you on a map [x]
-* Autofill suggestions when searching event locations [x]
-* Search page will display interns that have the same industry as you and in the same area [x]
-* For Profile Picture, there can be an option to upload picture from camera roll or make your profile picture a picture you take on your camera then and there. [x]
+* [x] Users can modify their profiles and edit teir responses to questions about work (for example: After work what is your favorite thing to do? On the weekends what do you like to do? What's your work from home set up like?) When you click on someone else's profile it'll show how alike you guys are based on how many questions you both answered
+* [x] Users can filter feed to show posts from people they are following, people within a certain number of miles of them, and people of their industry
+* [x] You can see a list of people attending the event
+* [x] There is a map on the search/explore page that shows events near you on a map. When you click on the marker for each event it takes you to the post of the event. There is also a list of Users in your area.
+* [x] Autofill suggestions when searching for a location for your event post
+* [x] For Profile Picture, there can be an option to upload picture from camera roll
 
 ### 2. Screen Archetypes
 
@@ -89,8 +88,7 @@ InternFinder is an app where you can create a profile and meet and connect with 
 * Timeline (upper bar)
 
 ## Wireframes
-[Add picture of your hand sketched wireframes in this section]
-<img src="https://www.figma.com/proto/0yivHGyHXgUChY8IypclPc/InternFinder?node-id=1%3A2&scaling=scale-down&page-id=0%3A1" width=600>
+https://www.figma.com/proto/0yivHGyHXgUChY8IypclPc/InternFinder?node-id=1%3A2&scaling=scale-down&page-id=0%3A1
 
 ### [BONUS] Digital Wireframes & Mockups
 
@@ -114,12 +112,38 @@ Post
 User
 | Property | Type | Description |
 | -------- | -------- | -------- |
-| objectID     | String     | unique id for the user post (default field)    |
+| objectID     | String     | unique id for the user (default field)    |
 | author     | Pointer to User     | image author   |
 | username     | string     | username   |
 | password     | String     | password    |
 | profilePic     | File     | profile picture for profile    |
 | Bio     | String     | biography for profile    |
+| currentLocation     | GeoPoint     | Coordinate of user's current location    |
+
+Follow
+| Property | Type | Description |
+| -------- | -------- | -------- |
+| objectID     | String     | unique id for the follow (default field)    |
+| from     | Pointer to User     | pointer to the user that is following   |
+| to     | Pointer to User     | pointer to the user that is being followed   |
+
+Answers
+| Property | Type | Description |
+| -------- | -------- | -------- |
+| objectID     | String     | unique id for the answers (default field)    |
+| user     | Pointer to User     | pointer to the user of the answer  |
+| question1     | String    | string answer to question1   |
+| question2     | String    | string answer to question1   |
+| question3    | String    | string answer to question1   |
+| question4    | String    | string answer to question1   |
+
+Comment
+| Property | Type | Description |
+| -------- | -------- | -------- |
+| objectID     | String     | unique id for the comment (default field)    |
+| user     | Pointer to User     | pointer to the user of the comment  |
+| text     | String    | description of comment   |
+| post     | Pointer to Post    | pointer to what post the comment is under   |
 
 
 List of network requests by screen
