@@ -87,13 +87,14 @@
 
     <Button
         android:id="@+id/btnSave"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/etBioEditProfile"
         android:layout_marginTop="19dp"
         android:backgroundTint="#AA9183"
         android:text="SAVE"
-        android:textColor="#C4A494" />
+        android:textColor="@color/white"
+        app:cornerRadius="100dp" />
 
 
 </RelativeLayout>

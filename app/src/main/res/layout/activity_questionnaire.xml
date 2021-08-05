@@ -43,7 +43,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvAnswers3"
-            android:text="GO TO MODIFY PROFILE" />
+            android:backgroundTint="#AA9183"
+            android:text="GO TO MODIFY PROFILE"
+            app:cornerRadius="100dp" />
 
         <TextView
             android:id="@+id/tvQuestionnaireTitle"
@@ -272,7 +274,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/radioGroupQuestion4"
             android:layout_marginTop="8dp"
-            android:background="#AA9183"
             android:backgroundTint="#AA9183"
             android:gravity="center_horizontal"
             android:text="apply"

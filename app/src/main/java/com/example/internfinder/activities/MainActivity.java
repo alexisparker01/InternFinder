@@ -1,5 +1,6 @@
 package com.example.internfinder.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.example.internfinder.fragments.MapFragment;
 import com.example.internfinder.fragments.ProfileFragment;
 import com.example.internfinder.fragments.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 
@@ -34,6 +36,11 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if(ParseUser.getCurrentUser() == null) {
+            Intent i = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(i);
+        }
 
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);

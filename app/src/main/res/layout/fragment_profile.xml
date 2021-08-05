@@ -113,10 +113,11 @@
             android:layout_below="@+id/tvFollowers"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="7dp"
-            android:backgroundTint="#E3B2B2"
+            android:backgroundTint="#AA9183"
             android:fontFamily="sans-serif-light"
             android:text="edit profile"
             android:visibility="visible"
+            app:cornerRadius="100dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvIndustry" />

@@ -127,8 +127,10 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="-51dp"
             android:layout_toEndOf="@+id/etComment"
+            android:backgroundTint="#AA9183"
             android:text="SUBMIT"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            app:cornerRadius="100dp" />
 
         <EditText
             android:id="@+id/etComment"
