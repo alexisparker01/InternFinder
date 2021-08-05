@@ -47,13 +47,14 @@ InternFinder is an app where you can create a profile and meet and connect with 
 
 **Optional Nice-to-have Stories**
 
-* You can link your LinkedIn profile to your profile
+* [ ] You can link your LinkedIn profile to your profile
 * [x] Users can modify their profiles and edit teir responses to questions about work (for example: After work what is your favorite thing to do? On the weekends what do you like to do? What's your work from home set up like?) When you click on someone else's profile it'll show how alike you guys are based on how many questions you both answered
 * [x] Users can filter feed to show posts from people they are following, people within a certain number of miles of them, and people of their industry
-* [] You can see a list of people attending the event
+* [ ] You can see a list of people attending the event
 * [x] There is a map on the search/explore page that shows events near you on a map. When you click on the marker for each event it takes you to the post of the event. There is also a list of Users in your area.
 * [x] Autofill suggestions when searching for a location for your event post
 * [x] For Profile Picture, there can be an option to upload picture from camera roll
+* [ ] Users can DM each other
 
 ### 2. Screen Archetypes
 
@@ -93,6 +94,9 @@ https://www.figma.com/proto/0yivHGyHXgUChY8IypclPc/InternFinder?node-id=1%3A2&sc
 ### [BONUS] Digital Wireframes & Mockups
 
 ### [BONUS] Interactive Prototype
+
+## Video Walkthrough of InternFinder
+https://imgur.com/a/BaNoN9p
 
 ## Schema 
 Models
