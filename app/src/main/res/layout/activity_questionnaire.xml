@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#E1D6CE"
     tools:context=".activities.QuestionnaireActivity">
-
 
 
     <RelativeLayout
@@ -24,17 +24,17 @@
 
         <TextView
             android:id="@+id/tvAnswers2"
-            android:layout_below="@id/tvAnswers"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@id/tvAnswers"
             android:layout_marginBottom="10dp"
             android:text="" />
 
         <TextView
             android:id="@+id/tvAnswers3"
-            android:layout_below="@id/tvAnswers2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@id/tvAnswers2"
             android:layout_marginBottom="10dp"
             android:text="" />
 
@@ -148,7 +148,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/radioGroupQuestion1"
-            android:text="What do you like to do on the weekends?" />
+            android:text="What is your work from home setup like?" />
 
         <RadioGroup
             android:id="@+id/radioGroupQuestion2"
@@ -160,26 +160,25 @@
                 android:id="@+id/question2_option1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Eat out a restaurant, I’m starving after work!" />
+                android:text="I don't have one..." />
 
             <RadioButton
                 android:id="@+id/question2_option2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Go do something fun with friends like see a movie" />
+                android:text="I can't survive without my moniter" />
 
             <RadioButton
                 android:id="@+id/question2_option3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Get outdoors. I’ve been inside all day. Going for a walk or having a picnic with some friends is the best.
-" />
+                android:text="Lots of Amazon purchases that I found on TikTok that I don't need" />
 
             <RadioButton
                 android:id="@+id/question2_option4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=" Do something casual at home" />
+                android:text="Just my desk" />
 
         </RadioGroup>
 
@@ -190,7 +189,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/radioGroupQuestion2"
-            android:text="What do you like to do on the weekends?" />
+            android:text="Where do you see yourself in 5 years?" />
 
         <RadioGroup
             android:id="@+id/radioGroupQuestion3"
@@ -202,26 +201,25 @@
                 android:id="@+id/question3_option1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Eat out a restaurant, I’m starving after work!" />
+                android:text="Some form of higher education beyond undergrad" />
 
             <RadioButton
                 android:id="@+id/question3_option2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Go do something fun with friends like see a movie" />
+                android:text="Working fulltime at a place I love" />
 
             <RadioButton
                 android:id="@+id/question3_option3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Get outdoors. I’ve been inside all day. Going for a walk or having a picnic with some friends is the best.
-" />
+                android:text="Travelling" />
 
             <RadioButton
                 android:id="@+id/question3_option4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=" Do something casual at home" />
+                android:text="I live in the moment" />
 
         </RadioGroup>
 
@@ -233,7 +231,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/radioGroupQuestion3"
-            android:text="What do you like to do on the weekends?" />
+            android:text="When do you work the best?" />
 
         <RadioGroup
             android:id="@+id/radioGroupQuestion4"
@@ -245,38 +243,40 @@
                 android:id="@+id/question4_option1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Eat out a restaurant, I’m starving after work!" />
+                android:text="Late at night" />
 
             <RadioButton
                 android:id="@+id/question4_option2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Go do something fun with friends like see a movie" />
+                android:text="Early in the morning" />
 
             <RadioButton
                 android:id="@+id/question4_option3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Get outdoors. I’ve been inside all day. Going for a walk or having a picnic with some friends is the best.
-" />
+                android:text="Afternoon" />
 
             <RadioButton
                 android:id="@+id/question4_option4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=" Do something casual at home" />
+                android:text="I don't really have a specific time" />
 
         </RadioGroup>
 
 
         <Button
             android:id="@+id/btnApply"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/radioGroupQuestion4"
             android:layout_marginTop="8dp"
-            android:text="apply" />
-
+            android:background="#AA9183"
+            android:backgroundTint="#AA9183"
+            android:gravity="center_horizontal"
+            android:text="apply"
+            app:cornerRadius="100dp" />
 
 
     </RelativeLayout>

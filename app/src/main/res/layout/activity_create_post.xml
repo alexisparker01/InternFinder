@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="#FCFFE1"
+    android:background="#E1D6CE"
     tools:context=".activities.CreatePostActivity">
 
     <Spinner
@@ -12,8 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="2dp"
-        android:background="@android:drawable/btn_dropdown"
+        android:background="#AA9183"
         android:clipChildren="false"
+        android:popupBackground="#E1D6CE"
         android:prompt="@string/title"
         android:spinnerMode="dropdown" />
 
@@ -41,19 +42,24 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="2dp"
         android:layout_marginRight="10dp"
-        android:background="@drawable/white_border"
+        android:background="#E1D6CE"
         android:elevation="10dp">
 
-
-        <fragment
-            android:id="@+id/autocomplete_fragment"
-            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
-            android:layout_width="match_parent"
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp" />
+            android:background="@drawable/white_border">
 
+            <fragment
+                android:id="@+id/autocomplete_fragment"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp" />
+        </RelativeLayout>
 
     </RelativeLayout>
+
 
     <ImageView
         android:id="@+id/ic_gps2"
@@ -66,26 +72,12 @@
         android:scaleType="centerCrop"
         android:src="@drawable/ic_gps" />
 
-
-    <!-- <fragment
-    android:id="@+id/autocomplete_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
-        android:layout_below="@+id/relLayout2"
-        android:background="@drawable/white_border"
-        android:ems="10"
-        android:gravity="start|top"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="3dp" />
-        -->
-
     <RelativeLayout
         android:id="@+id/relLayout3"
         android:layout_width="match_parent"
         android:layout_height="500dp"
         android:layout_below="@+id/map"
-        android:backgroundTint="#FCFFE1"
+        android:backgroundTint="#E1D6CE"
         android:foregroundTint="#FCFFE1">
 
         <TextView
@@ -145,9 +137,10 @@
             android:layout_below="@+id/etLayout"
             android:layout_marginStart="300dp"
             android:layout_marginTop="5dp"
-            android:backgroundTint="#9C27B0"
+            android:backgroundTint="#AA9183"
             android:fontFamily="sans-serif-light"
             android:text="submit"
+            app:cornerRadius="100dp"
             tools:text="submit" />
 
     </RelativeLayout>
@@ -159,9 +152,10 @@
         android:layout_below="@+id/spinnerPostType"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="-5dp"
-        android:backgroundTint="#9C27B0"
+        android:backgroundTint="#AA9183"
         android:fontFamily="sans-serif-light"
         android:text="take picture"
+        app:cornerRadius="100dp"
         tools:text="take picture" />
 
 

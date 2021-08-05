@@ -15,10 +15,10 @@
             android:id="@+id/spinnerFeed"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@color/purple_200"
+            android:background="#AA9183"
             android:contentDescription="Hi idk man"
             android:defaultFocusHighlightEnabled="false"
-            android:popupBackground="@drawable/side_nav_bar" />
+            android:popupBackground="#E1D6CE" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeContainerFeedActivity"
@@ -48,6 +48,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|right"
                     android:layout_margin="16dp"
+                    android:backgroundTint="#AA9183"
                     android:src="@drawable/ic_addpost"
                     app:fab_colorNormal="#ffffff"
                     app:fab_colorPressed="#ffffff"

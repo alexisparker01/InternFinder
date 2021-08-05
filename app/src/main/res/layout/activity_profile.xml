@@ -5,7 +5,7 @@
     style="@style/Theme.InternFinder.NoActionBar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FBF7CD"
+    android:background="#E1D6CE"
     tools:context=".activities.ProfileActivity">
 
 
@@ -27,10 +27,10 @@
         android:foregroundGravity="center_vertical|center|center_horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.136"
+        app:layout_constraintVertical_bias="0.179"
         tools:src="@tools:sample/avatars"
         tools:srcCompat="@tools:sample/avatars" />
 
@@ -38,10 +38,9 @@
         android:id="@+id/tvArea"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="196dp"
+        android:layout_marginTop="228dp"
         android:fontFamily="sans-serif-light"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tvUsername"
         tools:text="New York, NY" />
@@ -51,20 +50,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvUsername"
-        android:layout_marginStart="70dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:layout_toEndOf="@+id/ivProfilePic"
         android:fontFamily="sans-serif-light"
+        android:gravity="center|center_horizontal"
         android:hint="Firstname"
+        android:textAlignment="textEnd"
         android:textSize="18sp"
         android:textStyle="normal|bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/ivProfilePic"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.367"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.167"
+        app:layout_constraintVertical_bias="0.103"
         tools:text="Jane" />
 
     <TextView
@@ -72,49 +72,55 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvUsername"
-        android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="70dp"
         android:layout_toEndOf="@+id/etFirstName"
         android:fontFamily="sans-serif-light"
+        android:gravity="center|center_horizontal"
         android:hint="Lastname"
+        android:textAlignment="viewStart"
         android:textSize="18sp"
         android:textStyle="normal|bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
+        app:layout_constraintHorizontal_bias="0.104"
+        app:layout_constraintStart_toEndOf="@+id/etFirstName"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.167"
+        app:layout_constraintVertical_bias="0.103"
         tools:text="Doe" />
 
     <TextView
         android:id="@+id/tvBio"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="358dp"
+        android:layout_height="58dp"
         android:layout_below="@+id/tvLastName"
         android:layout_margin="10dp"
         android:layout_marginStart="10dp"
         android:layout_toEndOf="@+id/ivProfilePic"
         android:fontFamily="sans-serif-light"
+        android:gravity="center|center_horizontal"
         android:hint="Bio"
-        android:textSize="16sp"
+        android:textAlignment="center"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivProfilePic"
-        app:layout_constraintVertical_bias="0.176"
+        app:layout_constraintTop_toBottomOf="@+id/tvIndustry"
+        app:layout_constraintVertical_bias="0.0"
         tools:text="Hello! I'm a 20 year old FBU Engineering Intern at Facebook this summer. I want to meet new people in my area :)" />
 
     <Button
         android:id="@+id/btnFollow2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="88dp"
+        android:layout_marginTop="72dp"
+        android:background="#AA9182"
+        android:gravity="center|center_horizontal"
         android:text="Follow"
+        app:cornerRadius="100dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvIndustry" />
 
@@ -125,7 +131,7 @@
         android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-light"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.519"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvArea"
         tools:text="Technology" />
@@ -203,69 +209,106 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     ]]>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainer"
-        android:layout_width="390dp"
-        android:layout_height="349dp"
-        android:layout_below="@+id/btnEditProfile"
-        android:layout_marginEnd="8dp"
+        android:layout_width="380dp"
+        android:layout_height="337dp"
+        android:layout_below="@+id/btnFollow2"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="4dp"
+        android:foregroundGravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnFollow2"
+        app:layout_constraintVertical_bias="0.736">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvUserPosts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:layout_marginBottom="20dp"
+            android:background="#FFFFFF"
+            android:backgroundTint="#FFFFFF"
             android:padding="8dp" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <TextView
         android:id="@+id/tvPercent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="350dp"
+        android:layout_height="37dp"
         android:fontFamily="sans-serif-light"
         android:text="You and this user are 50% compatable. Click to find out more about them!"
+        android:textStyle="italic"
         app:layout_constraintBottom_toTopOf="@+id/ivProfilePic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tvUsername"
-        app:layout_constraintVertical_bias="0.76" />
-
+        app:layout_constraintVertical_bias="0.438" />
 
     <TextView
         android:id="@+id/tvFollowers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvBio"
-        android:layout_marginStart="56dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginBottom="11dp"
         android:fontFamily="sans-serif-light"
         android:text="500 followers"
         android:textAlignment="center"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/tvBio"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="243dp" />
+        app:layout_constraintTop_toBottomOf="@+id/etFirstName"
+        app:layout_constraintVertical_bias="0.312" />
 
     <TextView
         android:id="@+id/tvFollowing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvBio"
+        android:layout_marginBottom="11dp"
         android:layout_toEndOf="@+id/tvFollowers"
         android:fontFamily="sans-serif-light"
         android:text="500 following"
         android:textAlignment="center"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/tvBio"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.712"
-        app:layout_constraintStart_toEndOf="@+id/tvFollowers"
-        tools:layout_editor_absoluteY="243dp" />
+        app:layout_constraintHorizontal_bias="0.338"
+        app:layout_constraintStart_toEndOf="@+id/ivProfilePic"
+        app:layout_constraintTop_toBottomOf="@+id/tvLastName"
+        app:layout_constraintVertical_bias="0.312" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

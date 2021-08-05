@@ -292,8 +292,8 @@ public class ProfileActivity extends AppCompatActivity {
         followCount("from");
         followCount("to");
 
-        tvFollowers.setText("Followers:\n" + followersList.size());
-        tvFollowing.setText("Following:\n" + followingList.size());
+        tvFollowers.setText("Followers:\n" + String.valueOf(followersList.size()));
+        tvFollowing.setText("Following:\n" + String.valueOf(followingList.size()));
 
         btnFollow.setOnClickListener(new View.OnClickListener() {
             @Override

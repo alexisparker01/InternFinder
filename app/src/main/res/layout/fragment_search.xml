@@ -4,31 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="10dp"
-    tools:context=".activities2delte.SearchActivity">
+    android:background="#E1D6CE"
+    tools:context=".fragments.SearchFragment">
 
     <EditText
         android:id="@+id/etSearch"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:hint="Search for other users!"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/white_border"
+        android:fontFamily="sans-serif-light"
+        android:hint="Search for other interns"
         android:imeActionLabel="Search"
         android:imeOptions="actionSearch"
-        android:inputType="text">
+        android:inputType="text"
+        android:textColorHighlight="#BBA39F"
+        android:textSize="15sp">
 
     </EditText>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragments.SearchFragment"/>
+        tools:context=".fragments.SearchFragment" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvUsers2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="661dp"
         android:layout_below="@+id/etSearch"
+        android:layout_marginLeft="15dp"
         android:layout_marginTop="14dp">
 
     </androidx.recyclerview.widget.RecyclerView>
