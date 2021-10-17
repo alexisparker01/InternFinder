@@ -22,7 +22,7 @@ import org.parceler.Parcels;
 
 import java.util.Date;
 import java.util.List;
-
+// test
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder> {
 
